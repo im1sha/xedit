@@ -15,6 +15,8 @@ namespace XEdit.XAML
 		public PhotoListPage ()
 		{
 			InitializeComponent ();
+
+
 		}
 	}
 }
