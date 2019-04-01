@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:XEdit"
 			 x:Class="XEdit.XAML.MasterPage"
 			 Padding="0,0,0,0"
-			 Icon="hamburger.png"
 			 Title="Personal Organiser">
     <StackLayout BackgroundColor="White">
         <ListView x:Name="listView" x:FieldModifier="public">

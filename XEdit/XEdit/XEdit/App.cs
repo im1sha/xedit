@@ -9,7 +9,7 @@ namespace XEdit
 	{
 		public App ()
 		{
-			MainPage = new XEdit.XAML.MainPage ();
+			MainPage = new XEdit.Layout.MainPage ();
         }
 
 		protected override void OnStart ()

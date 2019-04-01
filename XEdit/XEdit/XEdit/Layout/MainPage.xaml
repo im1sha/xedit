@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XEdit.Layout.MainPage">
+    <ContentPage.Content>
+        <Grid RowSpacing="0" ColumnSpacing="0">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="70" />
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            
+            <StackLayout Grid.Row="0"
+                         BackgroundColor="Black"
+                         HorizontalOptions="Fill"  
+                         />
+
+
+            <Slider Grid.Row="3"
+                    HorizontalOptions="Fill"
+                    Margin="10, 0, 10, 0"
+                    MinimumTrackColor="CadetBlue"
+                    MaximumTrackColor="DarkViolet"
+                    ThumbColor="Gray"></Slider>
+            
+            <!--tools options-->
+            <ScrollView Grid.Row="4"
+                        HorizontalOptions="Fill"
+                        BackgroundColor="SkyBlue"                                               
+                        Orientation="Horizontal" 
+                        >
+                <StackLayout Orientation="Horizontal" Spacing="0">
+                    <BoxView WidthRequest="90" BackgroundColor="AliceBlue" />
+                    <BoxView WidthRequest="90" BackgroundColor="OliveDrab" />
+                    <BoxView WidthRequest="90" BackgroundColor="Yellow" />
+                    <BoxView WidthRequest="90" BackgroundColor="Wheat" />
+                    <BoxView WidthRequest="90" BackgroundColor="Pink" />
+                </StackLayout>
+            </ScrollView>
+
+            <!--edit tools-->
+            <ScrollView Grid.Row="5"
+                        HorizontalOptions="Fill"                      
+                        BackgroundColor="DeepSkyBlue"
+                        Orientation="Horizontal" >
+                <StackLayout Orientation="Horizontal" Spacing="0">
+                    <BoxView WidthRequest="50" BackgroundColor="BlueViolet" />
+                    <BoxView WidthRequest="50" BackgroundColor="SeaGreen" />
+                    <BoxView WidthRequest="50" BackgroundColor="Turquoise" />
+                    <BoxView WidthRequest="50" BackgroundColor="Wheat" />
+                    <BoxView WidthRequest="50" BackgroundColor="DarkCyan" />
+                    <BoxView WidthRequest="50" BackgroundColor="AliceBlue" />
+                    <BoxView WidthRequest="50" BackgroundColor="OliveDrab" />
+                    <BoxView WidthRequest="50" BackgroundColor="Yellow" />
+                    <BoxView WidthRequest="50" BackgroundColor="Wheat" />
+                    <BoxView WidthRequest="50" BackgroundColor="Pink" />
+                </StackLayout>
+
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

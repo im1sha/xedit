@@ -9,7 +9,7 @@ using XEdit.Droid;
 
 namespace XEdit.Droid
 {
-    public class PicturePickerImplementation : XEdit.PicturePicker.IPicturePicker
+    public class PicturePickerImplementation : XEdit.Core.Data.IPicturePicker
     {
         public Task<Stream> GetImageStreamAsync()
         {

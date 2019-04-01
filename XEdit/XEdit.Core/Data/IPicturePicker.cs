@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace XEdit.PicturePicker
+namespace XEdit.Core.Data
 {
     public interface IPicturePicker
     {

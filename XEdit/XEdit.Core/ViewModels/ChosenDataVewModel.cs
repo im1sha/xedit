@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Xamarin.Forms;
 
-namespace XEdit.DataStorage
+namespace XEdit.Core.ViewModels
 {
     class ChosenDataViewModel : INotifyPropertyChanged
     {
