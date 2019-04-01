@@ -12,7 +12,7 @@
                 <x:Array Type="{x:Type local:MasterPageItem}">
                     <local:MasterPageItem Title="Gallery"
                                           IconSource="folder.png" 
-                                          TargetType="{x:Type local:XAML.PhotoListPage}" />
+                                          TargetType="{x:Type local:XAML.GalleryPage}" />
                     <local:MasterPageItem Title="Preferences" 
                                           IconSource="preferences.png"
                                           TargetType="{x:Type local:XAML.PreferencesPage}" />

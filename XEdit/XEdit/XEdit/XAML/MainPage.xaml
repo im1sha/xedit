@@ -9,7 +9,7 @@
 	<MasterDetailPage.Detail>
 		<NavigationPage>
 			<x:Arguments>
-				<local:PhotoListPage />
+				<local:GalleryPage />
 			</x:Arguments>
 		</NavigationPage>
 	</MasterDetailPage.Detail>
