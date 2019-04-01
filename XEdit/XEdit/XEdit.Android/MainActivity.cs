@@ -24,7 +24,6 @@ namespace XEdit.Droid
             LoadApplication(new App());
         }
 
-
         // Field, property, and method for Picture Picker
         public static readonly int PickImageId = 1000;
 
