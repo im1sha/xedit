@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XEdit.XAML.PhotoListPage"
-             Title="Photos">
+             Title="Select">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="photos" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
+            <Label Text="Select photo here" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -6,18 +6,18 @@
 			 Padding="0,0,0,0"
 			 Icon="hamburger.png"
 			 Title="Personal Organiser">
-    <StackLayout BackgroundColor="Gray">
+    <StackLayout BackgroundColor="White">
         <ListView x:Name="listView" x:FieldModifier="public">
            <ListView.ItemsSource>
                 <x:Array Type="{x:Type local:MasterPageItem}">
-                    <local:MasterPageItem Title="pho"
-                                          IconSource="image_picture.png" 
+                    <local:MasterPageItem Title="Gallery"
+                                          IconSource="folder.png" 
                                           TargetType="{x:Type local:XAML.PhotoListPage}" />
                     <local:MasterPageItem Title="Preferences" 
-                                          IconSource="settings.png"
+                                          IconSource="preferences.png"
                                           TargetType="{x:Type local:XAML.PreferencesPage}" />
                     <local:MasterPageItem Title="About"
-                                          IconSource="information.png" 
+                                          IconSource="about.png" 
                                           TargetType="{x:Type local:XAML.AboutPage}" />
         
                 </x:Array>
