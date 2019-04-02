@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="XEdit.Layout.MainPage">
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="XEdit.Layout.MainPage" >
     <ContentPage.Content>
-        <Grid RowSpacing="0" ColumnSpacing="0">
+        <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="70" />
@@ -15,22 +15,59 @@
             </Grid.RowDefinitions>
 
             <!--Header-->
+
+            <Grid Grid.Row="0" 
+                  BackgroundColor="Black"
+                  HorizontalOptions="Fill"
+                  VerticalOptions="Fill" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="25" />
+                </Grid.ColumnDefinitions>
+
+                <Button BackgroundColor="Black"
+                        Grid.Column="0"
+                        HeightRequest="20" 
+                        WidthRequest="25"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
+                        Image="menu_list.png">
+                </Button>
+                <Button BackgroundColor="Black"
+                        Grid.Column="2"
+                        HeightRequest="20" 
+                        WidthRequest="20" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start"
+                        Image="arrow_left.png">
+                </Button>
+                <Button BackgroundColor="Black"
+                        Grid.Column="3"
+                        HeightRequest="20" 
+                        WidthRequest="20" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start"
+                        Image="arrow_right.png">
+                </Button>
+
+            </Grid>
+
             
-            <StackLayout Grid.Row="0"
-                         BackgroundColor="Black"
-                         HorizontalOptions="Fill"  
-                         />
-
-
-            <Slider Grid.Row="3"
+            <Grid Grid.Row="1" x:Name="skiaWrapper" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Black">
+                <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
+            </Grid>
+            
+            <Slider Grid.Row="2"
                     HorizontalOptions="Fill"
-                    Margin="10, 0, 10, 0"
                     MinimumTrackColor="CadetBlue"
-                    MaximumTrackColor="DarkViolet"
-                    ThumbColor="Gray"></Slider>
+                    MaximumTrackColor="Red"
+                    BackgroundColor="Black"
+                    ThumbColor="White"></Slider>
             
             <!--tools options-->
-            <ScrollView Grid.Row="4"
+            <ScrollView Grid.Row="3"
                         HorizontalOptions="Fill"
                         BackgroundColor="SkyBlue"                                               
                         Orientation="Horizontal" 
@@ -45,21 +82,21 @@
             </ScrollView>
 
             <!--edit tools-->
-            <ScrollView Grid.Row="5"
+            <ScrollView Grid.Row="4"
                         HorizontalOptions="Fill"                      
                         BackgroundColor="DeepSkyBlue"
                         Orientation="Horizontal" >
-                <StackLayout Orientation="Horizontal" Spacing="0">
-                    <BoxView WidthRequest="50" BackgroundColor="BlueViolet" />
-                    <BoxView WidthRequest="50" BackgroundColor="SeaGreen" />
-                    <BoxView WidthRequest="50" BackgroundColor="Turquoise" />
-                    <BoxView WidthRequest="50" BackgroundColor="Wheat" />
-                    <BoxView WidthRequest="50" BackgroundColor="DarkCyan" />
-                    <BoxView WidthRequest="50" BackgroundColor="AliceBlue" />
-                    <BoxView WidthRequest="50" BackgroundColor="OliveDrab" />
-                    <BoxView WidthRequest="50" BackgroundColor="Yellow" />
-                    <BoxView WidthRequest="50" BackgroundColor="Wheat" />
-                    <BoxView WidthRequest="50" BackgroundColor="Pink" />
+                <StackLayout Orientation="Horizontal" Spacing="0" >
+                    <Label WidthRequest="50" BackgroundColor="BlueViolet" Text="Draw" FontSize="Small"/>
+                    <Label WidthRequest="50" BackgroundColor="SeaGreen" Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="Turquoise"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="Wheat"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="DarkCyan" Text="" FontSize="Small"  />
+                    <Label WidthRequest="50" BackgroundColor="AliceBlue"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="OliveDrab"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="Yellow"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="Wheat"  Text="" FontSize="Small" />
+                    <Label WidthRequest="50" BackgroundColor="Pink"  Text="" FontSize="Small" />
                 </StackLayout>
 
             </ScrollView>
