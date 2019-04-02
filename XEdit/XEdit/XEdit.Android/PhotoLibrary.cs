@@ -13,7 +13,7 @@ using XEdit.Droid;
 
 namespace XEdit.Droid
 {
-    public class PhotoLibrary : XEdit.Core.Data.IPhotoLibrary
+    public class PhotoLibrary : XEdit.Data.IPhotoLibrary
     {
         public Task<System.IO.Stream> PickPhotoAsync()
         {

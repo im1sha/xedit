@@ -11,15 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="ViewModels\FunFlactsViewModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\" />
   </ItemGroup>
 
 </Project>

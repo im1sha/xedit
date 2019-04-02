@@ -19,20 +19,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="jpg\record.jpg" />
+    <None Remove="Images\australia.png" />
+    <None Remove="Images\bhutan.png" />
+    <None Remove="Images\brazil.png" />
+    <None Remove="Images\canada.png" />
+    <None Remove="Images\greece.png" />
+    <None Remove="Images\nepal.png" />
+    <None Remove="Images\usa.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="jpg\record.jpg" />
+    <EmbeddedResource Include="Images\australia.png" />
+    <EmbeddedResource Include="Images\bhutan.png" />
+    <EmbeddedResource Include="Images\brazil.png" />
+    <EmbeddedResource Include="Images\canada.png" />
+    <EmbeddedResource Include="Images\greece.png" />
+    <EmbeddedResource Include="Images\nepal.png" />
+    <EmbeddedResource Include="Images\usa.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\XEdit.Core\XEdit.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,5 +77,9 @@
     <EmbeddedResource Update="XAML\PreferencesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\" />
   </ItemGroup>
 </Project>

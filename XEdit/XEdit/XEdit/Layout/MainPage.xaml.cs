@@ -35,7 +35,7 @@ namespace XEdit.Layout
             skiaWrapper.Children.Add(canvasView);
 
             // Load resource bitmap
-            string resourceID = "XEdit.jpg.record.jpg";
+            string resourceID = "XEdit.Images.usa.png";
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceID))

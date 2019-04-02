@@ -1,4 +1,4 @@
-﻿namespace XEdit.Core
+﻿namespace XEdit
 {
     /// <summary>
     /// Constants class to register known pages
