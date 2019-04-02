@@ -8,6 +8,7 @@ using Android.OS;
 using System.Threading.Tasks;
 using System.IO;
 using Android.Content;
+using Xamarin.Forms;
 
 namespace XEdit.Droid
 {
@@ -24,6 +25,8 @@ namespace XEdit.Droid
             Instance = this;
 
             base.OnCreate(savedInstanceState);
+            Forms.SetFlags("CollectionView_Experimental");
+
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }

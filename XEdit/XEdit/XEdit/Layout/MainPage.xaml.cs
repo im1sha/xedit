@@ -14,7 +14,14 @@ using Xamarin.Forms.Xaml;
 
 namespace XEdit.Layout
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    public class Phone
+    {
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public int Price { get; set; }
+    }
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainPage : ContentPage
 	{
         SKCanvasView canvasView;
@@ -23,13 +30,23 @@ namespace XEdit.Layout
 
        // SKBitmap webBitmap;
         SKBitmap resourceBitmap;
-       // SKBitmap libraryBitmap;
+        // SKBitmap libraryBitmap;
 
+
+        public List<Phone> Phones { get; set; }
 
         public MainPage ()
 		{
-			InitializeComponent ();
+            Phones = new List<Phone>
+            {
+                new Phone {Title="Galaxy S8", Company="Samsung", Price=48000 },
+                new Phone {Title="Huawei P10", Company="Huawei", Price=35000 },
+                new Phone {Title="HTC U Ultra", Company="HTC", Price=42000 },
+                new Phone {Title="iPhone 7", Company="Apple", Price=52000 }
+            };
 
+			InitializeComponent ();
+           
             canvasView = new SKCanvasView();
             canvasView.PaintSurface += OnCanvasViewPaintSurface;
             skiaWrapper.Children.Add(canvasView);

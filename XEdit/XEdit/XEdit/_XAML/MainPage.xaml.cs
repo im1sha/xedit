@@ -9,25 +9,25 @@ namespace XEdit.XAML
     public partial class MainPage : MasterDetailPage
     {
         //readonly ChosenDataViewModel vm = new ChosenDataViewModel();
-         
+
         public MainPage()
         {
             InitializeComponent();
 
-           // BindingContext = vm;
+            // BindingContext = vm;
 
             masterPage.listView.ItemSelected += OnItemSelected;
         }
 
         void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as MasterPageItem;
-            if (item != null)
-            {
-                Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
-                masterPage.listView.SelectedItem = null;
-                IsPresented = false;
-            }
+            //var item = e.SelectedItem as MasterPageItem;
+            //if (item != null)
+            //{
+            //    Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
+            //    masterPage.listView.SelectedItem = null;
+            //    IsPresented = false;
+            //}
         }
     }
 }
