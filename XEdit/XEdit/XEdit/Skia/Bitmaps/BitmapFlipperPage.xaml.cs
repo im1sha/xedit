@@ -11,7 +11,7 @@ namespace SkiaBase.Bitmaps
     {
         SKBitmap bitmap =
             BitmapExtensions.LoadBitmapResource(typeof(BitmapRotatorPage),
-                "SkiaBase.Media.SeatedMonkey.jpg");
+                "XEdit.Media.SeatedMonkey.jpg");
 
         public BitmapFlipperPage()
         {

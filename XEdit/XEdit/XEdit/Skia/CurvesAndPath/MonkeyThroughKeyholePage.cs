@@ -23,7 +23,7 @@ namespace SkiaBase.Curves
             canvasView.PaintSurface += OnCanvasViewPaintSurface;
             Content = canvasView;
 
-            string resourceID = "SkiaBase.Media.SeatedMonkey.jpg";
+            string resourceID = "XEdit.Media.SeatedMonkey.jpg";
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceID))

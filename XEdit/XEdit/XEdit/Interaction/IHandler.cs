@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Models
+namespace XEdit.Interaction
 {
-    public interface IFilter
+    public interface IHandler
     { 
         string Name { get; }
         string ImageUrl { get; }
-        Action<object> Apply { get; }
+        Action GetAction(object sender, EventArgs args);
     }
 }

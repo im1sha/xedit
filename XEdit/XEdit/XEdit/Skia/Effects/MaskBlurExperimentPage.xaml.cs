@@ -12,8 +12,8 @@ namespace SkiaBase.Effects
         const string TEXT = "Blur My Text";
 
         SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(
-                                typeof(MaskBlurExperimentPage), 
-                                "SkiaBase.Media.SeatedMonkey.jpg");
+                                typeof(MaskBlurExperimentPage),
+                                "XEdit.Media.SeatedMonkey.jpg");
 
 		public MaskBlurExperimentPage ()
 		{

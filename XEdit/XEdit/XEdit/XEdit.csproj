@@ -19,23 +19,43 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\australia.png" />
-    <None Remove="Images\bhutan.png" />
-    <None Remove="Images\brazil.png" />
-    <None Remove="Images\canada.png" />
-    <None Remove="Images\greece.png" />
-    <None Remove="Images\nepal.png" />
-    <None Remove="Images\usa.png" />
+    <None Remove="Media\Banana.jpg" />
+    <None Remove="Media\BananaMatte.png" />
+    <None Remove="Media\BrickWallTile.jpg" />
+    <None Remove="Media\FacePalm.jpg" />
+    <None Remove="Media\monkey.png" />
+    <None Remove="Media\MonkeyFace.png" />
+    <None Remove="Media\MountainClimbers.jpg" />
+    <None Remove="Media\Newtons_cradle_animation_book_2.gif" />
+    <None Remove="Media\PageOfCode.png" />
+    <None Remove="Media\SeatedMonkey.jpg" />
+    <None Remove="Media\SeatedMonkeyMatte.png" />
+    <None Remove="Media\StoneWallTile.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Images\australia.png" />
-    <EmbeddedResource Include="Images\bhutan.png" />
-    <EmbeddedResource Include="Images\brazil.png" />
-    <EmbeddedResource Include="Images\canada.png" />
-    <EmbeddedResource Include="Images\greece.png" />
-    <EmbeddedResource Include="Images\nepal.png" />
-    <EmbeddedResource Include="Images\usa.png" />
+    <EmbeddedResource Include="Media\StoneWallTile.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\BrickWallTile.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Banana.jpg" />
+    <EmbeddedResource Include="Media\BananaMatte.png" />
+    <EmbeddedResource Include="Media\FacePalm.jpg" />
+    <EmbeddedResource Include="Media\monkey.png" />
+    <EmbeddedResource Include="Media\MonkeyFace.png" />
+    <EmbeddedResource Include="Media\MountainClimbers.jpg" />
+    <EmbeddedResource Include="Media\Newtons_cradle_animation_book_2.gif" />
+    <EmbeddedResource Include="Media\PageOfCode.png" />
+    <EmbeddedResource Include="Media\SeatedMonkey.jpg" />
+    <EmbeddedResource Include="Media\SeatedMonkeyMatte.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\usa.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Layout\MainPage.xaml">
+    <EmbeddedResource Update="Views\MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Skia\Basics\BitmapDissolvePage.xaml">

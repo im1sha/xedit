@@ -11,7 +11,7 @@ namespace SkiaBase.Bitmaps
     {
         SKBitmap bitmap =
             BitmapExtensions.LoadBitmapResource(typeof(ScalingModesPage),
-                                                "SkiaBase.Media.Banana.jpg");
+                                                "XEdit.Media.Banana.jpg");
         public ScalingModesPage()
         {
             InitializeComponent();

@@ -4,12 +4,15 @@ using System.Text;
 
 namespace XEdit.Filters
 {
-    class CombineFilter : Models.IFilter
+    class CombineFilter : Interaction.IHandler
     {
         public string Name => "Combine";
 
         public string ImageUrl => throw new NotImplementedException();
 
-        public Action<object> Apply => throw new NotImplementedException();
+        public Action GetAction(object sender, EventArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

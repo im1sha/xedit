@@ -28,7 +28,7 @@ namespace SkiaBase.Transforms
         {
             InitializeComponent();
 
-            string resourceID = "SkiaBase.Media.Banana.jpg";
+            string resourceID = "XEdit.Media.Banana.jpg";
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceID))

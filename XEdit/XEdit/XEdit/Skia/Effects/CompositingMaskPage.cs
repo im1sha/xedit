@@ -11,7 +11,7 @@ namespace SkiaBase.Effects
 	{
         SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(
             typeof(CompositingMaskPage),
-            "SkiaBase.Media.MountainClimbers.jpg");
+            "XEdit.Media.MountainClimbers.jpg");
 
         static readonly SKPoint CENTER = new SKPoint(180, 300);
         static readonly float RADIUS = 120;

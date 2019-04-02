@@ -9,6 +9,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!--  -->
         <Grid x:Name="canvasViewHost"
               Grid.Row="0"
               BackgroundColor="Gray"

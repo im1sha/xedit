@@ -1,4 +1,5 @@
-﻿using XEdit.Models;
+﻿using XEdit.Interaction;
+using XEdit.Filters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +14,14 @@ namespace XEdit.ViewModels
 {
     public class FiltersViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<IFilter> Filters { get; private set; } // to set
+        public ObservableCollection<IHandler> Filters { get; private set; }
+            = new ObservableCollection<IHandler>();
 
-        private IFilter selectedFilter;
-        public IFilter SelectedFilter
+        private readonly Handlers.PictureLoader pictureLoader 
+            = new Handlers.PictureLoader();
+
+        private IHandler selectedFilter;
+        public IHandler SelectedFilter
         {
             get
             {
@@ -34,16 +39,50 @@ namespace XEdit.ViewModels
 
         //<Button Command = "{Binding RemoveCommand}" CommandParameter="{Binding SelectedOne}">-</Button>
 
-        // obj is selected filter
-        public ICommand ApplyFilterCommand
+        public ICommand ApplyChangesCommand
         {
             get
             {
-                return new Command(obj => {
-                    
-                });
+                return new Command(obj => { });
             }
         }
+
+        public ICommand DiscardChangesCommand
+        {
+            get
+            {
+                return new Command(obj => { });
+            }
+        }
+
+        public ICommand SetFilterCommand
+        {
+            get
+            {
+                return new Command(obj => { });
+            }
+        }
+
+        public ICommand SetFilterOptionCommand
+        {
+            get
+            {
+                return new Command(obj => { });
+            }
+        }
+
+        public ICommand LoadImageCommand
+        {
+            get
+            {
+                return new Command((object target) =>
+                {
+                    pictureLoader.GetAction(target, null) ();
+                });
+            }    
+        }
+
+
 
         public FiltersViewModel()
         {
@@ -52,10 +91,12 @@ namespace XEdit.ViewModels
 
         private void InitializeFilters()
         {
-           // Filters.Add();
-
-            
-            //SelectedFilter = Filters.FirstOrDefault();
+            Filters.Add(new CropFilter());
+            Filters.Add(new CombineFilter());
+            Filters.Add(new ColorFilter());
+            Filters.Add(new RotateFilter());
+            Filters.Add(new SkewFilter());
+            SelectedFilter = Filters.FirstOrDefault();
         }
     
 

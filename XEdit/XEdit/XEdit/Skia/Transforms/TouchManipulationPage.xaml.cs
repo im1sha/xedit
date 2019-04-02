@@ -22,7 +22,7 @@ namespace SkiaBase.Transforms
         {
             InitializeComponent();
 
-            string resourceID = "SkiaBase.Media.MountainClimbers.jpg";
+            string resourceID = "XEdit.Media.MountainClimbers.jpg";
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceID))

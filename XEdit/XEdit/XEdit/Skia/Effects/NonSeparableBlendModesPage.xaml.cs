@@ -11,7 +11,7 @@ namespace SkiaBase.Effects
     {
         SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(
                             typeof(NonSeparableBlendModesPage),
-                            "SkiaBase.Media.Banana.jpg");
+                            "XEdit.Media.Banana.jpg");
         SKColor color;
 
         public NonSeparableBlendModesPage()

@@ -4,12 +4,15 @@ using System.Text;
 
 namespace XEdit.Filters
 {
-    class ColorFilter : Models.IFilter
+    class ColorFilter : Interaction.IHandler
     {
         public string Name => "Color"; 
 
         public string ImageUrl => throw new NotImplementedException();
 
-        public Action<object> Apply => throw new NotImplementedException();
+        public Action GetAction(object sender, EventArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

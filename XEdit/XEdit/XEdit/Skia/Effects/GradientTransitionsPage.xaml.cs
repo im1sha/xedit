@@ -11,11 +11,11 @@ namespace SkiaBase.Effects
 	{
         SKBitmap bitmap1 = BitmapExtensions.LoadBitmapResource(
             typeof(GradientTransitionsPage),
-            "SkiaBase.Media.SeatedMonkey.jpg");
+            "XEdit.Media.SeatedMonkey.jpg");
 
         SKBitmap bitmap2 = BitmapExtensions.LoadBitmapResource(
             typeof(GradientTransitionsPage),
-            "SkiaBase.Media.FacePalm.jpg");
+            "XEdit.Media.FacePalm.jpg");
 
         enum TransitionMode
         {

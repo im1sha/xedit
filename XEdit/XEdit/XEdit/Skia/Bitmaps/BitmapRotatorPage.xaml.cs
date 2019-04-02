@@ -11,7 +11,7 @@ namespace SkiaBase.Bitmaps
     {
         static readonly SKBitmap originalBitmap = 
             BitmapExtensions.LoadBitmapResource(typeof(BitmapRotatorPage),
-                "SkiaBase.Media.Banana.jpg");
+                "XEdit.Media.Banana.jpg");
 
         SKBitmap rotatedBitmap = originalBitmap;
 

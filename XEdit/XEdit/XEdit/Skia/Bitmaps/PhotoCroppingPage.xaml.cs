@@ -17,7 +17,7 @@ namespace SkiaBase.Bitmaps
             InitializeComponent ();
 
             SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(GetType(),
-                "SkiaBase.Media.MountainClimbers.jpg");
+                "XEdit.Media.MountainClimbers.jpg");
 
             photoCropper = new PhotoCropperCanvasView(bitmap);
             canvasViewHost.Children.Add(photoCropper);

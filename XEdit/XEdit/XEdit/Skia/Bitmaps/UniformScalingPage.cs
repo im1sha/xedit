@@ -13,7 +13,7 @@ namespace SkiaBase.Bitmaps
     {
         SKBitmap bitmap =
             BitmapExtensions.LoadBitmapResource(typeof(UniformScalingPage),
-                                                "SkiaBase.Media.Banana.jpg");
+                                                "XEdit.Media.Banana.jpg");
         public UniformScalingPage()
         {
             Title = "Uniform Scaling";

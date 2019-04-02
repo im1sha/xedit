@@ -22,12 +22,12 @@ namespace SkiaBase.Basics
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(
-                                    "SkiaBase.Media.SeatedMonkey.jpg"))
+                                    "XEdit.Media.SeatedMonkey.jpg"))
             {
                 bitmap1 = SKBitmap.Decode(stream);
             }
             using (Stream stream = assembly.GetManifestResourceStream(
-                                    "SkiaBase.Media.FacePalm.jpg"))
+                                    "XEdit.Media.FacePalm.jpg"))
             {
                 bitmap2 = SKBitmap.Decode(stream);
             }

@@ -13,7 +13,7 @@ namespace SkiaBase.Effects
 
         SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(
                                 typeof(MaskBlurExperimentPage),
-                                "SkiaBase.Media.SeatedMonkey.jpg");
+                                "XEdit.Media.SeatedMonkey.jpg");
 
         public ImageBlurExperimentPage ()
 		{

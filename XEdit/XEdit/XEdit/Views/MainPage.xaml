@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
-             x:Class="XEdit.Layout.MainPage" >
+             x:Class="XEdit.Views.MainPage" >
 
     <!--<ContentPage.Resources>
         <Style TargetType="Grid">
@@ -52,7 +52,9 @@
                         WidthRequest="25"
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
-                        Image="menu_list.png">
+                        Image="menu_list.png"
+                        Command="{Binding LoadImageCommand }"
+                        CommandParameter="{Reference skiaWrapper}">
                 </Button>
                 <Button BackgroundColor="Black"
                         Grid.Column="2"

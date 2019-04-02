@@ -11,7 +11,7 @@ namespace SkiaBase.Bitmaps
     public partial class SaveFileFormatsPage : ContentPage
     {
         SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(typeof(SaveFileFormatsPage),
-            "SkiaBase.Media.MonkeyFace.png");
+            "XEdit.Media.MonkeyFace.png");
 
 	    public SaveFileFormatsPage ()
 	    {
