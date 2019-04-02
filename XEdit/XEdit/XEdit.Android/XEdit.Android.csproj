@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="PhotoLibrary.cs" />
-    <Compile Include="PicturePickerImplementation.cs" />
+    <Compile Include="_Unused\PicturePickerImplementation.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

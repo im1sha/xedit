@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XEdit.Data
+namespace XEdit.Interaction
 {
     // skia sharp
 

@@ -11,42 +11,35 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XEdit.ViewModels;
 
 namespace XEdit.Layout
 {
-    public class Phone
-    {
-        public string Title { get; set; }
-        public string Company { get; set; }
-        public int Price { get; set; }
-    }
-
+  
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainPage : ContentPage
 	{
         SKCanvasView canvasView;
-
-       // HttpClient httpClient = new HttpClient();
-
-       // SKBitmap webBitmap;
         SKBitmap resourceBitmap;
+
+
         // SKBitmap libraryBitmap;
+        // SKBitmap webBitmap;
+        // HttpClient httpClient = new HttpClient();
 
-
-        public List<Phone> Phones { get; set; }
 
         public MainPage ()
 		{
-            Phones = new List<Phone>
-            {
-                new Phone {Title="Galaxy S8", Company="Samsung", Price=48000 },
-                new Phone {Title="Huawei P10", Company="Huawei", Price=35000 },
-                new Phone {Title="HTC U Ultra", Company="HTC", Price=42000 },
-                new Phone {Title="iPhone 7", Company="Apple", Price=52000 }
-            };
 
 			InitializeComponent ();
-           
+
+            BindingContext = new FiltersViewModel();
+
+
+
+
+
+
             canvasView = new SKCanvasView();
             canvasView.PaintSurface += OnCanvasViewPaintSurface;
             skiaWrapper.Children.Add(canvasView);
