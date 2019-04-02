@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Filters
+namespace XEdit.Sections
 {
-    class RotateFilter : Interaction.IHandler
+    class ColorSection : Interaction.IHandler
     {
-        public string Name => "Rotate";
+        public string Name => "Color"; 
 
         public string ImageUrl => throw new NotImplementedException();
 
-        public Action GetAction(object sender, EventArgs args)
+        public Action<object> GetAction(object sender, EventArgs args)
         {
             throw new NotImplementedException();
         }

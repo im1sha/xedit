@@ -4,8 +4,8 @@
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="XEdit.Views.MainPage" >
 
-    <!--<ContentPage.Resources>
-        <Style TargetType="Grid">
+    <ContentPage.Resources>
+        <Style TargetType="Grid" x:Key="activeItemStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -13,14 +13,14 @@
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" 
-                                        Value="LightSkyBlue" />
+                                        Value="Orange" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
         </Style>
-    </ContentPage.Resources>-->
+    </ContentPage.Resources>
 
     <ContentPage.Content>
         <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black">
@@ -74,88 +74,55 @@
                 </Button>
 
             </Grid>
-
-            
+          
             <Grid Grid.Row="1" x:Name="skiaWrapper" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Black">
                 <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
             </Grid>
-            
+
             <Slider Grid.Row="2"
                     HorizontalOptions="Fill"
                     MinimumTrackColor="CadetBlue"
                     MaximumTrackColor="Red"
                     BackgroundColor="Black"
                     ThumbColor="White"></Slider>
-            
-            <!--tools options-->
-            <ScrollView Grid.Row="3"
-                        HorizontalOptions="Fill"
-                        BackgroundColor="SkyBlue"                                               
-                        Orientation="Horizontal" 
-                        >
-                <StackLayout Orientation="Horizontal" Spacing="0">
-                    <BoxView WidthRequest="90" BackgroundColor="AliceBlue" />
-                    <BoxView WidthRequest="90" BackgroundColor="OliveDrab" />
-                    <BoxView WidthRequest="90" BackgroundColor="Yellow" />
-                    <BoxView WidthRequest="90" BackgroundColor="Wheat" />
-                    <BoxView WidthRequest="90" BackgroundColor="Pink" />
-                </StackLayout>
-            </ScrollView>
 
-            <!--edit tools-->
-            <!--<ScrollView Grid.Row="4"
-                        HorizontalOptions="Fill"                      
-                        BackgroundColor="DeepSkyBlue"
-                        Orientation="Horizontal" >
-                <StackLayout Orientation="Horizontal" Spacing="0" >
-                    <Label WidthRequest="50" BackgroundColor="BlueViolet" Text="Draw" FontSize="Small"/>
-                    <Label WidthRequest="50" BackgroundColor="SeaGreen" Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="Turquoise"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="Wheat"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="DarkCyan" Text="" FontSize="Small"  />
-                    <Label WidthRequest="50" BackgroundColor="AliceBlue"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="OliveDrab"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="Yellow"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="Wheat"  Text="" FontSize="Small" />
-                    <Label WidthRequest="50" BackgroundColor="Pink"  Text="" FontSize="Small" />
-                </StackLayout>
-
-            </ScrollView>-->
-
-
-
-            <StackLayout Grid.Row="4" >
-                <CollectionView ItemsSource="{Binding Phones}"
+            <!--tools & filters-->
+            <StackLayout Grid.Row="3" >
+                <CollectionView ItemsSource="{Binding Filters}"
                         ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                         SelectionMode="Single" >
-
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <!--<Grid.RowDefinitions>
-                                    <RowDefinition Height="35" />
-                                    <RowDefinition Height="35" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="140" />
-                                </Grid.ColumnDefinitions>
-                                <Image Grid.RowSpan="2" 
-                               Source="{Binding ImageUrl}" 
-                               Aspect="AspectFill"
-                               HeightRequest="60" 
-                               WidthRequest="60" />
-                                <Label Grid.Column="1" 
-                               Text="{Binding Name}" 
-                               FontAttributes="Bold"
-                               LineBreakMode="TailTruncation" />-->
-                                <Label 
-                                   Text="{Binding Title}"
-                                   LineBreakMode="TailTruncation"
-                                   FontAttributes="Italic" 
-                                   VerticalOptions="End"
-                                   BackgroundColor="AliceBlue"
-                                   TextColor="Black" />
+                            <Grid Style="{StaticResource activeItemStyle}" WidthRequest="90">
+                                <Label                                     
+                                Text="{Binding Name}"
+                                TextColor="White" 
+                                FontSize="Micro" 
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
+            <!--sections-->
+            <StackLayout Grid.Row="4" >                   
+                <CollectionView ItemsSource="{Binding Sections}"
+                        ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
+                        SelectionMode="Single" 
+                        SelectedItem="{Binding SelectedSection, Mode=TwoWay}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Style="{StaticResource activeItemStyle}" WidthRequest="70">
+                            <Label                                     
+                                Text="{Binding Name}"
+                                TextColor="White" 
+                                FontSize="Micro" 
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

@@ -5,15 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Filters
+namespace XEdit.Sections
 {
-    class CropFilter : Interaction.IHandler
+    class CropSection : Interaction.IHandler
     {
         public string Name => "Crop";
 
         public string ImageUrl => throw new NotImplementedException();
 
-        public Action GetAction(object sender, EventArgs args)
+        public Action<object> GetAction(object sender, EventArgs args)
         {
             throw new NotImplementedException();
         }

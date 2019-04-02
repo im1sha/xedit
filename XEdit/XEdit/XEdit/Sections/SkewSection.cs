@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Filters
+namespace XEdit.Sections
 {
-    class ColorFilter : Interaction.IHandler
+    class SkewSection : Interaction.IHandler
     {
-        public string Name => "Color"; 
+        public string Name => "Skew";
 
         public string ImageUrl => throw new NotImplementedException();
 
-        public Action GetAction(object sender, EventArgs args)
+        public Action<object> GetAction(object sender, EventArgs args)
         {
             throw new NotImplementedException();
         }

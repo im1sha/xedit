@@ -1,5 +1,5 @@
 ﻿using XEdit.Interaction;
-using XEdit.Filters;
+using XEdit.Sections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,30 +14,77 @@ namespace XEdit.ViewModels
 {
     public class FiltersViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<IHandler> Filters { get; private set; }
+        #region sections
+
+        public ObservableCollection<IHandler> Sections { get; private set; }
             = new ObservableCollection<IHandler>();
 
-        private readonly Handlers.PictureLoader pictureLoader 
-            = new Handlers.PictureLoader();
-
-        private IHandler selectedFilter;
-        public IHandler SelectedFilter
+        private IHandler selectedSection;
+        public IHandler SelectedSection
         {
             get
             {
-                return selectedFilter;
+                return selectedSection;
             }
             set
             {
-                if (selectedFilter != value)
+                if (selectedSection != value)
                 {
-                    selectedFilter = value;
+                    selectedSection = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        //<Button Command = "{Binding RemoveCommand}" CommandParameter="{Binding SelectedOne}">-</Button>
+       // private 
+
+        public ICommand SetFilterCommand
+        {
+            get
+            {
+                return new Command(obj => { });
+            }
+        }
+
+        public ICommand SetSectionCommand
+        {
+            get
+            {
+                return new Command(obj => { });
+            }
+        }
+
+        private void InitializeSections()
+        {
+            Sections.Add(new CropSection());
+            Sections.Add(new CombineSection());
+            Sections.Add(new ColorSection());
+            Sections.Add(new RotateSection());
+            Sections.Add(new SkewSection());
+            SelectedSection = Sections.FirstOrDefault();
+        }
+
+        #endregion
+
+        #region pictureLoader
+
+        private readonly Handlers.PictureLoader pictureLoader 
+            = new Handlers.PictureLoader();
+
+        public ICommand LoadImageCommand
+        {
+            get
+            {
+                return new Command((object target) =>
+                {
+                    pictureLoader.GetAction(target, null) (null);
+                });
+            }
+        }
+
+        #endregion
+
+        #region working with changes
 
         public ICommand ApplyChangesCommand
         {
@@ -55,51 +102,13 @@ namespace XEdit.ViewModels
             }
         }
 
-        public ICommand SetFilterCommand
-        {
-            get
-            {
-                return new Command(obj => { });
-            }
-        }
-
-        public ICommand SetFilterOptionCommand
-        {
-            get
-            {
-                return new Command(obj => { });
-            }
-        }
-
-        public ICommand LoadImageCommand
-        {
-            get
-            {
-                return new Command((object target) =>
-                {
-                    pictureLoader.GetAction(target, null) ();
-                });
-            }    
-        }
-
-
-
+        #endregion 
+      
         public FiltersViewModel()
         {
-            InitializeFilters();
+            InitializeSections();
         }
-
-        private void InitializeFilters()
-        {
-            Filters.Add(new CropFilter());
-            Filters.Add(new CombineFilter());
-            Filters.Add(new ColorFilter());
-            Filters.Add(new RotateFilter());
-            Filters.Add(new SkewFilter());
-            SelectedFilter = Filters.FirstOrDefault();
-        }
-    
-
+      
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

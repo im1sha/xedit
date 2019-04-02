@@ -17,9 +17,9 @@ namespace XEdit.Handlers
 
         private SKBitmap resourceBitmap;
    
-        public Action GetAction(object sender, EventArgs args)
+        public Action<object> GetAction(object sender, EventArgs args)
         {
-            return delegate{ Perform(sender, args); };
+            return (obj)=> { Perform(sender, args); };
         }
 
         private void Perform(object sender, EventArgs args)
