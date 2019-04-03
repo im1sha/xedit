@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    class CombineSection : Interaction.IHandler
+    public class CombineSection : CoreSection
     {
-        public string Name => "Combine";
-
-        public string ImageUrl => throw new NotImplementedException();
-
-        public Action<object> GetAction(object sender, EventArgs args)
-        {
-            throw new NotImplementedException();
-        }
+        public override string Name => "Combine";       
     }
 }

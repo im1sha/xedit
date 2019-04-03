@@ -9,18 +9,17 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
+using XEdit.Handlers;
 
 namespace XEdit.ViewModels
 {
     public class FiltersViewModel : INotifyPropertyChanged
     {
-        #region sections
-
-        public ObservableCollection<IHandler> Sections { get; private set; }
-            = new ObservableCollection<IHandler>();
-
-        private IHandler selectedSection;
-        public IHandler SelectedSection
+        public ObservableCollection<ISection> Sections { get; set; }
+            = new ObservableCollection<ISection>();
+     
+        private ISection selectedSection;
+        public ISection SelectedSection
         {
             get
             {
@@ -31,20 +30,13 @@ namespace XEdit.ViewModels
                 if (selectedSection != value)
                 {
                     selectedSection = value;
+                    OnSelectedSectionChanged();
                     OnPropertyChanged();
                 }
             }
         }
 
-       // private 
-
-        public ICommand SetFilterCommand
-        {
-            get
-            {
-                return new Command(obj => { });
-            }
-        }
+        private void OnSelectedSectionChanged() { }
 
         public ICommand SetSectionCommand
         {
@@ -53,6 +45,8 @@ namespace XEdit.ViewModels
                 return new Command(obj => { });
             }
         }
+
+        public ISection ImageLoader { get; } = new PictureLoader();
 
         private void InitializeSections()
         {
@@ -63,46 +57,6 @@ namespace XEdit.ViewModels
             Sections.Add(new SkewSection());
             SelectedSection = Sections.FirstOrDefault();
         }
-
-        #endregion
-
-        #region pictureLoader
-
-        private readonly Handlers.PictureLoader pictureLoader 
-            = new Handlers.PictureLoader();
-
-        public ICommand LoadImageCommand
-        {
-            get
-            {
-                return new Command((object target) =>
-                {
-                    pictureLoader.GetAction(target, null) (null);
-                });
-            }
-        }
-
-        #endregion
-
-        #region working with changes
-
-        public ICommand ApplyChangesCommand
-        {
-            get
-            {
-                return new Command(obj => { });
-            }
-        }
-
-        public ICommand DiscardChangesCommand
-        {
-            get
-            {
-                return new Command(obj => { });
-            }
-        }
-
-        #endregion 
       
         public FiltersViewModel()
         {

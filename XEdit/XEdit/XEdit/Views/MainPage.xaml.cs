@@ -20,7 +20,10 @@ namespace XEdit.Views
         public MainPage()
 		{
 			InitializeComponent ();
-            BindingContext = new FiltersViewModel();        
+
+            BindingContext = new FiltersViewModel();
+
+         
         }
     }
 }

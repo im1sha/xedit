@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    class RotateSection : Interaction.IHandler
+    public class RotateSection : CoreSection
     {
-        public string Name => "Rotate";
+        public override string Name => "Rotate";
 
-        public string ImageUrl => throw new NotImplementedException();
-
-        public Action<object> GetAction(object sender, EventArgs args)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

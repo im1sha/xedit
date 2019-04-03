@@ -3,19 +3,20 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text;
+using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    class CropSection : Interaction.IHandler
+    public class CropSection : CoreSection
     {
-        public string Name => "Crop";
+        public override string Name => "Crop";
 
-        public string ImageUrl => throw new NotImplementedException();
-
-        public Action<object> GetAction(object sender, EventArgs args)
+        public class FreeSizeCrop : CoreHandler
         {
-            throw new NotImplementedException();
+            public override string Name => "Free size";
         }
 
         /*
@@ -225,6 +226,6 @@ namespace XEdit.Sections
                {
                    return new SKPoint((float)(CanvasSize.Width * pt.X / Width),
                                        (float)(CanvasSize.Height * pt.Y / Height));
-               }*/
+               }*/    
     }
 }

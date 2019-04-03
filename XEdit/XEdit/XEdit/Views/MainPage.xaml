@@ -53,7 +53,7 @@
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
                         Image="menu_list.png"
-                        Command="{Binding LoadImageCommand }"
+                        Command="{Binding ImageLoader.SelectCommand }"
                         CommandParameter="{Reference skiaWrapper}">
                 </Button>
                 <Button BackgroundColor="Black"
@@ -75,7 +75,10 @@
 
             </Grid>
           
-            <Grid Grid.Row="1" x:Name="skiaWrapper" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Black">
+            <Grid Grid.Row="1" x:Name="skiaWrapper" 
+                  HorizontalOptions="Fill" 
+                  VerticalOptions="Fill"
+                  BackgroundColor="Black">
                 <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
             </Grid>
 
@@ -88,19 +91,23 @@
 
             <!--tools & filters-->
             <StackLayout Grid.Row="3" >
-                <CollectionView ItemsSource="{Binding Filters}"
+                <CollectionView ItemsSource="{Binding SelectedSection.Handlers}"
                         ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
-                        SelectionMode="Single" >
+                        SelectionMode="Single" 
+                        SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"   >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" WidthRequest="90">
                                 <Label                                     
-                                Text="{Binding Name}"
-                                TextColor="White" 
-                                FontSize="Micro" 
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                />
+                                    Text="{Binding Name}"
+                                    TextColor="White" 
+                                    FontSize="Micro" 
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"  >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SelectedSection.SelectCommand}" NumberOfTapsRequired="1" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -116,13 +123,16 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" WidthRequest="70">
-                            <Label                                     
+                                <Label                                     
                                 Text="{Binding Name}"
                                 TextColor="White" 
                                 FontSize="Micro" 
                                 HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                />
+                                VerticalOptions="Center" >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SetSectionCommand}" NumberOfTapsRequired="1" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
