@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using XEdit.Interaction;
 
@@ -14,9 +16,115 @@ namespace XEdit.Sections
     {
         public override string Name => "Crop";
 
+        public CropSection() : base()
+        {
+            Handlers.Add(new FreeSizeCrop());
+            Handlers.Add(new OneToOneCrop());
+            SelectedHandler = Handlers[0];
+        }
+
+        private class MainCrop
+        {
+
+        }
+
         public class FreeSizeCrop : CoreHandler
         {
             public override string Name => "Free size";
+
+
+            public override Action<object> GetAction(object target, EventArgs args)
+            {
+                return (obj) => { AddSkCanvasAsChild(target, args); };
+            }
+
+            private SKBitmap resourceBitmap;
+
+            private void AddSkCanvasAsChild(object target, EventArgs args)
+            {
+                SKCanvasView canvasView = new SKCanvasView();
+
+                canvasView.PaintSurface += OnCanvasViewPaintSurface;
+
+                if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
+                {
+                    (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
+
+                    // Load resource bitmap
+                    string resourceID = "XEdit.Media.SeatedMonkey.jpg";
+                    Assembly assembly = GetType().GetTypeInfo().Assembly;
+
+                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
+                    {
+                        resourceBitmap = SKBitmap.Decode(stream);
+                    }
+                }
+            }
+
+            private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+            {
+                SKImageInfo info = args.Info;
+                SKSurface surface = args.Surface;
+                SKCanvas canvas = surface.Canvas;
+
+                canvas.Clear();
+
+                if (resourceBitmap != null)
+                {
+                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
+                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
+                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                }
+            }
+        }
+
+        public class OneToOneCrop : CoreHandler
+        {
+            public override string Name => "1 : 1";
+
+            public override Action<object> GetAction(object target, EventArgs args)
+            {
+                return (obj) => { AddSkCanvasAsChild(target, args); };
+            }
+
+            private SKBitmap resourceBitmap;
+
+            private void AddSkCanvasAsChild(object target, EventArgs args)
+            {
+                SKCanvasView canvasView = new SKCanvasView();
+
+                canvasView.PaintSurface += OnCanvasViewPaintSurface;
+
+                if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
+                {
+                    (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
+
+                    // Load resource bitmap
+                    string resourceID = "XEdit.Media.PageOfCode.png";
+                    Assembly assembly = GetType().GetTypeInfo().Assembly;
+
+                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
+                    {
+                        resourceBitmap = SKBitmap.Decode(stream);
+                    }
+                }
+            }
+
+            private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+            {
+                SKImageInfo info = args.Info;
+                SKSurface surface = args.Surface;
+                SKCanvas canvas = surface.Canvas;
+
+                canvas.Clear();
+
+                if (resourceBitmap != null)
+                {
+                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
+                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
+                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                }
+            }
         }
 
         /*
@@ -226,6 +334,6 @@ namespace XEdit.Sections
                {
                    return new SKPoint((float)(CanvasSize.Width * pt.X / Width),
                                        (float)(CanvasSize.Height * pt.Y / Height));
-               }*/    
+               }*/
     }
 }

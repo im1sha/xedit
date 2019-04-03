@@ -42,7 +42,14 @@ namespace XEdit.ViewModels
         {
             get
             {
-                return new Command(obj => { });
+                return new Command(() => { /*SelectedSection.SelectCommand.Execute();*/ });
+            }
+        }
+
+        public ICommand ButtonCommand {
+            get
+            {
+                return new Command((t) => { SelectedSection.SelectCommand.Execute(t); });
             }
         }
 
@@ -50,12 +57,12 @@ namespace XEdit.ViewModels
 
         private void InitializeSections()
         {
-            Sections.Add(new CropSection());
-            Sections.Add(new CombineSection());
             Sections.Add(new ColorSection());
-            Sections.Add(new RotateSection());
-            Sections.Add(new SkewSection());
-            SelectedSection = Sections.FirstOrDefault();
+            Sections.Add(new CropSection());
+            //Sections.Add(new CombineSection());            
+            //Sections.Add(new RotateSection());
+            //Sections.Add(new SkewSection());
+            selectedSection = Sections[0];
         }
       
         public FiltersViewModel()

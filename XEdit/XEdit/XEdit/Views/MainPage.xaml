@@ -31,6 +31,7 @@
                 <RowDefinition Height="10" />
                 <RowDefinition Height="70" />
                 <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
             </Grid.RowDefinitions>
 
             <!--Header-->
@@ -94,7 +95,8 @@
                 <CollectionView ItemsSource="{Binding SelectedSection.Handlers}"
                         ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                         SelectionMode="Single" 
-                        SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"   >
+                        SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"  
+                        x:Name="filtersTag" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" WidthRequest="90">
@@ -102,11 +104,8 @@
                                     Text="{Binding Name}"
                                     TextColor="White" 
                                     FontSize="Micro" 
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center"  >
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding SelectedSection.SelectCommand}" NumberOfTapsRequired="1" />
-                                    </Label.GestureRecognizers>
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="CenterAndExpand" >
                                 </Label>
                             </Grid>
                         </DataTemplate>
@@ -119,25 +118,37 @@
                 <CollectionView ItemsSource="{Binding Sections}"
                         ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                         SelectionMode="Single" 
-                        SelectedItem="{Binding SelectedSection, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedSection, Mode=TwoWay}"
+                        >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" WidthRequest="70">
                                 <Label                                     
-                                Text="{Binding Name}"
-                                TextColor="White" 
-                                FontSize="Micro" 
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center" >
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding SetSectionCommand}" NumberOfTapsRequired="1" />
-                                    </Label.GestureRecognizers>
+                                    Text="{Binding Name}"
+                                    TextColor="White" 
+                                    FontSize="Micro"                                 
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="CenterAndExpand" >
+                                    <!--<Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SetSectionCommand}"                                                              
+                                                              NumberOfTapsRequired="1" />
+                                    </Label.GestureRecognizers>-->
                                 </Label>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </StackLayout>
+
+            <Button Grid.Row="5"              
+                Text="OK"
+                FontSize="Micro" 
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand" 
+                TextColor="Black"
+                Command="{Binding ButtonCommand}"
+                CommandParameter="{Reference skiaWrapper}" >
+            </Button>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
