@@ -13,5 +13,6 @@ namespace XEdit.Interaction
         ObservableCollection<IHandler> Handlers { get; }
         IHandler SelectedHandler { get; }
         Command SelectCommand { get; }
+        Command CancelCommand { get; }
     }
 }

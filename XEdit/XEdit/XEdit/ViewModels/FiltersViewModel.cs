@@ -18,7 +18,9 @@ namespace XEdit.ViewModels
     {
         public ObservableCollection<ISection> Sections { get; set; }
             = new ObservableCollection<ISection>();
-     
+
+
+        private ISection prevSection;
         private ISection selectedSection;
         public ISection SelectedSection
         {
@@ -30,8 +32,9 @@ namespace XEdit.ViewModels
             {
                 if (selectedSection != value)
                 {
+                    prevSection = selectedSection;
                     selectedSection = value;
-                    OnSelectedSectionChanged();
+                    //OnSelectedSectionChanged();
                     OnPropertyChanged();
                 }
             }
@@ -47,6 +50,11 @@ namespace XEdit.ViewModels
                 return new Command((t) => {
                     if (ViewFunctionality.IsImageLoaded)
                     {
+                        if (prevSection != null)
+                        {
+                            prevSection.CancelCommand.Execute(t);
+                            prevSection = null;
+                        }
                         SelectedSection.SelectCommand.Execute(t);
                     }
                 });

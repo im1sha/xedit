@@ -8,6 +8,7 @@ namespace XEdit.Interaction
     { 
         string Name { get; }
         string ImageUrl { get; }
-        Action<object> GetAction(object target, EventArgs args);
+        Action<object> SelectAction(object target, EventArgs args);
+        Action<object> CancelAction(object target, EventArgs args);
     }
 }

@@ -31,7 +31,7 @@ namespace XEdit.Sections
         {
             public override string Name => "Green";
 
-            public override Action<object> GetAction(object target, EventArgs args)
+            public override Action<object> SelectAction(object target, EventArgs args)
             {
                 return (obj) => { AddSkCanvasAsChild(target, args); };
             }
@@ -80,7 +80,7 @@ namespace XEdit.Sections
         {
             public override string Name => "Yellow";
 
-            public override Action<object> GetAction(object target, EventArgs args)
+            public override Action<object> SelectAction(object target, EventArgs args)
             {
                 return (obj) => { AddSkCanvasAsChild(target, args); };
             }

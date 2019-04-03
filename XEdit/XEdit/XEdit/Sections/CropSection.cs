@@ -21,7 +21,6 @@ namespace XEdit.Sections
         public CropSection() : base()
         {
             Handlers.Add(new FreeSizeCrop());
-            Handlers.Add(new OneToOneCrop());
             SelectedHandler = Handlers[0];
         }
 
@@ -29,37 +28,37 @@ namespace XEdit.Sections
         {
             public bool IsCroppingInProgress { get; set; } = false;
 
-            private SKBitmap croppedBitmap;
-            private PhotoCropperCanvasView photoCropper;
+            private SKBitmap currentBitmap;
+            private PhotoCropperCanvasView photoCropperView;
 
             private object target; // wrapper of canva at XAML
 
             public void RunCropping(object target)
             {
-                photoCropper = new PhotoCropperCanvasView(ViewFunctionality.ResourceBitmap);
-
-                ViewFunctionality.AddNewCanvaAsChild(target, photoCropper);
-
+                photoCropperView = new PhotoCropperCanvasView(ViewFunctionality.ResourceBitmap);
+                ViewFunctionality.AddNewCanvaAsChild(target, photoCropperView);
                 this.target = target;
             }
 
-
             // target stored in local field
-            public void OnDoneButtonClicked(/*object sender, EventArgs args*/)
+            public void OnApply()
             {
-                croppedBitmap = photoCropper.CroppedBitmap;
+                currentBitmap = photoCropperView.CroppedBitmap;
+                ViewFunctionality.SetBitmap(currentBitmap);
 
+                RedrawCanvas();
+            }
+
+        
+
+            void RedrawCanvas()
+            {
                 SKCanvasView canvasView = new SKCanvasView();
                 canvasView.PaintSurface += OnCanvasViewPaintSurface;
-
-                ViewFunctionality.SetBitmap(croppedBitmap);
-
-
-                photoCropper.UnregisterEffects(); ////
-                // photoCropper = null;
-
+                photoCropperView.UnregisterEffects();
                 ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
             }
+
 
             void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
             {
@@ -68,7 +67,7 @@ namespace XEdit.Sections
                 SKCanvas canvas = surface.Canvas;
 
                 canvas.Clear();
-                canvas.DrawBitmap(croppedBitmap, info.Rect, BitmapStretch.Uniform);
+                canvas.DrawBitmap(currentBitmap, info.Rect, BitmapStretch.Uniform);
             }
         }
 
@@ -260,9 +259,7 @@ namespace XEdit.Sections
                 touchEffect.TouchAction -= OnTouchEffectTouchAction;
                 Parent?.Effects?.Remove(touchEffect);
             }
-        }
-
-        
+        }   
 
         public class FreeSizeCrop : CoreHandler
         {
@@ -272,7 +269,7 @@ namespace XEdit.Sections
             {
             }
 
-            public override Action<object> GetAction(object target, EventArgs args)
+            public override Action<object> SelectAction(object target, EventArgs args)
             {
                 if (!mainCropperInstance.IsCroppingInProgress)
                 {
@@ -285,11 +282,24 @@ namespace XEdit.Sections
                 }
 
                 return (obj) => {
-                    mainCropperInstance.OnDoneButtonClicked();
+                    mainCropperInstance.OnApply();
                     mainCropperInstance.IsCroppingInProgress = false;
 
                 };
                 
+            }
+
+            public override Action<object> CancelAction(object target, EventArgs args)
+            {
+                if (mainCropperInstance.IsCroppingInProgress)
+                {
+                    return (obj) => {
+                        mainCropperInstance.OnApply();
+                        mainCropperInstance.IsCroppingInProgress = false;
+                    };
+                }
+
+                return (obj) => { };
             }
 
         }
@@ -302,7 +312,12 @@ namespace XEdit.Sections
             {
             }
 
-            public override Action<object> GetAction(object target, EventArgs args)
+            public override Action<object> SelectAction(object target, EventArgs args)
+            {
+                return (obj) => { };
+            }
+
+            public override Action<object> CancelAction(object target, EventArgs args)
             {
                 return (obj) => { };
             }

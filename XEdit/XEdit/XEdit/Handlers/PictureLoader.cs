@@ -32,7 +32,7 @@ namespace XEdit.Handlers
         {
             public override string Name => "Upload";
 
-            public override Action<object> GetAction(object target, EventArgs args)
+            public override Action<object> SelectAction(object target, EventArgs args)
             {
                 return (obj) => { AddSkCanvasAsChild(target, args); };
             }

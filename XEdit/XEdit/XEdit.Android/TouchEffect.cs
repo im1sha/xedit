@@ -39,7 +39,14 @@ namespace TouchTracking.Droid
 
             if (touchEffect != null && view != null)
             {
-                viewDictionary.Add(view, this);
+                if (!viewDictionary.ContainsKey(view))
+                {
+                    viewDictionary.Add(view, this);
+                }
+                else
+                {
+                    viewDictionary[view]= this;
+                }
 
                 formsElement = Element;
 

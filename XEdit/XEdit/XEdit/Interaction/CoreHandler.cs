@@ -10,9 +10,14 @@ namespace XEdit.Interaction
 
         public virtual string ImageUrl => throw new NotImplementedException();
 
-        public virtual Action<object> GetAction(object target, EventArgs args)
+        public virtual Action<object> SelectAction(object target, EventArgs args)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual Action<object> CancelAction(object target, EventArgs args)
+        {
+            return (obj) => { };
         }
     }
 }

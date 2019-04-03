@@ -37,7 +37,17 @@ namespace XEdit.Interaction
             get
             {
                 return new Command((object target) => {
-                    SelectedHandler?.GetAction(target, null) (null);
+                    SelectedHandler?.SelectAction(target, null) (null);
+                });
+            }
+        }
+
+        public virtual Command CancelCommand
+        {
+            get
+            {
+                return new Command((object target) => {
+                    SelectedHandler?.CancelAction(target, null)(null);
                 });
             }
         }

@@ -35,7 +35,6 @@ namespace XEdit.Interaction
             if (IsTargetSuitable(target))
             {
                 Xamarin.Forms.Layout<Xamarin.Forms.View> view = (target as Xamarin.Forms.Layout<Xamarin.Forms.View>);
-                view.Children.Clear();          
                 view.Children.Add(canvasView);
                 return true;
             }
