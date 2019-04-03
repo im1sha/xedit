@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using SkiaBase;
+using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,10 @@ namespace XEdit.Sections
     {
         public override string Name => "Color";
 
-
         public ColorSection() : base()
         {
-            Handlers.Add(new GreenColor());
-            Handlers.Add(new YellowCollor());
+            Handlers.Add(new PastelColor());
+            Handlers.Add(new GrayScaleColor());
             SelectedHandler = Handlers[0];
         }
 
@@ -27,16 +27,13 @@ namespace XEdit.Sections
 
         }
 
-        public class GreenColor : CoreHandler
+        public class PastelColor : CoreHandler
         {
-            public override string Name => "Green";
-
+            public override string Name => "Pastel";
             public override Action<object> SelectAction(object target, EventArgs args)
             {
                 return (obj) => { AddSkCanvasAsChild(target, args); };
             }
-
-            private SKBitmap resourceBitmap;
 
             private void AddSkCanvasAsChild(object target, EventArgs args)
             {
@@ -47,16 +44,10 @@ namespace XEdit.Sections
                 if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
                 {
                     (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
-
-                    // Load resource bitmap
-                    string resourceID = "XEdit.Media.monkey.png";
-                    Assembly assembly = GetType().GetTypeInfo().Assembly;
-
-                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
-                    {
-                        resourceBitmap = SKBitmap.Decode(stream);
-                    }
                 }
+
+                canvasView.InvalidateSurface();
+
             }
 
             private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -67,25 +58,31 @@ namespace XEdit.Sections
 
                 canvas.Clear();
 
-                if (resourceBitmap != null)
+                using (SKPaint paint = new SKPaint())
                 {
-                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
-                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
-                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                    paint.ColorFilter =
+                     SKColorFilter.CreateColorMatrix(new float[]
+                     {
+                                         0.75f, 0.25f, 0.25f, 0, 0,
+                                         0.25f, 0.75f, 0.25f, 0, 0,
+                                         0.25f, 0.25f, 0.75f, 0, 0,
+                                         0, 0, 0, 1, 0
+                     });
+
+                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
                 }
+
             }
         }
 
-        public class YellowCollor : CoreHandler
+        public class GrayScaleColor : CoreHandler
         {
-            public override string Name => "Yellow";
+            public override string Name => "Gray Scale";
 
             public override Action<object> SelectAction(object target, EventArgs args)
             {
                 return (obj) => { AddSkCanvasAsChild(target, args); };
             }
-
-            private SKBitmap resourceBitmap;
 
             private void AddSkCanvasAsChild(object target, EventArgs args)
             {
@@ -96,16 +93,10 @@ namespace XEdit.Sections
                 if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
                 {
                     (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
-
-                    // Load resource bitmap
-                    string resourceID = "XEdit.Media.MonkeyFace.png";
-                    Assembly assembly = GetType().GetTypeInfo().Assembly;
-
-                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
-                    {
-                        resourceBitmap = SKBitmap.Decode(stream);
-                    }
                 }
+
+                canvasView.InvalidateSurface();
+
             }
 
             private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -116,13 +107,25 @@ namespace XEdit.Sections
 
                 canvas.Clear();
 
-                if (resourceBitmap != null)
+                using (SKPaint paint = new SKPaint())
                 {
-                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
-                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
-                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                    paint.ColorFilter =
+                    paint.ColorFilter =
+                        SKColorFilter.CreateColorMatrix(new float[]
+                        {
+                        0.21f, 0.72f, 0.07f, 0, 0,
+                        0.21f, 0.72f, 0.07f, 0, 0,
+                        0.21f, 0.72f, 0.07f, 0, 0,
+                        0,     0,     0,     1, 0
+                        });
+
+
+                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
                 }
+
             }
         }
     }
 }
+
+

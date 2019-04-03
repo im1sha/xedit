@@ -57,6 +57,7 @@ namespace XEdit.Sections
                 canvasView.PaintSurface += OnCanvasViewPaintSurface;
                 photoCropperView.UnregisterEffects();
                 ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
+                canvasView.InvalidateSurface();
             }
 
 
@@ -68,6 +69,7 @@ namespace XEdit.Sections
 
                 canvas.Clear();
                 canvas.DrawBitmap(currentBitmap, info.Rect, BitmapStretch.Uniform);
+
             }
         }
 
@@ -291,6 +293,8 @@ namespace XEdit.Sections
 
             public override Action<object> CancelAction(object target, EventArgs args)
             {
+                //to replace
+
                 if (mainCropperInstance.IsCroppingInProgress)
                 {
                     return (obj) => {

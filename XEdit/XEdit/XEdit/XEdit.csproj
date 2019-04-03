@@ -22,6 +22,7 @@
     <None Remove="Media\Banana.jpg" />
     <None Remove="Media\BananaMatte.png" />
     <None Remove="Media\BrickWallTile.jpg" />
+    <None Remove="Media\city.jpg" />
     <None Remove="Media\FacePalm.jpg" />
     <None Remove="Media\monkey.png" />
     <None Remove="Media\MonkeyFace.png" />
@@ -34,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Media\city.jpg" />
     <EmbeddedResource Include="Media\StoneWallTile.jpg" />
   </ItemGroup>
 

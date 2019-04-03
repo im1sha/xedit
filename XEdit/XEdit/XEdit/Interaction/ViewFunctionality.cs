@@ -3,6 +3,7 @@ using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace XEdit.Interaction
 {
@@ -35,6 +36,13 @@ namespace XEdit.Interaction
             if (IsTargetSuitable(target))
             {
                 Xamarin.Forms.Layout<Xamarin.Forms.View> view = (target as Xamarin.Forms.Layout<Xamarin.Forms.View>);
+
+                for (int i = 0; i < view.Children.Count; i++)
+                {
+                    view.Children.RemoveAt(i);
+                }
+                view.BackgroundColor = Color.Black;
+
                 view.Children.Add(canvasView);
                 return true;
             }

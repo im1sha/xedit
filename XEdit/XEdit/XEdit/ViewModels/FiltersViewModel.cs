@@ -68,7 +68,7 @@ namespace XEdit.ViewModels
             Sections.Add(new ColorSection());
             Sections.Add(new CropSection());
             //Sections.Add(new CombineSection());            
-            //Sections.Add(new RotateSection());
+            Sections.Add(new RotateSection());
             //Sections.Add(new SkewSection());
             selectedSection = Sections[0];
         }
