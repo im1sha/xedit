@@ -1,4 +1,5 @@
 ﻿using SkiaBase;
+using SkiaBase.Bitmaps;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
@@ -8,6 +9,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using TouchTracking;
 using XEdit.Interaction;
 
 namespace XEdit.Sections
@@ -23,317 +25,287 @@ namespace XEdit.Sections
             SelectedHandler = Handlers[0];
         }
 
-        private class MainCrop
+        public class MainCropper
         {
+            public bool IsCroppingInProgress { get; set; } = false;
 
-        }
+            private SKBitmap croppedBitmap;
+            private PhotoCropperCanvasView photoCropper;
 
-        public class FreeSizeCrop : CoreHandler
-        {
-            public override string Name => "Free size";
+            private object target; // wrapper of canva at XAML
 
-
-            public override Action<object> GetAction(object target, EventArgs args)
+            public void RunCropping(object target)
             {
-                return (obj) => { AddSkCanvasAsChild(target, args); };
+                photoCropper = new PhotoCropperCanvasView(ViewFunctionality.ResourceBitmap);
+
+                ViewFunctionality.AddNewCanvaAsChild(target, photoCropper);
+
+                this.target = target;
             }
 
-            private SKBitmap resourceBitmap;
 
-            private void AddSkCanvasAsChild(object target, EventArgs args)
+            // target stored in local field
+            public void OnDoneButtonClicked(/*object sender, EventArgs args*/)
             {
-                SKCanvasView canvasView = new SKCanvasView();
+                croppedBitmap = photoCropper.CroppedBitmap;
 
+                SKCanvasView canvasView = new SKCanvasView();
                 canvasView.PaintSurface += OnCanvasViewPaintSurface;
 
-                if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
-                {
-                    (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
+                ViewFunctionality.SetBitmap(croppedBitmap);
 
-                    // Load resource bitmap
-                    string resourceID = "XEdit.Media.SeatedMonkey.jpg";
-                    Assembly assembly = GetType().GetTypeInfo().Assembly;
 
-                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
-                    {
-                        resourceBitmap = SKBitmap.Decode(stream);
-                    }
-                }
+                photoCropper.UnregisterEffects(); ////
+                // photoCropper = null;
+
+                ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
             }
 
-            private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+            void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
             {
                 SKImageInfo info = args.Info;
                 SKSurface surface = args.Surface;
                 SKCanvas canvas = surface.Canvas;
 
                 canvas.Clear();
+                canvas.DrawBitmap(croppedBitmap, info.Rect, BitmapStretch.Uniform);
+            }
+        }
 
-                if (resourceBitmap != null)
+        /// <summary>
+        /// Should call UregisterEffects()
+        /// </summary>
+        private class PhotoCropperCanvasView : SKCanvasView
+        {
+            const int CORNER = 50;      // pixel length of cropper corner
+            const int RADIUS = 100;     // pixel radius of touch hit-test
+
+            SKBitmap bitmap;
+            CroppingRectangle croppingRect;
+            SKMatrix inverseBitmapMatrix;
+
+            // Touch tracking
+            TouchEffect touchEffect = new TouchEffect();
+            struct TouchPoint
+            {
+                public int CornerIndex { set; get; }
+                public SKPoint Offset { set; get; }
+            }
+
+            Dictionary<long, TouchPoint> touchPoints = new Dictionary<long, TouchPoint>();
+
+            // Drawing objects
+            SKPaint cornerStroke = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.White,
+                StrokeWidth = 10
+            };
+            SKPaint edgeStroke = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.White,
+                StrokeWidth = 2
+            };
+
+            public PhotoCropperCanvasView(SKBitmap bitmap, float? aspectRatio = null)
+            {
+                this.bitmap = bitmap;
+
+                SKRect bitmapRect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
+                croppingRect = new CroppingRectangle(bitmapRect, aspectRatio);
+
+
+                touchEffect.TouchAction += OnTouchEffectTouchAction;
+
+            }
+
+            public SKBitmap CroppedBitmap
+            {
+                get
                 {
-                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
-                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
-                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                    SKRect cropRect = croppingRect.Rect;
+                    SKBitmap croppedBitmap = new SKBitmap((int)cropRect.Width,
+                                                          (int)cropRect.Height);
+                    SKRect dest = new SKRect(0, 0, cropRect.Width, cropRect.Height);
+                    SKRect source = new SKRect(cropRect.Left, cropRect.Top,
+                                               cropRect.Right, cropRect.Bottom);
+
+                    using (SKCanvas canvas = new SKCanvas(croppedBitmap))
+                    {
+                        canvas.DrawBitmap(bitmap, source, dest);
+                    }
+
+                    return croppedBitmap;
                 }
             }
+
+            protected override void OnParentSet()
+            {
+                base.OnParentSet();
+
+                // Attach TouchEffect to parent view
+
+                Parent?.Effects?.Add(touchEffect);
+            }
+
+            protected override void OnPaintSurface(SKPaintSurfaceEventArgs args)
+            {
+                base.OnPaintSurface(args);
+
+                SKImageInfo info = args.Info;
+                SKSurface surface = args.Surface;
+                SKCanvas canvas = surface.Canvas;
+
+                canvas.Clear(SKColors.Gray);
+
+                // Calculate rectangle for displaying bitmap
+
+                float scale = Math.Min((float)info.Width / bitmap.Width, (float)info.Height / bitmap.Height);
+                float x = (info.Width - scale * bitmap.Width) / 2;
+                float y = (info.Height - scale * bitmap.Height) / 2;
+                SKRect bitmapRect = new SKRect(x, y, x + scale * bitmap.Width, y + scale * bitmap.Height);
+                canvas.DrawBitmap(bitmap, bitmapRect);
+
+                //Calculate a matrix transform for displaying the cropping rectangle
+
+                SKMatrix bitmapScaleMatrix = SKMatrix.MakeIdentity();
+                bitmapScaleMatrix.SetScaleTranslate(scale, scale, x, y);
+
+                //Display rectangle
+                SKRect scaledCropRect = bitmapScaleMatrix.MapRect(croppingRect.Rect);
+                canvas.DrawRect(scaledCropRect, edgeStroke);
+
+                //Display heavier corners
+                using (SKPath path = new SKPath())
+                {
+                    path.MoveTo(scaledCropRect.Left, scaledCropRect.Top + CORNER);
+                    path.LineTo(scaledCropRect.Left, scaledCropRect.Top);
+                    path.LineTo(scaledCropRect.Left + CORNER, scaledCropRect.Top);
+
+                    path.MoveTo(scaledCropRect.Right - CORNER, scaledCropRect.Top);
+                    path.LineTo(scaledCropRect.Right, scaledCropRect.Top);
+                    path.LineTo(scaledCropRect.Right, scaledCropRect.Top + CORNER);
+
+                    path.MoveTo(scaledCropRect.Right, scaledCropRect.Bottom - CORNER);
+                    path.LineTo(scaledCropRect.Right, scaledCropRect.Bottom);
+                    path.LineTo(scaledCropRect.Right - CORNER, scaledCropRect.Bottom);
+
+                    path.MoveTo(scaledCropRect.Left + CORNER, scaledCropRect.Bottom);
+                    path.LineTo(scaledCropRect.Left, scaledCropRect.Bottom);
+                    path.LineTo(scaledCropRect.Left, scaledCropRect.Bottom - CORNER);
+
+                    canvas.DrawPath(path, cornerStroke);
+                }
+
+                //    Invert the transform for touch tracking
+
+                bitmapScaleMatrix.TryInvert(out inverseBitmapMatrix);
+            }
+
+            void OnTouchEffectTouchAction(object sender, TouchActionEventArgs args)
+            {
+                SKPoint pixelLocation = ConvertToPixel(args.Location);
+                SKPoint bitmapLocation = inverseBitmapMatrix.MapPoint(pixelLocation);
+
+                switch (args.Type)
+                {
+                    case TouchActionType.Pressed:
+                        //  Convert radius to bitmap/ cropping scale
+                        float radius = inverseBitmapMatrix.ScaleX * RADIUS;
+
+                        // Find corner that the finger is touching
+                        int cornerIndex = croppingRect.HitTest(bitmapLocation, radius);
+
+                        if (cornerIndex != -1 && !touchPoints.ContainsKey(args.Id))
+                        {
+                            TouchPoint touchPoint = new TouchPoint
+                            {
+                                CornerIndex = cornerIndex,
+                                Offset = bitmapLocation - croppingRect.Corners[cornerIndex]
+                            };
+
+                            touchPoints.Add(args.Id, touchPoint);
+                        }
+                        break;
+
+                    case TouchActionType.Moved:
+                        if (touchPoints.ContainsKey(args.Id))
+                        {
+                            TouchPoint touchPoint = touchPoints[args.Id];
+                            croppingRect.MoveCorner(touchPoint.CornerIndex,
+                                                    bitmapLocation - touchPoint.Offset);
+                            InvalidateSurface();
+                        }
+                        break;
+
+                    case TouchActionType.Released:
+                    case TouchActionType.Cancelled:
+                        if (touchPoints.ContainsKey(args.Id))
+                        {
+                            touchPoints.Remove(args.Id);
+                        }
+                        break;
+                }
+            }
+
+            SKPoint ConvertToPixel(Xamarin.Forms.Point pt)
+            {
+                return new SKPoint(
+                    (float)(CanvasSize.Width * pt.X / Width),
+                    (float)(CanvasSize.Height * pt.Y / Height));
+            }
+
+            public void UnregisterEffects() {
+                touchEffect.TouchAction -= OnTouchEffectTouchAction;
+                Parent?.Effects?.Remove(touchEffect);
+            }
+        }
+
+        
+
+        public class FreeSizeCrop : CoreHandler
+        {
+            private MainCropper mainCropperInstance = new MainCropper();
+            public override string Name => "Free size";
+            public FreeSizeCrop() : base()
+            {
+            }
+
+            public override Action<object> GetAction(object target, EventArgs args)
+            {
+                if (!mainCropperInstance.IsCroppingInProgress)
+                {
+                    mainCropperInstance = new MainCropper();
+
+                    return (obj) => {
+                        mainCropperInstance.RunCropping(target);
+                        mainCropperInstance.IsCroppingInProgress = true;
+                    };
+                }
+
+                return (obj) => {
+                    mainCropperInstance.OnDoneButtonClicked();
+                    mainCropperInstance.IsCroppingInProgress = false;
+
+                };
+                
+            }
+
         }
 
         public class OneToOneCrop : CoreHandler
         {
+            private MainCropper cropperInstance;
             public override string Name => "1 : 1";
+            public OneToOneCrop() : base()
+            {
+            }
 
             public override Action<object> GetAction(object target, EventArgs args)
             {
-                return (obj) => { AddSkCanvasAsChild(target, args); };
-            }
-
-            private SKBitmap resourceBitmap;
-
-            private void AddSkCanvasAsChild(object target, EventArgs args)
-            {
-                SKCanvasView canvasView = new SKCanvasView();
-
-                canvasView.PaintSurface += OnCanvasViewPaintSurface;
-
-                if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
-                {
-                    (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
-
-                    // Load resource bitmap
-                    string resourceID = "XEdit.Media.PageOfCode.png";
-                    Assembly assembly = GetType().GetTypeInfo().Assembly;
-
-                    using (Stream stream = assembly.GetManifestResourceStream(resourceID))
-                    {
-                        resourceBitmap = SKBitmap.Decode(stream);
-                    }
-                }
-            }
-
-            private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
-            {
-                SKImageInfo info = args.Info;
-                SKSurface surface = args.Surface;
-                SKCanvas canvas = surface.Canvas;
-
-                canvas.Clear();
-
-                if (resourceBitmap != null)
-                {
-                    SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
-                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
-                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
-                }
+                return (obj) => { };
             }
         }
-
-        /*
-               SKBitmap croppedBitmap;
-               PhotoCropperCanvasView photoCropper;
-
-                       public CropFilter()
-                       {
-                           SKBitmap bitmap = BitmapExtensions.LoadBitmapResource(GetType(),
-                               "XEdit.Media.MountainClimbers.jpg");
-
-                           PhotoCropperCanvasView photoCropper = new PhotoCropperCanvasView(bitmap);
-                          // object on screen
-                       canvasViewHost.Children.Add(photoCropper);
-               }
-
-               void OnDoneButtonClicked(object sender, EventArgs args)
-               {
-                   croppedBitmap = photoCropper.CroppedBitmap;
-
-                   SKCanvasView canvasView = new SKCanvasView();
-                   canvasView.PaintSurface += OnCanvasViewPaintSurface;
-                   Content = canvasView;
-               }
-
-               void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
-               {
-                   SKImageInfo info = args.Info;
-                   SKSurface surface = args.Surface;
-                   SKCanvas canvas = surface.Canvas;
-
-                   canvas.Clear();
-                   canvas.DrawBitmap(croppedBitmap, info.Rect, BitmapStretch.Uniform);
-               }
-           }
-
-           class PhotoCropperCanvasView : SKCanvasView
-           {
-               const int CORNER = 50;      // pixel length of cropper corner
-               const int RADIUS = 100;     // pixel radius of touch hit-test
-
-               SKBitmap bitmap;
-               CroppingRectangle croppingRect;
-               SKMatrix inverseBitmapMatrix;
-
-               // Touch tracking 
-               TouchEffect touchEffect = new TouchEffect();
-               struct TouchPoint
-               {
-                   public int CornerIndex { set; get; }
-                   public SKPoint Offset { set; get; }
-               }
-
-               Dictionary<long, TouchPoint> touchPoints = new Dictionary<long, TouchPoint>();
-
-               // Drawing objects
-               SKPaint cornerStroke = new SKPaint
-               {
-                   Style = SKPaintStyle.Stroke,
-                   Color = SKColors.White,
-                   StrokeWidth = 10
-               };
-
-               SKPaint edgeStroke = new SKPaint
-               {
-                   Style = SKPaintStyle.Stroke,
-                   Color = SKColors.White,
-                   StrokeWidth = 2
-               };
-
-               public PhotoCropperCanvasView(SKBitmap bitmap, float? aspectRatio = null)
-               {
-                   this.bitmap = bitmap;
-
-                   SKRect bitmapRect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
-                   croppingRect = new CroppingRectangle(bitmapRect, aspectRatio);
-
-                   touchEffect.TouchAction += OnTouchEffectTouchAction;
-               }
-
-               public SKBitmap CroppedBitmap
-               {
-                   get
-                   {
-                       SKRect cropRect = croppingRect.Rect;
-                       SKBitmap croppedBitmap = new SKBitmap((int)cropRect.Width,
-                                                             (int)cropRect.Height);
-                       SKRect dest = new SKRect(0, 0, cropRect.Width, cropRect.Height);
-                       SKRect source = new SKRect(cropRect.Left, cropRect.Top,
-                                                  cropRect.Right, cropRect.Bottom);
-
-                       using (SKCanvas canvas = new SKCanvas(croppedBitmap))
-                       {
-                           canvas.DrawBitmap(bitmap, source, dest);
-                       }
-
-                       return croppedBitmap;
-                   }
-               }
-
-               protected override void OnParentSet()
-               {
-                   base.OnParentSet();
-
-                   // Attach TouchEffect to parent view
-                   Parent.Effects.Add(touchEffect);
-               }
-
-               protected override void OnPaintSurface(SKPaintSurfaceEventArgs args)
-               {
-                   base.OnPaintSurface(args);
-
-                   SKImageInfo info = args.Info;
-                   SKSurface surface = args.Surface;
-                   SKCanvas canvas = surface.Canvas;
-
-                   canvas.Clear(SKColors.Gray);
-
-                   // Calculate rectangle for displaying bitmap 
-                   float scale = Math.Min((float)info.Width / bitmap.Width, (float)info.Height / bitmap.Height);
-                   float x = (info.Width - scale * bitmap.Width) / 2;
-                   float y = (info.Height - scale * bitmap.Height) / 2;
-                   SKRect bitmapRect = new SKRect(x, y, x + scale * bitmap.Width, y + scale * bitmap.Height);
-                   canvas.DrawBitmap(bitmap, bitmapRect);
-
-                   // Calculate a matrix transform for displaying the cropping rectangle
-                   SKMatrix bitmapScaleMatrix = SKMatrix.MakeIdentity();
-                   bitmapScaleMatrix.SetScaleTranslate(scale, scale, x, y);
-
-                   // Display rectangle
-                   SKRect scaledCropRect = bitmapScaleMatrix.MapRect(croppingRect.Rect);
-                   canvas.DrawRect(scaledCropRect, edgeStroke);
-
-                   // Display heavier corners
-                   using (SKPath path = new SKPath())
-                   {
-                       path.MoveTo(scaledCropRect.Left, scaledCropRect.Top + CORNER);
-                       path.LineTo(scaledCropRect.Left, scaledCropRect.Top);
-                       path.LineTo(scaledCropRect.Left + CORNER, scaledCropRect.Top);
-
-                       path.MoveTo(scaledCropRect.Right - CORNER, scaledCropRect.Top);
-                       path.LineTo(scaledCropRect.Right, scaledCropRect.Top);
-                       path.LineTo(scaledCropRect.Right, scaledCropRect.Top + CORNER);
-
-                       path.MoveTo(scaledCropRect.Right, scaledCropRect.Bottom - CORNER);
-                       path.LineTo(scaledCropRect.Right, scaledCropRect.Bottom);
-                       path.LineTo(scaledCropRect.Right - CORNER, scaledCropRect.Bottom);
-
-                       path.MoveTo(scaledCropRect.Left + CORNER, scaledCropRect.Bottom);
-                       path.LineTo(scaledCropRect.Left, scaledCropRect.Bottom);
-                       path.LineTo(scaledCropRect.Left, scaledCropRect.Bottom - CORNER);
-
-                       canvas.DrawPath(path, cornerStroke);
-                   }
-
-                   // Invert the transform for touch tracking
-                   bitmapScaleMatrix.TryInvert(out inverseBitmapMatrix);
-               }
-
-               void OnTouchEffectTouchAction(object sender, TouchActionEventArgs args)
-               {
-                   SKPoint pixelLocation = ConvertToPixel(args.Location);
-                   SKPoint bitmapLocation = inverseBitmapMatrix.MapPoint(pixelLocation);
-
-                   switch (args.Type)
-                   {
-                       case TouchActionType.Pressed:
-                           // Convert radius to bitmap/cropping scale
-                           float radius = inverseBitmapMatrix.ScaleX * RADIUS;
-
-                           // Find corner that the finger is touching
-                           int cornerIndex = croppingRect.HitTest(bitmapLocation, radius);
-
-                           if (cornerIndex != -1 && !touchPoints.ContainsKey(args.Id))
-                           {
-                               TouchPoint touchPoint = new TouchPoint
-                               {
-                                   CornerIndex = cornerIndex,
-                                   Offset = bitmapLocation - croppingRect.Corners[cornerIndex]
-                               };
-
-                               touchPoints.Add(args.Id, touchPoint);
-                           }
-                           break;
-
-                       case TouchActionType.Moved:
-                           if (touchPoints.ContainsKey(args.Id))
-                           {
-                               TouchPoint touchPoint = touchPoints[args.Id];
-                               croppingRect.MoveCorner(touchPoint.CornerIndex,
-                                                       bitmapLocation - touchPoint.Offset);
-                               InvalidateSurface();
-                           }
-                           break;
-
-                       case TouchActionType.Released:
-                       case TouchActionType.Cancelled:
-                           if (touchPoints.ContainsKey(args.Id))
-                           {
-                               touchPoints.Remove(args.Id);
-                           }
-                           break;
-                   }
-               }
-
-               SKPoint ConvertToPixel(Xamarin.Forms.Point pt)
-               {
-                   return new SKPoint((float)(CanvasSize.Width * pt.X / Width),
-                                       (float)(CanvasSize.Height * pt.Y / Height));
-               }*/
     }
 }

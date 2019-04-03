@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 using XEdit.Handlers;
+using SkiaSharp;
 
 namespace XEdit.ViewModels
 {
@@ -38,22 +39,21 @@ namespace XEdit.ViewModels
 
         private void OnSelectedSectionChanged() { }
 
-        public ICommand SetSectionCommand
+
+        public ICommand ApplyCommand
         {
             get
             {
-                return new Command(() => { /*SelectedSection.SelectCommand.Execute();*/ });
+                return new Command((t) => {
+                    if (ViewFunctionality.IsImageLoaded)
+                    {
+                        SelectedSection.SelectCommand.Execute(t);
+                    }
+                });
             }
         }
 
-        public ICommand ButtonCommand {
-            get
-            {
-                return new Command((t) => { SelectedSection.SelectCommand.Execute(t); });
-            }
-        }
-
-        public ISection ImageLoader { get; } = new PictureLoader();
+        public PictureLoader ImageLoader { get; } = new PictureLoader();
 
         private void InitializeSections()
         {

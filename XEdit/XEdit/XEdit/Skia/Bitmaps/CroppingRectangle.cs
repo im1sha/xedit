@@ -118,10 +118,10 @@ namespace SkiaBase.Bitmaps
 
                     switch (index)
                     {
-                        case 0:
-                        case 3: rect.Left = rect.Right - width; break;
-                        case 1:
-                        case 2: rect.Right = rect.Left + width; break;
+                        case 0: case 3:
+                            rect.Left = rect.Right - width; break;
+                        case 1: case 2:
+                            rect.Right = rect.Left + width; break;
                     }
                 }
                 else

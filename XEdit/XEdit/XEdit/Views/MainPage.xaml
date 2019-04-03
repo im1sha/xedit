@@ -106,6 +106,11 @@
                                     FontSize="Micro" 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
+                                    <!--<Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ButtonCommand}"    
+                                                              CommandParameter="{Reference skiaWrapper}"
+                                                              NumberOfTapsRequired="1" />
+                                    </Label.GestureRecognizers>-->
                                 </Label>
                             </Grid>
                         </DataTemplate>
@@ -130,7 +135,8 @@
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
                                     <!--<Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding SetSectionCommand}"                                                              
+                                        <TapGestureRecognizer Command="{Binding ButtonCommand}"    
+                                                              CommandParameter="{Reference skiaWrapper}"
                                                               NumberOfTapsRequired="1" />
                                     </Label.GestureRecognizers>-->
                                 </Label>
@@ -140,15 +146,23 @@
                 </CollectionView>
             </StackLayout>
 
-            <Button Grid.Row="5"              
-                Text="OK"
+            <Grid Grid.Row="5" VerticalOptions="Fill" HorizontalOptions="Fill">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                                           
+                <Button  Grid.Column="1"   
+                Text="Apply"
                 FontSize="Micro" 
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill" 
                 TextColor="Black"
-                Command="{Binding ButtonCommand}"
+                Command="{Binding ApplyCommand}"
                 CommandParameter="{Reference skiaWrapper}" >
-            </Button>
+                </Button>
+            </Grid>
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -15,21 +15,21 @@ namespace XEdit.Handlers
 {
     public class PictureLoader : CoreSection
     {
+        private readonly PictureUploader uploader = new PictureUploader();
+
         public override string Name => "Load picture";
       
         public PictureLoader() : base()
         {
-            Handlers.Add(new PictureUploader());
+            Handlers.Add(uploader);
             SelectedHandler = Handlers[0];
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public class PictureUploader : CoreHandler
+        public class PictureUploader : CoreHandler 
         {
-            private SKBitmap resourceBitmap;
-
             public override string Name => "Upload";
 
             public override Action<object> GetAction(object target, EventArgs args)
@@ -43,9 +43,9 @@ namespace XEdit.Handlers
 
                 canvasView.PaintSurface += OnCanvasViewPaintSurface;
 
-                if (target is Xamarin.Forms.Layout<Xamarin.Forms.View>)
+                if (ViewFunctionality.IsTargetSuitable( target ))
                 {
-                    (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
+                    ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
 
                     // Load resource bitmap
                     string resourceID = "XEdit.Media.usa.png";
@@ -53,7 +53,7 @@ namespace XEdit.Handlers
 
                     using (Stream stream = assembly.GetManifestResourceStream(resourceID))
                     {
-                        resourceBitmap = SKBitmap.Decode(stream);
+                        ViewFunctionality.SetBitmap(SKBitmap.Decode(stream));
                     }
                 }
             }
@@ -106,11 +106,11 @@ namespace XEdit.Handlers
 
                 canvas.Clear();
 
-                if (resourceBitmap != null)
+                if (ViewFunctionality.ResourceBitmap != null)
                 {
                     SKRect pictureFrame = SKRect.Create(0, 0, info.Width, info.Height);
-                    SKRect dest = pictureFrame.AspectFit(new SKSize(resourceBitmap.Width, resourceBitmap.Height));
-                    canvas.DrawBitmap(resourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
+                    SKRect dest = pictureFrame.AspectFit(new SKSize(ViewFunctionality.ResourceBitmap.Width, ViewFunctionality.ResourceBitmap.Height));
+                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, dest, new SKPaint() { FilterQuality = SKFilterQuality.High });
                 }
             }
 
