@@ -23,56 +23,58 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black">
+        <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black" >
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="70" />
-                <RowDefinition Height="35" />
-                <RowDefinition Height="35" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="0.3*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="45" /> <!--DEBUG ONLY-->
             </Grid.RowDefinitions>
 
             <!--Header-->
 
             <Grid Grid.Row="0" 
-                  BackgroundColor="Black"
+                  BackgroundColor="Navy"
                   HorizontalOptions="Fill"
-                  VerticalOptions="Fill" >
+                  VerticalOptions="Fill" 
+                  ColumnSpacing="0" 
+                  RowSpacing="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="25" />
-                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button BackgroundColor="Black"
-                        Grid.Column="0"
-                        HeightRequest="20" 
-                        WidthRequest="25"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Center"
-                        Image="menu_list.png"
-                        Command="{Binding ImageLoader.SelectCommand }"
-                        CommandParameter="{Reference skiaWrapper}">
-                </Button>
-                <Button BackgroundColor="Black"
+                <!--HeightRequest="20" 
+                 WidthRequest="25"-->
+
+                <ImageButton BackgroundColor="Red"
+                    Padding="5"                                         
+                    Source="menu_list.png"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"                                    
+                    Command="{Binding ImageLoader.SelectCommand }"
+                    CommandParameter="{Reference skiaWrapper}">
+                </ImageButton>
+
+                <ImageButton BackgroundColor="Brown"
                         Grid.Column="2"
-                        HeightRequest="20" 
-                        WidthRequest="20" 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start"
-                        Image="arrow_left.png">
-                </Button>
-                <Button BackgroundColor="Black"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill"       
+                        Padding="5"                                         
+                        Source="arrow_left.png">
+                </ImageButton>
+                <ImageButton BackgroundColor="Red"
                         Grid.Column="3"
-                        HeightRequest="20" 
-                        WidthRequest="20" 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start"
-                        Image="arrow_right.png">
-                </Button>
+                        Padding="5"                                         
+                        VerticalOptions="Fill" 
+                        HorizontalOptions="Fill"
+                        Source="arrow_right.png">
+                </ImageButton>
 
             </Grid>
           
