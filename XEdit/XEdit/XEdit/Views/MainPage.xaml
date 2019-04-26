@@ -2,9 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
              x:Class="XEdit.Views.MainPage" >
-
     <ContentPage.Resources>
+        <localViews:GridLengthConverter x:Key="gridLengthConverter" />
+
         <Style TargetType="Grid" x:Key="activeItemStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -20,60 +22,58 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+
+        <Style TargetType="ImageButton" x:Key="headerItemStyle">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="VerticalOptions" Value="Fill"/>
+        </Style>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black" >
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"  />
                 <RowDefinition Height="10*" />
                 <RowDefinition Height="0.3*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="45" /> <!--DEBUG ONLY-->
             </Grid.RowDefinitions>
 
             <!--Header-->
 
-            <Grid Grid.Row="0" 
-                  BackgroundColor="Navy"
-                  HorizontalOptions="Fill"
-                  VerticalOptions="Fill" 
-                  ColumnSpacing="0" 
-                  RowSpacing="0">
+            <Grid Grid.Row="0"  
+                x:Name="menuImageButtonTag" 
+                BackgroundColor="Navy"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill" 
+                ColumnSpacing="0" 
+                RowSpacing="0" >
+
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                 </Grid.ColumnDefinitions>
 
-                <!--HeightRequest="20" 
-                 WidthRequest="25"-->
-
                 <ImageButton BackgroundColor="Red"
-                    Padding="5"                                         
                     Source="menu_list.png"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Fill"                                    
+                    Style="{StaticResource headerItemStyle}"                                                      
                     Command="{Binding ImageLoader.SelectCommand }"
-                    CommandParameter="{Reference skiaWrapper}">
-                </ImageButton>
-
-                <ImageButton BackgroundColor="Brown"
-                        Grid.Column="2"
-                        HorizontalOptions="Fill"
-                        VerticalOptions="Fill"       
-                        Padding="5"                                         
-                        Source="arrow_left.png">
+                    CommandParameter="{Reference skiaWrapper}"  >
                 </ImageButton>
                 <ImageButton BackgroundColor="Red"
-                        Grid.Column="3"
-                        Padding="5"                                         
-                        VerticalOptions="Fill" 
-                        HorizontalOptions="Fill"
-                        Source="arrow_right.png">
+                    Grid.Column="2"
+                    Style="{StaticResource headerItemStyle}"                                                                 
+                    Source="arrow_left.png">
+                </ImageButton>
+                <ImageButton BackgroundColor="Red"
+                    Grid.Column="3"
+                    Style="{StaticResource headerItemStyle}"                                                      
+                    Source="arrow_right.png">
                 </ImageButton>
 
             </Grid>
@@ -81,38 +81,35 @@
             <Grid Grid.Row="1" x:Name="skiaWrapper" 
                   HorizontalOptions="Fill" 
                   VerticalOptions="Fill"
-                  BackgroundColor="Black">
+                  BackgroundColor="Green">
                 <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
             </Grid>
 
             <Slider Grid.Row="2"
-                    HorizontalOptions="Fill"
-                    MinimumTrackColor="CadetBlue"
-                    MaximumTrackColor="Red"
-                    BackgroundColor="Black"
-                    ThumbColor="White"></Slider>
+                HorizontalOptions="Fill"
+                MinimumTrackColor="CadetBlue"
+                MaximumTrackColor="YellowGreen"
+                BackgroundColor="Black"
+                ThumbColor="White" >
+            </Slider>
 
             <!--tools & filters-->
             <StackLayout Grid.Row="3" >
                 <CollectionView ItemsSource="{Binding SelectedSection.Handlers}"
-                        ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
-                        SelectionMode="Single" 
-                        SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"  
-                        x:Name="filtersTag" >
+                    ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
+                    SelectionMode="Single" 
+                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"  
+                    x:Name="filtersTag" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Style="{StaticResource activeItemStyle}" WidthRequest="90">
+                            <Grid Style="{StaticResource activeItemStyle}" 
+                                WidthRequest="{Binding Height, Source={x:Reference filtersTag}}">
                                 <Label                                     
-                                    Text="{Binding Name}"
+                                    Text="{Binding Name}" 
                                     TextColor="White" 
                                     FontSize="Micro" 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
-                                    <!--<Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ButtonCommand}"    
-                                                              CommandParameter="{Reference skiaWrapper}"
-                                                              NumberOfTapsRequired="1" />
-                                    </Label.GestureRecognizers>-->
                                 </Label>
                             </Grid>
                         </DataTemplate>
@@ -120,27 +117,31 @@
                 </CollectionView>
             </StackLayout>
 
+            <!--<Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ButtonCommand}"    
+                    CommandParameter="{Reference skiaWrapper}"
+                    NumberOfTapsRequired="1" />
+                </Label.GestureRecognizers>-->
+            
+            
             <!--sections-->
+            
             <StackLayout Grid.Row="4" >                   
                 <CollectionView ItemsSource="{Binding Sections}"
-                        ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
-                        SelectionMode="Single" 
-                        SelectedItem="{Binding SelectedSection, Mode=TwoWay}"
-                        >
+                    ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
+                    SelectionMode="Single" 
+                    SelectedItem="{Binding SelectedSection, Mode=TwoWay}"
+                    x:Name="sectionsTag" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Style="{StaticResource activeItemStyle}" WidthRequest="70">
+                            <Grid Style="{StaticResource activeItemStyle}"  
+                                WidthRequest="{Binding Height, Source={x:Reference sectionsTag}}">
                                 <Label                                     
                                     Text="{Binding Name}"
                                     TextColor="White" 
                                     FontSize="Micro"                                 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
-                                    <!--<Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ButtonCommand}"    
-                                                              CommandParameter="{Reference skiaWrapper}"
-                                                              NumberOfTapsRequired="1" />
-                                    </Label.GestureRecognizers>-->
                                 </Label>
                             </Grid>
                         </DataTemplate>
@@ -148,23 +149,31 @@
                 </CollectionView>
             </StackLayout>
 
+            <!--<Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ButtonCommand}"    
+                    CommandParameter="{Reference skiaWrapper}"
+                    NumberOfTapsRequired="1" />
+            </Label.GestureRecognizers>-->
+
+            <!--DEBUG BUTTON-->
+
             <Grid Grid.Row="5" VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                                           
+
                 <Button  Grid.Column="1"   
-                Text="Apply"
-                FontSize="Micro" 
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill" 
-                TextColor="Black"
-                Command="{Binding ApplyCommand}"
-                CommandParameter="{Reference skiaWrapper}" >
+                    Text="Apply"
+                    FontSize="Micro" 
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill" 
+                    TextColor="Black"
+                    Command="{Binding ApplyCommand}"
+                    CommandParameter="{Reference skiaWrapper}" >
                 </Button>
             </Grid>
-            
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>
