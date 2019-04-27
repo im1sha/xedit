@@ -35,36 +35,10 @@ namespace XEdit.ViewModels
         {
             get
             {
-                // target is skiaWrapper
-                return new Command((target) => {
-                    //if (_ViewFunctionality.IsImageLoaded)
-                    //{
-                        //if (prevSection != null)
-                        //{
-                        //    prevSection.CancelCommand.Execute(target);
-                        //    prevSection = null;
-                        //}
-
-                        //SelectedSection.SelectCommand.Execute(target);
-                    //}
-                });
+                return new Command(arg => { });
             }
         }
-
-        public MainViewModel()
-        {
-            InitializeSections();
-        }
-
-        private void InitializeSections()
-        {
-            //Sections.Add(new ColorSection());
-            //Sections.Add(new CropSection());
-            //Sections.Add(new RotateSection());
-            //_selectedSection = Sections[0];
-        }
-      
-      
+         
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

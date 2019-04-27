@@ -19,8 +19,6 @@ namespace XEdit.Views
             InitializeComponent();
 		}
 
-        //SKCanvasView
-
         public async void OnSelectFromGallery(object sender, EventArgs e)
         {
             using (Stream stream = await DependencyService.Get<IPhotoLibrary>().PickPhotoAsync())
@@ -28,12 +26,9 @@ namespace XEdit.Views
                 if (stream != null)
                 {
                     AppDispatcher.Get<ImageManager>().Image = SKBitmap.Decode(stream);
-                    NavigateCommand.Execute(new MainPage());
+                    NavigateCommand.Execute(typeof(MainPage));
                 }
             }
-        }
-
-      
-
+        }   
     }
 }
