@@ -2,9 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-
 using Xamarin.Forms;
-
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using SkiaBase;

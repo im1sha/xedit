@@ -4,14 +4,40 @@
              x:Class="XEdit.Views.StartPage"
              xmlns:local="clr-namespace:XEdit.Views" 
              xmlns:core="clr-namespace:XEdit.Core">
-    <ContentPage.Content>
-        <StackLayout>
-            <Button Text="SELECT PICTURE"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="{x:Type core:PictureLoader}" />
+    
+    <ContentPage.Resources>
+        <Style TargetType="ImageButton" x:Key="itemStyle">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Padding" Value="15"/>
+            
+        </Style>
+    </ContentPage.Resources>
 
-        </StackLayout>
+    <ContentPage.Content>
+        
+
+        <Grid ColumnSpacing="10" RowSpacing="10" BackgroundColor="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+           
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>    
+                <ColumnDefinition></ColumnDefinition>    
+            </Grid.ColumnDefinitions>
+
+            <ImageButton Grid.Row="0" Grid.Column="0" 
+                Command="{Binding NavigateCommand}"
+                CommandParameter="{x:Type core:PictureLoader}" 
+                Source="Gallery.jpg"
+                Style="{StaticResource itemStyle}">
+            </ImageButton>
+
+            <ImageButton Grid.Row="1" Grid.Column="0" Source="Camera.jpg" Style="{StaticResource itemStyle}" >
+            </ImageButton>
+            
+        </Grid>
     </ContentPage.Content>
 </local:BasePage>
