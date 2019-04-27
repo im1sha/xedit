@@ -42,7 +42,7 @@
                 <RowDefinition Height="45" /> <!--DEBUG ONLY-->
             </Grid.RowDefinitions>
 
-            <!--Header-->
+            <!--HEADER-->
 
             <Grid Grid.Row="0"  
                 x:Name="menuImageButtonTag" 
@@ -60,10 +60,11 @@
                 </Grid.ColumnDefinitions>
 
                 <ImageButton BackgroundColor="Red"
-                    Source="menu_list.png"
-                    Style="{StaticResource headerItemStyle}"                                                      
+                    Grid.Column="0"
+                    Style="{StaticResource headerItemStyle}"                                                                                        
+                    Source="menu_list.png"  
                     Command="{Binding ImageLoader.SelectCommand }"
-                    CommandParameter="{Reference skiaWrapper}"  >
+                    CommandParameter="{Reference skiaWrapper}" >
                 </ImageButton>
                 <ImageButton BackgroundColor="Red"
                     Grid.Column="2"
@@ -78,12 +79,13 @@
 
             </Grid>
           
-            <Grid Grid.Row="1" x:Name="skiaWrapper" 
-                  HorizontalOptions="Fill" 
-                  VerticalOptions="Fill"
-                  BackgroundColor="Green">
-                <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
+            <Grid BackgroundColor="Green"
+                Grid.Row="1" 
+                x:Name="skiaWrapper" 
+                HorizontalOptions="Fill" 
+                VerticalOptions="Fill" >
             </Grid>
+             <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
 
             <Slider Grid.Row="2"
                 HorizontalOptions="Fill"
@@ -93,13 +95,13 @@
                 ThumbColor="White" >
             </Slider>
 
-            <!--tools & filters-->
+            <!--TOOLS & FILTERS-->
             <StackLayout Grid.Row="3" >
-                <CollectionView ItemsSource="{Binding SelectedSection.Handlers}"
+                <CollectionView x:Name="filtersTag"
                     ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                     SelectionMode="Single" 
-                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}"  
-                    x:Name="filtersTag" >
+                    ItemsSource="{Binding SelectedSection.Handlers}"
+                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" 
@@ -118,26 +120,25 @@
             </StackLayout>
 
             <!--<Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ButtonCommand}"    
-                    CommandParameter="{Reference skiaWrapper}"
-                    NumberOfTapsRequired="1" />
+                    <TapGestureRecognizer Command="{Binding ButtonCommand}"    
+                        CommandParameter="{Reference skiaWrapper}"
+                        NumberOfTapsRequired="1" />
                 </Label.GestureRecognizers>-->
             
             
-            <!--sections-->
+            <!--SECTIONS-->
             
             <StackLayout Grid.Row="4" >                   
-                <CollectionView ItemsSource="{Binding Sections}"
-                    ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
-                    SelectionMode="Single" 
+                <CollectionView x:Name="sectionsTag"
+                    ItemsSource="{Binding Sections}"
+                    ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"                   
                     SelectedItem="{Binding SelectedSection, Mode=TwoWay}"
-                    x:Name="sectionsTag" >
+                    SelectionMode="Single">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}"  
                                 WidthRequest="{Binding Height, Source={x:Reference sectionsTag}}">
-                                <Label                                     
-                                    Text="{Binding Name}"
+                                <Label Text="{Binding Name}"
                                     TextColor="White" 
                                     FontSize="Micro"                                 
                                     HorizontalOptions="CenterAndExpand"
