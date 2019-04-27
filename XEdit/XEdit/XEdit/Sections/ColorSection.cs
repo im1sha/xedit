@@ -60,7 +60,7 @@ namespace XEdit.Sections
 
                 using (SKPaint paint = new SKPaint())
                 {
-                    paint.ColorFilter =
+                     paint.ColorFilter =
                      SKColorFilter.CreateColorMatrix(new float[]
                      {
                                          0.75f, 0.25f, 0.25f, 0, 0,
