@@ -6,12 +6,12 @@ using Xamarin.Forms;
 
 namespace XEdit.Interaction
 {
-    public interface ISection
+    public interface _ISection
     {
         string Name { get; }
         string ImageUrl { get; }
-        ObservableCollection<IHandler> Handlers { get; }
-        IHandler SelectedHandler { get; }
+        ObservableCollection<_IHandler> Handlers { get; }
+        _IHandler SelectedHandler { get; }
         Command SelectCommand { get; }
         Command CancelCommand { get; }
     }

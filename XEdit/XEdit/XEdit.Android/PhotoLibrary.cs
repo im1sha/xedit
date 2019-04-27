@@ -1,19 +1,19 @@
-﻿using System.Threading.Tasks;
-
+﻿// using System;
+// using System.IO;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Media;
 using Android.OS;
 using Java.IO;
-
 using Xamarin.Forms;
-
+using XEdit.Core;
 using XEdit.Droid;
 
 [assembly: Dependency(typeof(PhotoLibrary))]
 
 namespace XEdit.Droid
 {
-    public class PhotoLibrary : XEdit.Interaction.IPhotoLibrary
+    public class PhotoLibrary : IPhotoLibrary
     {
         public Task<System.IO.Stream> PickPhotoAsync()
         {
@@ -73,5 +73,6 @@ namespace XEdit.Droid
         }
     }
 }
+
 
 

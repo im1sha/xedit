@@ -1,6 +1,4 @@
-﻿using XEdit.Interaction;
-using XEdit.Sections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,83 +6,75 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
-using Xamarin.Forms;
-using XEdit.Handlers;
 using SkiaSharp;
+using Xamarin.Forms;
+using XEdit.Interaction;
+using XEdit.Sections;
 
 namespace XEdit.ViewModels
 {
     public class FiltersViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ISection> Sections { get; set; }
-            = new ObservableCollection<ISection>();
+        public ObservableCollection<_ISection> Sections { get; set; } = new ObservableCollection<_ISection>();
 
-
-        private ISection prevSection;
-        private ISection selectedSection;
-        public ISection SelectedSection
+        //private _ISection _previousSection;
+        private _ISection _selectedSection;
+        public _ISection SelectedSection
         {
-            get
-            {
-                return selectedSection;
-            }
+            get => _selectedSection;           
             set
             {
-                if (selectedSection != value)
+                if (_selectedSection != value)
                 {
-                    prevSection = selectedSection;
-                    selectedSection = value;
-                    //OnSelectedSectionChanged();
+                    _selectedSection = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private void OnSelectedSectionChanged() { }
-
-
         public ICommand ApplyCommand
         {
             get
             {
-                return new Command((t) => {
-                    if (ViewFunctionality.IsImageLoaded)
+                // target is skiaWrapper
+                return new Command((target) => {
+                    if (_ViewFunctionality.IsImageLoaded)
                     {
-                        if (prevSection != null)
-                        {
-                            prevSection.CancelCommand.Execute(t);
-                            prevSection = null;
-                        }
-                        SelectedSection.SelectCommand.Execute(t);
+                        //if (prevSection != null)
+                        //{
+                        //    prevSection.CancelCommand.Execute(target);
+                        //    prevSection = null;
+                        //}
+
+                        //SelectedSection.SelectCommand.Execute(target);
                     }
                 });
             }
         }
 
-        public PictureLoader ImageLoader { get; } = new PictureLoader();
+        public FiltersViewModel()
+        {
+            InitializeSections();
+        }
 
         private void InitializeSections()
         {
             Sections.Add(new ColorSection());
             Sections.Add(new CropSection());
-            //Sections.Add(new CombineSection());            
             Sections.Add(new RotateSection());
-            //Sections.Add(new SkewSection());
-            selectedSection = Sections[0];
+            _selectedSection = Sections[0];
         }
       
-        public FiltersViewModel()
-        {
-            InitializeSections();
-        }
       
         #region INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 }

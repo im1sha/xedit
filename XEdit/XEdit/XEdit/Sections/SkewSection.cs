@@ -6,7 +6,7 @@ using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    public class SkewSection : CoreSection
+    public class SkewSection : _CoreSection
     {
         public override string Name => "Skew";
 

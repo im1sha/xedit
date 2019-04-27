@@ -14,7 +14,7 @@ using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    public class CropSection : CoreSection
+    public class CropSection : _CoreSection
     {
         public override string Name => "Crop";
 
@@ -35,8 +35,8 @@ namespace XEdit.Sections
 
             public void RunCropping(object target)
             {
-                photoCropperView = new PhotoCropperCanvasView(ViewFunctionality.ResourceBitmap);
-                ViewFunctionality.AddNewCanvaAsChild(target, photoCropperView);
+                photoCropperView = new PhotoCropperCanvasView(_ViewFunctionality.ResourceBitmap);
+                _ViewFunctionality.AddNewCanvaAsChild(target, photoCropperView);
                 this.target = target;
             }
 
@@ -44,7 +44,7 @@ namespace XEdit.Sections
             public void OnApply()
             {
                 currentBitmap = photoCropperView.CroppedBitmap;
-                ViewFunctionality.SetBitmap(currentBitmap);
+                _ViewFunctionality.SetBitmap(currentBitmap);
 
                 RedrawCanvas();
             }
@@ -56,7 +56,7 @@ namespace XEdit.Sections
                 SKCanvasView canvasView = new SKCanvasView();
                 canvasView.PaintSurface += OnCanvasViewPaintSurface;
                 photoCropperView.UnregisterEffects();
-                ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
+                _ViewFunctionality.AddNewCanvaAsChild(target, canvasView);
                 canvasView.InvalidateSurface();
             }
 
@@ -263,7 +263,7 @@ namespace XEdit.Sections
             }
         }   
 
-        public class FreeSizeCrop : CoreHandler
+        public class FreeSizeCrop : _CoreHandler
         {
             private MainCropper mainCropperInstance = new MainCropper();
             public override string Name => "Free size";
@@ -308,7 +308,7 @@ namespace XEdit.Sections
 
         }
 
-        public class OneToOneCrop : CoreHandler
+        public class OneToOneCrop : _CoreHandler
         {
             private MainCropper cropperInstance;
             public override string Name => "1 : 1";

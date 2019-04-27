@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XEdit.Views.StartPage"
+             xmlns:local="clr-namespace:XEdit.Views" 
+             xmlns:core="clr-namespace:XEdit.Core">
+    <ContentPage.Content>
+        <StackLayout>
+            <Button Text="SELECT PICTURE"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="{x:Type core:PictureLoader}" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</local:BasePage>

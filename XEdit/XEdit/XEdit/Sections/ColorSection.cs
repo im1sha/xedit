@@ -11,7 +11,7 @@ using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    public class ColorSection : CoreSection
+    public class ColorSection : _CoreSection
     {
         public override string Name => "Color";
 
@@ -27,7 +27,7 @@ namespace XEdit.Sections
 
         }
 
-        public class PastelColor : CoreHandler
+        public class PastelColor : _CoreHandler
         {
             public override string Name => "Pastel";
             public override Action<object> SelectAction(object target, EventArgs args)
@@ -69,13 +69,13 @@ namespace XEdit.Sections
                                          0, 0, 0, 1, 0
                      });
 
-                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
+                    canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
                 }
 
             }
         }
 
-        public class GrayScaleColor : CoreHandler
+        public class GrayScaleColor : _CoreHandler
         {
             public override string Name => "Gray Scale";
 
@@ -120,7 +120,7 @@ namespace XEdit.Sections
                         });
 
 
-                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
+                    canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
                 }
 
             }

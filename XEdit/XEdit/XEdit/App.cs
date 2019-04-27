@@ -9,10 +9,10 @@ namespace XEdit
 	{
 		public App ()
 		{
-			MainPage = new XEdit.Views.MainPage();
+            MainPage = new NavigationPage(new XEdit.Views.StartPage());
         }
 
-		protected override void OnStart ()
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

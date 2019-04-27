@@ -4,7 +4,7 @@ using System.Text;
 
 namespace XEdit.Interaction
 {
-    public interface IHandler
+    public interface _IHandler
     { 
         string Name { get; }
         string ImageUrl { get; }

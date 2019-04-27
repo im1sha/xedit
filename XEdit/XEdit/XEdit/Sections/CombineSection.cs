@@ -6,7 +6,7 @@ using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    public class CombineSection : CoreSection
+    public class CombineSection : _CoreSection
     {
         public override string Name => "Combine";       
     }

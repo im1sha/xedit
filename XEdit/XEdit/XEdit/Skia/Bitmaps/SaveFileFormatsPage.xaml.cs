@@ -54,7 +54,7 @@ namespace SkiaBase.Bitmaps
                 }
                 else
                 {
-                    bool success = await DependencyService.Get<XEdit.Interaction.IPhotoLibrary>().
+                    bool success = await DependencyService.Get<XEdit.Interaction._IPhotoLibrary>().
                         SavePhotoAsync(data, folderNameEntry.Text, fileNameEntry.Text);
 
                     if (!success)

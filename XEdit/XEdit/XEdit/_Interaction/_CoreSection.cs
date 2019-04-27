@@ -8,15 +8,15 @@ using Xamarin.Forms;
 
 namespace XEdit.Interaction
 {
-    public class CoreSection : INotifyPropertyChanged, ISection
+    public class _CoreSection : INotifyPropertyChanged, _ISection
     {
         public virtual string Name => throw new NotImplementedException();
 
         public virtual string ImageUrl => throw new NotImplementedException();
 
-        public ObservableCollection<IHandler> Handlers { get; set; } = new ObservableCollection<IHandler>();
-        public IHandler selectedHandler;
-        public IHandler SelectedHandler
+        public ObservableCollection<_IHandler> Handlers { get; set; } = new ObservableCollection<_IHandler>();
+        public _IHandler selectedHandler;
+        public _IHandler SelectedHandler
         {
             get
             {

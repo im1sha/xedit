@@ -147,7 +147,7 @@ namespace SkiaBase.Bitmaps
                 string filename = String.Format("FingerPaint-{0:D4}{1:D2}{2:D2}-{3:D2}{4:D2}{5:D2}{6:D3}.png",
                                                 dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Millisecond);
 
-                XEdit.Interaction.IPhotoLibrary photoLibrary = DependencyService.Get<XEdit.Interaction.IPhotoLibrary>();
+                XEdit.Interaction._IPhotoLibrary photoLibrary = DependencyService.Get<XEdit.Interaction._IPhotoLibrary>();
                 bool result = await photoLibrary.SavePhotoAsync(data.ToArray(), "FingerPaint", filename);
 
                 if (!result)

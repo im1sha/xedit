@@ -11,7 +11,7 @@ using XEdit.Interaction;
 
 namespace XEdit.Sections
 {
-    public class RotateSection : CoreSection
+    public class RotateSection : _CoreSection
     {
         public override string Name => "Rotate";
 
@@ -23,7 +23,7 @@ namespace XEdit.Sections
         }
 
 
-        public class FlipHorizontal : CoreHandler
+        public class FlipHorizontal : _CoreHandler
         {
             public override string Name => "Horizontal Flip";
 
@@ -43,16 +43,16 @@ namespace XEdit.Sections
                     (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);      
                 }
 
-                SKBitmap flippedBitmap = new SKBitmap(ViewFunctionality.ResourceBitmap.Width, ViewFunctionality.ResourceBitmap.Height);
+                SKBitmap flippedBitmap = new SKBitmap(_ViewFunctionality.ResourceBitmap.Width, _ViewFunctionality.ResourceBitmap.Height);
 
                 using (SKCanvas canvas = new SKCanvas(flippedBitmap))
                 {
                     canvas.Clear();
-                    canvas.Scale(1, -1, 0, ViewFunctionality.ResourceBitmap.Height / 2);
-                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, new SKPoint());
+                    canvas.Scale(1, -1, 0, _ViewFunctionality.ResourceBitmap.Height / 2);
+                    canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, new SKPoint());
                 }
 
-                ViewFunctionality.SetBitmap(flippedBitmap);
+                _ViewFunctionality.SetBitmap(flippedBitmap);
                 canvasView.InvalidateSurface();
             }
 
@@ -63,14 +63,14 @@ namespace XEdit.Sections
                 SKCanvas canvas = surface.Canvas;
 
                 canvas.Clear();
-                canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform);
+                canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform);
             }
 
         
 
         }
 
-        public class FlipVertical : CoreHandler
+        public class FlipVertical : _CoreHandler
         {
             public override string Name => "Vertical Flip";
 
@@ -90,17 +90,17 @@ namespace XEdit.Sections
                     (target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Add(canvasView);
                 }
 
-                SKBitmap flippedBitmap = new SKBitmap(ViewFunctionality.ResourceBitmap.Width, ViewFunctionality.ResourceBitmap.Height);
+                SKBitmap flippedBitmap = new SKBitmap(_ViewFunctionality.ResourceBitmap.Width, _ViewFunctionality.ResourceBitmap.Height);
 
                 using (SKCanvas canvas = new SKCanvas(flippedBitmap))
                 {
                     canvas.Clear();
-                    canvas.Scale(-1, 1, ViewFunctionality.ResourceBitmap.Width / 2, 0);
-                    canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, new SKPoint());
+                    canvas.Scale(-1, 1, _ViewFunctionality.ResourceBitmap.Width / 2, 0);
+                    canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, new SKPoint());
                 }
 
 
-                ViewFunctionality.SetBitmap(flippedBitmap);
+                _ViewFunctionality.SetBitmap(flippedBitmap);
                 canvasView.InvalidateSurface();
 
             }
@@ -112,7 +112,7 @@ namespace XEdit.Sections
                 SKCanvas canvas = surface.Canvas;
 
                 canvas.Clear();
-                canvas.DrawBitmap(ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform);
+                canvas.DrawBitmap(_ViewFunctionality.ResourceBitmap, info.Rect, BitmapStretch.Uniform);
             }
 
        

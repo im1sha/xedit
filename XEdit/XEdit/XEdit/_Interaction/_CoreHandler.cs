@@ -4,7 +4,7 @@ using System.Text;
 
 namespace XEdit.Interaction
 {
-    public class CoreHandler : IHandler
+    public class _CoreHandler : _IHandler
     {
         public virtual string Name => throw new NotImplementedException();
 

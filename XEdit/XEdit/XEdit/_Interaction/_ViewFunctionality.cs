@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace XEdit.Interaction
 {
-    static class ViewFunctionality
+    static class _ViewFunctionality
     {
         public static bool IsImageLoaded { get { return ResourceBitmap != null; } }
 

@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
-             x:Class="XEdit.Views.MainPage" >
+             x:Class="XEdit.Views.MainPage"  >
+    
+
     <ContentPage.Resources>
         <localViews:GridLengthConverter x:Key="gridLengthConverter" />
-
+    
         <Style TargetType="Grid" x:Key="activeItemStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -27,6 +29,7 @@
             <Setter Property="Padding" Value="5"/>
             <Setter Property="HorizontalOptions" Value="Fill"/>
             <Setter Property="VerticalOptions" Value="Fill"/>
+            <Setter Property="BackgroundColor" Value="White"/>
         </Style>
     </ContentPage.Resources>
 
@@ -39,14 +42,14 @@
                 <RowDefinition Height="0.3*" />
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="45" /> <!--DEBUG ONLY-->
+                <!--<RowDefinition Height="45" /> --><!--DEBUG ONLY-->
             </Grid.RowDefinitions>
 
             <!--HEADER-->
 
             <Grid Grid.Row="0"  
                 x:Name="menuImageButtonTag" 
-                BackgroundColor="Navy"
+                BackgroundColor="White"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill" 
                 ColumnSpacing="0" 
@@ -57,24 +60,30 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                 </Grid.ColumnDefinitions>
 
-                <ImageButton BackgroundColor="Red"
+                <ImageButton 
                     Grid.Column="0"
                     Style="{StaticResource headerItemStyle}"                                                                                        
-                    Source="menu_list.png"  
+                    Source="Close.png"  
                     Command="{Binding ImageLoader.SelectCommand }"
                     CommandParameter="{Reference skiaWrapper}" >
                 </ImageButton>
-                <ImageButton BackgroundColor="Red"
+                <ImageButton 
                     Grid.Column="2"
                     Style="{StaticResource headerItemStyle}"                                                                 
-                    Source="arrow_left.png">
+                    Source="Left.png">
                 </ImageButton>
-                <ImageButton BackgroundColor="Red"
+                <ImageButton
                     Grid.Column="3"
                     Style="{StaticResource headerItemStyle}"                                                      
-                    Source="arrow_right.png">
+                    Source="Right.png">
+                </ImageButton>
+                <ImageButton 
+                    Grid.Column="4"
+                    Style="{StaticResource headerItemStyle}"                                                      
+                    Source="Check.png">
                 </ImageButton>
 
             </Grid>
@@ -158,7 +167,7 @@
 
             <!--DEBUG BUTTON-->
 
-            <Grid Grid.Row="5" VerticalOptions="Fill" HorizontalOptions="Fill">
+            <!--<Grid Grid.Row="5" VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -173,7 +182,7 @@
                     Command="{Binding ApplyCommand}"
                     CommandParameter="{Reference skiaWrapper}" >
                 </Button>
-            </Grid>
+            </Grid>-->
 
         </Grid>
     </ContentPage.Content>
