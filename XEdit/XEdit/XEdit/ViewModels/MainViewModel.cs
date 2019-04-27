@@ -8,18 +8,17 @@ using System.Text;
 using System.Windows.Input;
 using SkiaSharp;
 using Xamarin.Forms;
-using XEdit.Interaction;
-using XEdit.Sections;
+using XEdit.Core;
 
 namespace XEdit.ViewModels
 {
-    public class FiltersViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<_ISection> Sections { get; set; } = new ObservableCollection<_ISection>();
+        public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
 
         //private _ISection _previousSection;
-        private _ISection _selectedSection;
-        public _ISection SelectedSection
+        private ISection _selectedSection;
+        public ISection SelectedSection
         {
             get => _selectedSection;           
             set
@@ -38,8 +37,8 @@ namespace XEdit.ViewModels
             {
                 // target is skiaWrapper
                 return new Command((target) => {
-                    if (_ViewFunctionality.IsImageLoaded)
-                    {
+                    //if (_ViewFunctionality.IsImageLoaded)
+                    //{
                         //if (prevSection != null)
                         //{
                         //    prevSection.CancelCommand.Execute(target);
@@ -47,22 +46,22 @@ namespace XEdit.ViewModels
                         //}
 
                         //SelectedSection.SelectCommand.Execute(target);
-                    }
+                    //}
                 });
             }
         }
 
-        public FiltersViewModel()
+        public MainViewModel()
         {
             InitializeSections();
         }
 
         private void InitializeSections()
         {
-            Sections.Add(new ColorSection());
-            Sections.Add(new CropSection());
-            Sections.Add(new RotateSection());
-            _selectedSection = Sections[0];
+            //Sections.Add(new ColorSection());
+            //Sections.Add(new CropSection());
+            //Sections.Add(new RotateSection());
+            //_selectedSection = Sections[0];
         }
       
       

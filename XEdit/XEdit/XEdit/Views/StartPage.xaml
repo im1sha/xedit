@@ -18,9 +18,9 @@
 
         <Grid ColumnSpacing="10" RowSpacing="10" BackgroundColor="White">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
            
             <Grid.ColumnDefinitions>
@@ -28,9 +28,14 @@
                 <ColumnDefinition></ColumnDefinition>    
             </Grid.ColumnDefinitions>
 
-            <ImageButton Grid.Row="0" Grid.Column="0" 
+            <!--<ImageButton Grid.Row="0" Grid.Column="0" 
                 Command="{Binding NavigateCommand}"
                 CommandParameter="{x:Type core:PictureLoader}" 
+                Source="Gallery.jpg"
+                Style="{StaticResource itemStyle}">
+            </ImageButton>-->
+            <ImageButton Grid.Row="0" Grid.Column="0" 
+                Clicked="OnSelectFromGallery"
                 Source="Gallery.jpg"
                 Style="{StaticResource itemStyle}">
             </ImageButton>

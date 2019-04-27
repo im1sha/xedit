@@ -4,6 +4,9 @@ using System.Text;
 
 namespace XEdit.Core
 {
+    /// <summary>
+    /// Registers unique instanses
+    /// </summary>
     public static class AppDispatcher
     {
         private static List<object> _registeredInstances = new List<object>();
