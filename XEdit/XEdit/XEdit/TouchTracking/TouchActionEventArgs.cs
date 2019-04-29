@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace TouchTracking
+namespace XEdit.TouchTracking
 {
     public class TouchActionEventArgs : EventArgs
     {

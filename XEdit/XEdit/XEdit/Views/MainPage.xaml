@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
-             x:Class="XEdit.Views.MainPage"  >
-    
-
+             x:Class="XEdit.Views.MainPage" >
     <ContentPage.Resources>
         <localViews:GridLengthConverter x:Key="gridLengthConverter" />
     
@@ -39,10 +37,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"  />
                 <RowDefinition Height="10*" />
-                <RowDefinition Height="0.3*" />
+                <RowDefinition Height="0.4*" />
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
-                <!--<RowDefinition Height="45" /> --><!--DEBUG ONLY-->
             </Grid.RowDefinitions>
 
             <!--HEADER-->
@@ -56,19 +53,23 @@
                 RowSpacing="0" >
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
+                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
-                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
-                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag},
+                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
+                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                    <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
+                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                 </Grid.ColumnDefinitions>
 
                 <ImageButton 
                     Grid.Column="0"
                     Style="{StaticResource headerItemStyle}"                                                                                        
-                    Source="Close.png"  
-                    Command="{Binding ImageLoader.SelectCommand }"
-                    CommandParameter="{Reference skiaWrapper}" >
+                    Source="Close.png">
+                    <!--Command="{Binding ImageLoader.SelectCommand }"
+                    CommandParameter="{Reference skiaWrapper}"-->
                 </ImageButton>
                 <ImageButton 
                     Grid.Column="2"
@@ -88,20 +89,21 @@
 
             </Grid>
           
-            <Grid BackgroundColor="Green"
+            <Grid BackgroundColor="White"
                 Grid.Row="1" 
                 x:Name="skiaWrapper" 
                 HorizontalOptions="Fill" 
                 VerticalOptions="Fill" >
+                <skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>
             </Grid>
-             <!--<skia:SKCanvasView x:Name="viewContainer"></skia:SKCanvasView>-->
 
             <Slider Grid.Row="2"
                 HorizontalOptions="Fill"
-                MinimumTrackColor="CadetBlue"
-                MaximumTrackColor="YellowGreen"
-                BackgroundColor="Black"
-                ThumbColor="White" >
+                MinimumTrackColor="SkyBlue"
+                MaximumTrackColor="Gray"        
+                ThumbColor="Pink"
+                BackgroundColor="White"
+                Value="0.5" >
             </Slider>
 
             <!--TOOLS & FILTERS-->
@@ -158,32 +160,9 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </StackLayout>
-
-            <!--<Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ButtonCommand}"    
-                    CommandParameter="{Reference skiaWrapper}"
-                    NumberOfTapsRequired="1" />
-            </Label.GestureRecognizers>-->
-
-            <!--DEBUG BUTTON-->
-
-            <!--<Grid Grid.Row="5" VerticalOptions="Fill" HorizontalOptions="Fill">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Button  Grid.Column="1"   
-                    Text="Apply"
-                    FontSize="Micro" 
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Fill" 
-                    TextColor="Black"
-                    Command="{Binding ApplyCommand}"
-                    CommandParameter="{Reference skiaWrapper}" >
-                </Button>
-            </Grid>-->
-
+           
         </Grid>
     </ContentPage.Content>
 </ContentPage>
+    
+    

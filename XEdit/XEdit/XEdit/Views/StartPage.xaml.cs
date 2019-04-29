@@ -12,7 +12,8 @@ using XEdit.Core;
 
 namespace XEdit.Views
 {
-	public partial class StartPage : BasePage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class StartPage : BasePage
 	{
 		public StartPage() 
 		{

@@ -1,4 +1,4 @@
-﻿namespace TouchTracking
+﻿namespace XEdit.TouchTracking
 {
     public enum TouchActionType
     {

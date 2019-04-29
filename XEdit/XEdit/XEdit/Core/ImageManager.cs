@@ -1,6 +1,8 @@
 ﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 //void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -20,11 +22,13 @@ using System.Text;
 //}
 //}
 
+    // x:Name="skiaWrapper" 
+
 namespace XEdit.Core
 {
-    class ImageManager
+    public class ImageManager : INotifyPropertyChanged
     {
-        static readonly Lazy<ImageManager> instance = new Lazy<ImageManager>(() => new ImageManager());
+        private static readonly Lazy<ImageManager> instance = new Lazy<ImageManager>(() => new ImageManager());
 
         public static ImageManager Instance { get => instance.Value; }
 
@@ -45,9 +49,21 @@ namespace XEdit.Core
                 lock (this)
                 {
                     _image = value;
+                    OnPropertyChanged();
                 }
             }
         }
+
+        #region INotifyPropertyChanged Support
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
 
 
         //public static bool IsImageLoaded { get { return ResourceBitmap != null; } }

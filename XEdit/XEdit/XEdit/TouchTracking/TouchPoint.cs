@@ -1,8 +1,7 @@
 ﻿using System;
 using SkiaSharp;
-using TouchTracking;
 
-namespace SkiaBase
+namespace XEdit.TouchTracking
 {
     public class TouchPoint
     {

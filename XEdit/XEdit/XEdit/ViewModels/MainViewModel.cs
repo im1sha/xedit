@@ -16,6 +16,8 @@ namespace XEdit.ViewModels
     {
         public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
 
+        public SKBitmap Image { get; set; } = AppDispatcher.Get<ImageManager>().Image;
+
         //private _ISection _previousSection;
         private ISection _selectedSection;
         public ISection SelectedSection
@@ -31,6 +33,10 @@ namespace XEdit.ViewModels
             }
         }
 
+        //      DeleteQuote = new Command<QuoteViewModel>(async vm => OnDeleteQuote(vm));
+        //      CommandParameter="{Binding}"
+
+
         public ICommand ApplyCommand
         {
             get
@@ -39,7 +45,7 @@ namespace XEdit.ViewModels
             }
         }
          
-        #region INotifyPropertyChanged
+        #region INotifyPropertyChanged Support
 
         public event PropertyChangedEventHandler PropertyChanged;
 

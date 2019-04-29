@@ -4,13 +4,14 @@ using System.Linq;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-
 using Android.Views;
 
-[assembly: ResolutionGroupName("XamarinDocs")]
-[assembly: ExportEffect(typeof(TouchTracking.Droid.TouchEffect), "TouchEffect")]
+using XEdit.TouchTracking;
 
-namespace TouchTracking.Droid
+[assembly: ResolutionGroupName("XamarinDocs")]
+[assembly: ExportEffect(typeof(XEdit.Droid.TouchEffect), "TouchEffect")]
+
+namespace XEdit.Droid
 {
     public class TouchEffect : PlatformEffect
     {
