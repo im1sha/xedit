@@ -2,91 +2,87 @@
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms;
 using XEdit.Core;
+using XEdit.Extensions;
 
 namespace XEdit.Sections
 {
     class Features : Core.CoreSection
     {
-        //public static new bool VariableValues => true; // slider required
+        public override bool IsVariableValues() => true;
 
-        //public override string Name { get; } = "Features";
+        public override string Name { get; } = "Features";
 
-        //public override Handler SelectedHandler
-        //{
-        //    get
-        //    {
-        //        return _selectedHandler;
-        //    }
-        //    set
-        //    {
-        //        if (_selectedHandler != value)
-        //        {
-        //            _selectedHandler?.Exit(null);
-        //            _selectedHandler = value;
-        //            OnPropertyChanged();
-        //            _selectedHandler.Perform(null);
-        //            _selectedHandler = null;
-        //        }
-        //    }
-        //}
-
-        //public Features()
-        //{
-        //    Handlers = new ObservableCollection<Handler>()
-        //    {
-        //        new Handler("Vertical",
-        //            null,
-        //            (obj) => { OnVerticalFlip(); return null; },
-        //            (obj) => null),
-        //        new Handler("Horizontal",
-        //            null,
-        //            (obj) => { OnHorizontalFlip(); return null; },
-        //            (obj) => null),
-        //    };
-        //}
+        public override Handler SelectedHandler
+        {
+            get
+            {
+                return _selectedHandler;
+            }
+            set
+            {
+                if (_selectedHandler != value)
+                {
+                    _selectedHandler?.Exit(null);
+                    _selectedHandler = value;
+                    OnPropertyChanged();
+                    _selectedHandler.Perform(null);
+                }
+            }
+        }
 
 
-        //void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
-        //{
-        //    canvasView.InvalidateSurface();
-        //}
+        public Features()
+        {
+            Handlers = new ObservableCollection<Handler>()
+            {
+                new Handler("Transparency",
+                    null,
+                    (obj) => {
+                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(OnCanvaUpdate);
+                        AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler(OnSliderValueChanged);
+                    },
+                    (obj) => {
+                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                        AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler();
+                    }),
+            };
+        }
 
-        //void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
-        //{
-        //    SKImageInfo info = args.Info;
-        //    SKSurface surface = args.Surface;
-        //    SKCanvas canvas = surface.Canvas;
+        void OnCanvaUpdate(object sender, SKPaintSurfaceEventArgs args)
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
 
-        //    canvas.Clear();
+            canvas.Clear();
 
-        //    // Find rectangle to fit bitmap
-        //    float scale = Math.Min((float)info.Width / bitmap1.Width,
-        //                           (float)info.Height / bitmap1.Height);
+            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().TempBitmap, info.Rect, BitmapStretch.Uniform);
+        }
 
-        //    SKRect rect = SKRect.Create(scale * bitmap1.Width,
-        //                                scale * bitmap1.Height);
+        void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
+        {        
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage();
 
-        //    float x = (info.Width - rect.Width) / 2;
-        //    float y = (info.Height - rect.Height) / 2;
+            SKBitmap newBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
+            using (SKCanvas canvas = new SKCanvas(newBitmap))           
+            using (SKPaint paint = new SKPaint())
+            {
+                canvas.Clear();
 
-        //    rect.Offset(x, y);
+                float progress = (float)AppDispatcher.Get<ImageManager>().SliderValue;
 
-        //    // Get progress value from Slider
-        //    float progress = (float)progressSlider.Value;
+                paint.Color = paint.Color.WithAlpha(
+                    (byte)(0xFF * (1 - progress)));
 
-        //    // Display two bitmaps with transparency
-        //    using (SKPaint paint = new SKPaint())
-        //    {
-        //        paint.Color = paint.Color.WithAlpha((byte)(0xFF * (1 - progress)));
-        //        canvas.DrawBitmap(bitmap1, rect, paint);
+                canvas.DrawBitmap(bitmap, new SKPoint(), paint);
+            }
 
-        //        paint.Color = paint.Color.WithAlpha((byte)(0xFF * progress));
-        //        canvas.DrawBitmap(bitmap2, rect, paint);
-        //    }
-        //}
-
+            //AppDispatcher.Get<ImageManager>().SetImage( newBitmap );
+            AppDispatcher.Get<ImageManager>().TempBitmap = newBitmap ;
+        }
     }
 }

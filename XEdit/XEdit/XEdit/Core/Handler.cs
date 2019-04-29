@@ -12,14 +12,14 @@ namespace XEdit.Core
         /// <summary>
         /// Should be called when Handler is selected
         /// </summary>
-        public Func<object, object> Perform { get; }
+        public Action<object> Perform { get; }
 
         /// <summary>
         /// Should be called when Handler is deactivated 
         /// </summary>
-        public Func<object, object> Exit { get; }
+        public Action<object> Exit { get; }
 
-        public Handler(string name, string url, Func<object, object> performAction, Func<object, object> exitAction)
+        public Handler(string name, string url, Action<object> performAction, Action<object> exitAction)
         {
             Name = name;
             ImageUrl = url;

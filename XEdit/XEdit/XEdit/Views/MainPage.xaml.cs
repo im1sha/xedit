@@ -24,6 +24,7 @@ namespace XEdit.Views
 			InitializeComponent ();
             BindingContext = new MainViewModel();
             AppDispatcher.Get<ImageManager>().SetCanvasViewReference(skiaCanvasView);
+            AppDispatcher.Get<ImageManager>().SetSliderReference(variableValuesSlider);
         }
   
         private async void OnBack(object sender, EventArgs e)

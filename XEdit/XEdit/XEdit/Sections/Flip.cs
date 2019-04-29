@@ -10,6 +10,7 @@ using SkiaSharp.Views.Forms;
 using XEdit.Extensions;
 using XEdit.Core;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace XEdit.Sections
 {
@@ -42,14 +43,14 @@ namespace XEdit.Sections
             { 
                 new Handler("Vertical", 
                     null,
-                    (obj) => { OnVerticalFlip(); return null; }, 
-                    (obj) => null),
+                    (obj) => { OnVerticalFlip(); AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(); }, 
+                    (obj) => { }),
                 new Handler("Horizontal",
                     null,
-                    (obj) => { OnHorizontalFlip(); return null; },
-                    (obj) => null),
+                    (obj) => { OnHorizontalFlip(); AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(); },
+                    (obj) => { }),
             };
-        }   
+        }
 
         void OnVerticalFlip()
         {
@@ -66,6 +67,7 @@ namespace XEdit.Sections
             SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage();
 
             SKBitmap flippedBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
+
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
             {
                 canvas.Clear();

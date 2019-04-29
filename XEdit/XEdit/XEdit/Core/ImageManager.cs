@@ -14,12 +14,27 @@ namespace XEdit.Core
 {
     public class ImageManager : INotifyPropertyChanged
     {
-        private static readonly Lazy<ImageManager> instance = new Lazy<ImageManager>(() => new ImageManager());
+        private static readonly Lazy<ImageManager> _instance = new Lazy<ImageManager>(() => new ImageManager());
 
-        public static ImageManager Instance { get => instance.Value; }
+        public static ImageManager Instance { get => _instance.Value; }
 
         protected ImageManager()
         {          
+        }
+
+        // for Transparency effect displaying
+        private SKBitmap _tempBitmap;
+        public SKBitmap TempBitmap
+        {
+            get => _tempBitmap;
+            set
+            {
+                _tempBitmap = value;
+                if (IsCanvasViewInitialized)
+                {
+                    UpdateCanvasView();
+                }
+            }
         }
 
         public static SKBitmap _image;
@@ -27,11 +42,11 @@ namespace XEdit.Core
         public void SetImage(SKBitmap value)
         {
             _image = value;
-            OnPropertyChanged();
+            //OnPropertyChanged();
             if (IsCanvasViewInitialized)
             {
                 UpdateCanvasView();
-            }     
+            }
         }
 
         // replace with cloning
@@ -73,13 +88,15 @@ namespace XEdit.Core
             return success;
         }
 
+
+
         #region _canvasView
 
         private bool IsCanvasViewInitialized => _canvasView != null;
 
-        private SKCanvasView _canvasView;
+        private SKCanvasView _canvasView;   
 
-        public void SetCanvasViewReference(SKCanvasView cw)
+        public void SetCanvasViewReference(SKCanvasView c)
         {
             // IT'LL BE THROWN WHEN NAVIGATING BACK AND SELECT PICTURE AGAIN 
             //if (_canvasView != null)
@@ -87,15 +104,15 @@ namespace XEdit.Core
             //    throw new ApplicationException("_canvasView is already set");
             //}
 
-            _canvasView = cw;
+            _canvasView = c;
 
             //initial update handler
-            _canvasView.PaintSurface += _previousUpdateHandler;
+            _canvasView.PaintSurface += _previousCanvasUpdateHandler;
         }
 
-        private EventHandler<SKPaintSurfaceEventArgs> _previousUpdateHandler = _standardUpdateHandler;
+        private EventHandler<SKPaintSurfaceEventArgs> _previousCanvasUpdateHandler = _standardCanvasUpdateHandler;
 
-        private readonly static EventHandler<SKPaintSurfaceEventArgs> _standardUpdateHandler = (sender, args) =>
+        private readonly static EventHandler<SKPaintSurfaceEventArgs> _standardCanvasUpdateHandler = (sender, args) =>
         {
             SKImageInfo info = args.Info;
             SKSurface surface = args.Surface;
@@ -110,23 +127,68 @@ namespace XEdit.Core
         /// Sets rendering handler for SKCanvasView
         /// </summary>
         /// <param name="eh">If null passed then it should set standard handler</param>
-        public void SetUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh)
+        public void SetCanvasUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh = null)
         {
             if (eh == null)
             {
-                eh = _standardUpdateHandler;
+                eh = _standardCanvasUpdateHandler;
             }
-            _canvasView.PaintSurface -= _previousUpdateHandler;
-            _previousUpdateHandler = eh;
+            _canvasView.PaintSurface -= _previousCanvasUpdateHandler;
+            _previousCanvasUpdateHandler = eh;
             _canvasView.PaintSurface += eh;
         }
 
-        public void UpdateCanvasView()
+        private void UpdateCanvasView()
         {
             _canvasView.InvalidateSurface();
         }
 
         #endregion
+
+
+
+        #region _variableValuesSlider
+
+        private bool IsSliderInitialized => _variableValuesSlider != null;
+
+        private Slider _variableValuesSlider;
+
+        public double SliderValue {
+            get => _variableValuesSlider.Value;
+            set
+            {
+                if ((value <= _variableValuesSlider.Maximum) && (value >= _variableValuesSlider.Minimum))
+                {
+                    _variableValuesSlider.Value = value;
+                    return;
+                }
+                throw new ApplicationException("Invalid value has passed to SliderValue");
+            }
+        }
+
+        private EventHandler<ValueChangedEventArgs> _previousSliderUpdateHandler = _standardSliderUpdateHandler;
+        private readonly static EventHandler<ValueChangedEventArgs> _standardSliderUpdateHandler = (sender, args) => { };
+
+        public void SetSliderUpdateHandler(EventHandler<ValueChangedEventArgs> eh = null)
+        {
+            if (eh == null)
+            {
+                eh = _standardSliderUpdateHandler;
+            }
+            _variableValuesSlider.ValueChanged -= _previousSliderUpdateHandler;
+            _previousSliderUpdateHandler = eh;
+            _variableValuesSlider.ValueChanged += eh;
+        }
+
+        public void SetSliderReference(Slider s)
+        {
+            _variableValuesSlider = s;
+            _variableValuesSlider.ValueChanged += _previousSliderUpdateHandler;
+        }
+
+        #endregion
+
+
 
         #region INotifyPropertyChanged Support
 
@@ -138,51 +200,6 @@ namespace XEdit.Core
         }
 
         #endregion
-
-       
-
-
-        //public static bool IsImageLoaded { get { return ResourceBitmap != null; } }
-
-        //public static SKBitmap ResourceBitmap { get; private set; }
-
-        //public static void SetBitmap(SKBitmap b)
-        //{
-        //    if (b != null)
-        //    {
-        //        ResourceBitmap = b;
-        //    }
-        //}
-
-        //public static bool ContainsSkCanvasView(object target)
-        //{
-        //    return IsTargetSuitable(target)
-        //        && ((target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children.Count > 0)
-        //        && ((target as Xamarin.Forms.Layout<Xamarin.Forms.View>).Children[0].GetType() == typeof(SKCanvasView));
-        //}
-
-        //public static bool IsTargetSuitable(object target)
-        //{
-        //    return target is Xamarin.Forms.Layout<Xamarin.Forms.View>;
-        //}
-
-        //public static bool AddNewCanvaAsChild(object target, SKCanvasView canvasView)
-        //{
-        //    if (IsTargetSuitable(target))
-        //    {
-        //        Xamarin.Forms.Layout<Xamarin.Forms.View> view = (target as Xamarin.Forms.Layout<Xamarin.Forms.View>);
-
-        //        for (int i = 0; i < view.Children.Count; i++)
-        //        {
-        //            view.Children.RemoveAt(i);
-        //        }
-        //        view.BackgroundColor = Color.Black;
-
-        //        view.Children.Add(canvasView);
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
+     
     }
 }

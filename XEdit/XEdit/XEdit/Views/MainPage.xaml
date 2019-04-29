@@ -112,14 +112,16 @@
                 <skia:SKCanvasView x:Name="skiaCanvasView"> </skia:SKCanvasView>
             </Grid>
 
-            <Slider Grid.Row="2"
+            <Slider 
+                x:Name="variableValuesSlider"
+                Grid.Row="2"
                 HorizontalOptions="Fill"
                 MinimumTrackColor="Gray"
                 MaximumTrackColor="Black"        
                 ThumbColor="DeepPink"
                 BackgroundColor="White"
-                Value="0.5"   
-                IsVisible="{Binding Path=IsVariableValues}" >
+                Value="0"   
+                IsVisible="{Binding IsVariableValues, Mode=TwoWay}" >
             </Slider>
 
             <!--TOOLS & FILTERS-->
