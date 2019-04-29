@@ -80,10 +80,12 @@ namespace XEdit.Core
 
         public void SetCanvasViewReference(SKCanvasView cw)
         {
-            if (_canvasView != null)
-            {
-                throw new ApplicationException("_canvasView is already set");
-            }
+            // IT'LL BE THROWN WHEN NAVIGATING BACK AND SELECT PICTURE AGAIN 
+            //if (_canvasView != null)
+            //{
+            //    throw new ApplicationException("_canvasView is already set");
+            //}
+
             _canvasView = cw;
 
             //initial update handler
@@ -96,7 +98,7 @@ namespace XEdit.Core
             SKSurface surface = args.Surface;
             SKCanvas canvas = surface.Canvas;
 
-            canvas.Clear(SKColors.DarkBlue);
+            canvas.Clear();
 
             canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, info.Rect, BitmapStretch.Uniform);
         };
