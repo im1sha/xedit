@@ -23,21 +23,13 @@ namespace XEdit.Views
 		{
 			InitializeComponent ();
             BindingContext = new MainViewModel();
+            AppDispatcher.Get<ImageManager>().SetCanvasViewReference(skiaCanvasView);
         }
   
         private async void OnBack(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
-        }
-
-        void OnUpdate(object sender, SKPaintSurfaceEventArgs args)
-        {
-            SKImageInfo info = args.Info;
-            SKSurface surface = args.Surface;
-            SKCanvas canvas = surface.Canvas;
-            canvas.Clear(SKColors.DarkBlue);
-            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, info.Rect, BitmapStretch.Uniform);
-        }
+        }      
     }
 }
 

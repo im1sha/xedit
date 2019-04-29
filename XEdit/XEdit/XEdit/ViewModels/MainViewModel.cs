@@ -42,14 +42,14 @@ namespace XEdit.ViewModels
         {
             get
             {
-                return new Command<SKCanvasView>((SKCanvasView skiaCanvas) =>
+                return new Command(() =>
                 {
-                    AppDispatcher.Get<ImageManager>().Save(skiaCanvas);
+                    AppDispatcher.Get<ImageManager>().Save();
                 });
             }
         }
 
-
+        
 
 
         public ICommand ApplyCommand

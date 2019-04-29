@@ -18,7 +18,9 @@ namespace XEdit.Core
 
         public static ImageManager Instance { get => instance.Value; }
 
-        protected ImageManager() { }
+        protected ImageManager()
+        {          
+        }
 
         private SKBitmap _image;
         public SKBitmap Image
@@ -40,7 +42,8 @@ namespace XEdit.Core
             }
         }
 
-        public async Task<bool> Save(SKCanvasView canvas)
+        //SKCanvasView is not in use now. Image 's using instead
+        public async Task<bool> Save()
         {
             bool success = false;
             SKBitmap bitmap = AppDispatcher.Get<ImageManager>().Image; // to CHANGE
@@ -66,12 +69,46 @@ namespace XEdit.Core
                         success = await DependencyService.Get<IPhotoLibrary>().
                             SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".png");
                     }
-                }           
+                }
             }
             return success;
         }
 
+        #region _canvasView
 
+        private SKCanvasView _canvasView;
+
+        public void SetCanvasViewReference(SKCanvasView cw)
+        {
+            if (_canvasView != null)
+            {
+                throw new ApplicationException("_canvasView is already set");
+            }
+            _canvasView = cw;
+
+            //initial update handler
+            _canvasView.PaintSurface += _previousUpdateHandler;
+        }
+
+        private EventHandler<SKPaintSurfaceEventArgs> _previousUpdateHandler = (sender, args) =>
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
+
+            canvas.Clear(SKColors.DarkBlue);
+
+            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, info.Rect, BitmapStretch.Uniform);
+        };
+
+        public void SetUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh)
+        {
+            _canvasView.PaintSurface -= _previousUpdateHandler;
+            _previousUpdateHandler = eh;
+            _canvasView.PaintSurface += eh;
+        }
+
+        #endregion
 
         #region INotifyPropertyChanged Support
 

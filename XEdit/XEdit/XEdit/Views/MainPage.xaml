@@ -109,7 +109,7 @@
                 x:Name="skiaWrapper" 
                 HorizontalOptions="Fill" 
                 VerticalOptions="Fill" >
-                <skia:SKCanvasView x:Name="skiaCanvasView" skia:PaintSurface="OnUpdate"> </skia:SKCanvasView>
+                <skia:SKCanvasView x:Name="skiaCanvasView"> </skia:SKCanvasView>
             </Grid>
 
             <!--<Slider Grid.Row="2"
