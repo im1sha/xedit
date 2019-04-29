@@ -1,9 +1,11 @@
-﻿// using System;
-// using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Android;
 using Android.Content;
+using Android.Content.PM;
 using Android.Media;
 using Android.OS;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using Java.IO;
 using Xamarin.Forms;
 using XEdit.Core;
@@ -25,7 +27,7 @@ namespace XEdit.Droid
             // Start the picture-picker activity (resumes in MainActivity.cs)
             MainActivity.Instance.StartActivityForResult(
                 Intent.CreateChooser(intent, "Select Picture"),
-                MainActivity.PickImageId);
+                MainActivity.PICK_IMAGE_CODE);
 
             // Save the TaskCompletionSource object as a MainActivity property
             MainActivity.Instance.PickImageTaskCompletionSource = new TaskCompletionSource<System.IO.Stream>();
@@ -34,10 +36,8 @@ namespace XEdit.Droid
             return MainActivity.Instance.PickImageTaskCompletionSource.Task;
         }
 
-        // Saving photos requires android.permission.WRITE_EXTERNAL_STORAGE in AndroidManifest.xml
-
         public async Task<bool> SavePhotoAsync(byte[] data, string folder, string filename)
-        {
+        {          
             try
             {
                 File picturesDirectory = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryPictures);
@@ -45,8 +45,11 @@ namespace XEdit.Droid
 
                 if (!string.IsNullOrEmpty(folder))
                 {
-                    folderDirectory = new File(picturesDirectory, folder);
-                    folderDirectory.Mkdirs();
+                    folderDirectory = new File(picturesDirectory, folder) ;
+                    if (!folderDirectory.Exists())
+                    {
+                        folderDirectory.Mkdirs();
+                    }
                 }
 
                 using (File bitmapFile = new File(folderDirectory, filename))

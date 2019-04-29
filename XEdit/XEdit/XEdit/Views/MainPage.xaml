@@ -71,6 +71,13 @@
                     <!--Command="{Binding ImageLoader.SelectCommand }"
                     CommandParameter="{Reference skiaWrapper}"-->
                 </ImageButton>
+                <Label Grid.Column="1"
+                       x:Name="statusLabel" 
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"
+                       TextColor="Black">
+                    
+                </Label>
                 <ImageButton 
                     Grid.Column="2"
                     Style="{StaticResource headerItemStyle}"                                                                 
@@ -84,7 +91,8 @@
                 <ImageButton 
                     Grid.Column="4"
                     Style="{StaticResource headerItemStyle}"                                                      
-                    Source="Check.png">
+                    Source="Check.png"
+                    Clicked="Save">
                 </ImageButton>
 
             </Grid>
@@ -96,7 +104,7 @@
                 VerticalOptions="Fill" >
                 <skia:SKCanvasView 
                     x:Name="viewContainer" 
-                    skia:PaintSurface="OnCanvasViewPaintSurface">
+                    skia:PaintSurface="OnRedrawCanvasView">
                     
                 </skia:SKCanvasView>
             </Grid>

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XEdit.Core;
+using XEdit.Extensions;
 using XEdit.ViewModels;
 
 namespace XEdit.Views
@@ -24,16 +25,52 @@ namespace XEdit.Views
             BindingContext = new MainViewModel();      
         }
 
-        void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        void OnRedrawCanvasView(object sender, SKPaintSurfaceEventArgs args)
         {
             SKImageInfo info = args.Info;
             SKSurface surface = args.Surface;
             SKCanvas canvas = surface.Canvas;
 
             canvas.Clear();
-        
-            //public void DrawBitmap(SKBitmap bitmap, SKRect source, SKRect dest, SKPaint paint = null);
-            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, new SKRect(0, 0, info.Width, info.Height));
+
+            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, info.Rect, BitmapStretch.Uniform);
+        }
+
+        private async void Save(object sender, EventArgs e)
+        {
+            SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Jpeg;
+            int quality = 100;
+
+            using (MemoryStream memStream = new MemoryStream())
+            using (SKManagedWStream wstream = new SKManagedWStream(memStream))
+            {
+                AppDispatcher.Get<ImageManager>().Image.Encode(wstream, imageFormat, quality);
+
+                byte[] data = memStream.ToArray();
+
+                bool success = false;
+
+                if (data != null && data.Length != 0)
+                {
+                    bool isGranted = DependencyService.Get<IUtils>().AskForWriteStoragePermission();
+                    if (isGranted)
+                    {
+                        success = await DependencyService.Get<IPhotoLibrary>().
+                            SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".png");
+                    }
+                                        
+                }
+
+                if (success)
+                { 
+                    statusLabel.Text = "OK" + DateTime.Now.ToBinary().ToString().Substring(10);
+                }
+                else
+                {
+                    statusLabel.Text = "FAILED";
+                }
+               
+            }
         }
     }    
 }

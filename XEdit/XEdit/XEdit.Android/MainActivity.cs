@@ -32,15 +32,35 @@ namespace XEdit.Droid
         }
 
         // Field, property, and method for Picture Picker
-        public static readonly int PickImageId = 1000;
+        public const int PICK_IMAGE_CODE = 1000;
+
+        public const int WRITE_PERMISSION_REQUEST_CODE = 1001;
 
         public TaskCompletionSource<Stream> PickImageTaskCompletionSource { set; get; }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            switch (requestCode)
+            {
+                case WRITE_PERMISSION_REQUEST_CODE:
+                {
+                    if ((grantResults.Length > 0) && (grantResults[0] == Permission.Granted))
+                    {             
+                            
+                    }
+                    break;
+                }
+            }
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent intent)
         {
             base.OnActivityResult(requestCode, resultCode, intent);
 
-            if (requestCode == PickImageId)
+            if (requestCode == PICK_IMAGE_CODE)
             {
                 if ((resultCode == Result.Ok) && (intent != null))
                 {

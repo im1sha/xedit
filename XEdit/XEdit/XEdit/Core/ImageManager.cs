@@ -1,28 +1,11 @@
 ﻿using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-
-//void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
-//{
-//SKImageInfo info = args.Info;
-//SKSurface surface = args.Surface;
-//SKCanvas canvas = surface.Canvas;
-
-//canvas.Clear();
-
-//if (libraryBitmap != null)
-//{
-//    using (SKPaint paint = new SKPaint())
-//    {
-//        canvas.DrawBitmap(libraryBitmap, info.Rect, BitmapStretch.Uniform, paint: paint);
-//    }
-//}
-//}
-
-    // x:Name="skiaWrapper" 
+using XEdit.Extensions;
 
 namespace XEdit.Core
 {
@@ -64,6 +47,8 @@ namespace XEdit.Core
         }
 
         #endregion
+
+       
 
 
         //public static bool IsImageLoaded { get { return ResourceBitmap != null; } }
