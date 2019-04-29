@@ -37,7 +37,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"  />
                 <RowDefinition Height="10*" />
-                <RowDefinition Height="0.4*" />
+                <RowDefinition Height="0.4*" /> <!--slider : now not in use-->
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -67,16 +67,14 @@
                 <ImageButton 
                     Grid.Column="0"
                     Style="{StaticResource headerItemStyle}"                                                                                        
-                    Source="Close.png">
-                    <!--Command="{Binding ImageLoader.SelectCommand }"
-                    CommandParameter="{Reference skiaWrapper}"-->
+                    Source="Close.png"
+                    Clicked="OnBack">
                 </ImageButton>
                 <Label Grid.Column="1"
-                       x:Name="statusLabel" 
+                       Text="{Binding Status, Mode=TwoWay}"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"
-                       TextColor="Black">
-                    
+                       TextColor="Black" >
                 </Label>
                 <ImageButton 
                     Grid.Column="2"
@@ -91,40 +89,46 @@
                 <ImageButton 
                     Grid.Column="4"
                     Style="{StaticResource headerItemStyle}"                                                      
-                    Source="Check.png"
-                    Clicked="Save">
+                    Source="Check.png"                    
+                    Command="{Binding SaveCommand }"
+                    CommandParameter="{Reference skiaCanvasView}" >
                 </ImageButton>
-
             </Grid>
+
           
+
+            <!--<ImageButton.CommandParameter>
+                <x:Array Type="{x:Type x:Object}">
+                    <x:String>Y</x:String>
+                    <x:Double>10</x:Double>
+                </x:Array>
+            </ImageButton.CommandParameter>-->
+
             <Grid BackgroundColor="White"
                 Grid.Row="1" 
                 x:Name="skiaWrapper" 
                 HorizontalOptions="Fill" 
                 VerticalOptions="Fill" >
-                <skia:SKCanvasView 
-                    x:Name="viewContainer" 
-                    skia:PaintSurface="OnRedrawCanvasView">
-                    
-                </skia:SKCanvasView>
+                <skia:SKCanvasView x:Name="skiaCanvasView" skia:PaintSurface="OnUpdate"> </skia:SKCanvasView>
             </Grid>
 
-            <Slider Grid.Row="2"
+            <!--<Slider Grid.Row="2"
                 HorizontalOptions="Fill"
                 MinimumTrackColor="SkyBlue"
                 MaximumTrackColor="Gray"        
                 ThumbColor="Pink"
                 BackgroundColor="White"
                 Value="0.5" >
-            </Slider>
+            </Slider>-->
 
             <!--TOOLS & FILTERS-->
             <StackLayout Grid.Row="3" >
-                <CollectionView x:Name="filtersTag"
+                <CollectionView 
+                    x:Name="filtersTag"
                     ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                     SelectionMode="Single" 
                     ItemsSource="{Binding SelectedSection.Handlers}"
-                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}" >
+                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}" >  <!--!!-->
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" 
@@ -147,7 +151,6 @@
                         CommandParameter="{Reference skiaWrapper}"
                         NumberOfTapsRequired="1" />
                 </Label.GestureRecognizers>-->
-            
             
             <!--SECTIONS-->
             
@@ -176,5 +179,7 @@
         </Grid>
     </ContentPage.Content>
 </ContentPage>
+    
+    
     
     

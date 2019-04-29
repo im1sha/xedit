@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,7 +13,7 @@ namespace XEdit.Views
         {
             NavigationPage.SetHasNavigationBar(this, false);
 
-            NavigateCommand = new Command<Type>(async pageType =>
+            NavigateCommand = new Command<Type>(async (Type pageType) =>
             {
                 Page page = (Page)Activator.CreateInstance(pageType);
                 NavigationPage.SetHasNavigationBar(page, false);

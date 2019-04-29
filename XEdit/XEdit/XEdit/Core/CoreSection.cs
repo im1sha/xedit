@@ -7,7 +7,7 @@ using System.Text;
 using Xamarin.Forms;
 using XEdit.Core;
 
-namespace XEdit.Interaction
+namespace XEdit.Core
 {
     public class CoreSection : INotifyPropertyChanged, ISection
     {

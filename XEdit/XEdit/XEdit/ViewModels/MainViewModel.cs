@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using XEdit.Core;
 
@@ -14,9 +16,9 @@ namespace XEdit.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
+        public string Status { get; set; }
 
-        public SKBitmap Image { get; set; } = AppDispatcher.Get<ImageManager>().Image;
+        public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
 
         //private _ISection _previousSection;
         private ISection _selectedSection;
@@ -36,12 +38,25 @@ namespace XEdit.ViewModels
         //      DeleteQuote = new Command<QuoteViewModel>(async vm => OnDeleteQuote(vm));
         //      CommandParameter="{Binding}"
 
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new Command<SKCanvasView>((SKCanvasView skiaCanvas) =>
+                {
+                    AppDispatcher.Get<ImageManager>().Save(skiaCanvas);
+                });
+            }
+        }
+
+
+
 
         public ICommand ApplyCommand
         {
             get
             {
-                return new Command(arg => { });
+                return new Command(canvas => { });
             }
         }
          

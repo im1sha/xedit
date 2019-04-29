@@ -3,8 +3,11 @@ using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 using XEdit.Extensions;
 
 namespace XEdit.Core
@@ -36,6 +39,39 @@ namespace XEdit.Core
                 }
             }
         }
+
+        public async Task<bool> Save(SKCanvasView canvas)
+        {
+            bool success = false;
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().Image; // to CHANGE
+
+            if (bitmap == null)
+            {
+                return false;
+            }
+
+            SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Jpeg;
+            int quality = 100;
+
+            using (MemoryStream memStream = new MemoryStream())
+            using (SKManagedWStream wstream = new SKManagedWStream(memStream))
+            {
+                bitmap.Encode(wstream, imageFormat, quality);
+                byte[] data = memStream.ToArray();
+                if (data != null && data.Length != 0)
+                {
+                    bool isGranted = DependencyService.Get<IUtils>().AskForWriteStoragePermission();
+                    if (isGranted)
+                    {
+                        success = await DependencyService.Get<IPhotoLibrary>().
+                            SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".png");
+                    }
+                }           
+            }
+            return success;
+        }
+
+
 
         #region INotifyPropertyChanged Support
 
