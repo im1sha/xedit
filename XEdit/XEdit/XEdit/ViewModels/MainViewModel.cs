@@ -43,6 +43,7 @@ namespace XEdit.ViewModels
             {
                 if (_selectedSection != value)
                 {
+                    _selectedSection?.LeaveCommand?.Execute(null);
                     _selectedSection = value;
                     OnPropertyChanged();
                     IsVariableValues = _selectedSection.IsVariableValues();

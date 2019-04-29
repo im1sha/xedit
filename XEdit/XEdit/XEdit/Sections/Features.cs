@@ -34,6 +34,13 @@ namespace XEdit.Sections
             }
         }
 
+        public override Command LeaveCommand
+        {
+            get => new Command(obj => {
+                SelectedHandler?.Exit(null);
+                _selectedHandler = null;
+            });
+        }
 
         public Features()
         {
@@ -46,8 +53,9 @@ namespace XEdit.Sections
                         AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler(OnSliderValueChanged);
                     },
                     (obj) => {
-                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
                         AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler();
+                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                        AppDispatcher.Get<ImageManager>().SliderValue = 0;
                     }),
             };
         }
