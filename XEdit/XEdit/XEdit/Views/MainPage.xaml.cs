@@ -23,5 +23,17 @@ namespace XEdit.Views
 			InitializeComponent ();
             BindingContext = new MainViewModel();      
         }
-    }   
+
+        void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
+
+            canvas.Clear();
+        
+            //public void DrawBitmap(SKBitmap bitmap, SKRect source, SKRect dest, SKPaint paint = null);
+            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, new SKRect(0, 0, info.Width, info.Height));
+        }
+    }    
 }
