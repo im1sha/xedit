@@ -15,7 +15,7 @@
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" 
-                                        Value="Orange" />
+                                        Value="DeepPink" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -32,7 +32,7 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black" >
+        <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="White" >
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"  />
@@ -112,14 +112,15 @@
                 <skia:SKCanvasView x:Name="skiaCanvasView"> </skia:SKCanvasView>
             </Grid>
 
-            <!--<Slider Grid.Row="2"
+            <Slider Grid.Row="2"
                 HorizontalOptions="Fill"
-                MinimumTrackColor="SkyBlue"
-                MaximumTrackColor="Gray"        
-                ThumbColor="Pink"
+                MinimumTrackColor="Gray"
+                MaximumTrackColor="Black"        
+                ThumbColor="DeepPink"
                 BackgroundColor="White"
-                Value="0.5" >
-            </Slider>-->
+                Value="0.5"   
+                IsVisible="{Binding Path=IsVariableValues}" >
+            </Slider>
 
             <!--TOOLS & FILTERS-->
             <StackLayout Grid.Row="3" >
@@ -135,7 +136,7 @@
                                 WidthRequest="{Binding Height, Source={x:Reference filtersTag}}">
                                 <Label                                     
                                     Text="{Binding Name}" 
-                                    TextColor="White" 
+                                    TextColor="Black" 
                                     FontSize="Micro" 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
@@ -165,7 +166,7 @@
                             <Grid Style="{StaticResource activeItemStyle}"  
                                 WidthRequest="{Binding Height, Source={x:Reference sectionsTag}}">
                                 <Label Text="{Binding Name}"
-                                    TextColor="White" 
+                                    TextColor="Black"
                                     FontSize="Micro"                                 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >

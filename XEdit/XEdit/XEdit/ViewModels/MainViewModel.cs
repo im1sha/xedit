@@ -20,6 +20,9 @@ namespace XEdit.ViewModels
 
         public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
 
+
+        public bool IsVariableValues { get; private set; }
+
         //private _ISection _previousSection;
         private ISection _selectedSection;
         public ISection SelectedSection
@@ -31,6 +34,7 @@ namespace XEdit.ViewModels
                 {
                     _selectedSection = value;
                     OnPropertyChanged();
+                    IsVariableValues = _selectedSection.IsVariableValues();
                     _selectedSection.SelectCommand.Execute(null);
                 }
             }

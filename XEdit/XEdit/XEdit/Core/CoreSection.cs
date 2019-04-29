@@ -11,6 +11,7 @@ namespace XEdit.Core
 {
     public class CoreSection : INotifyPropertyChanged, ISection
     {
+        public virtual bool IsVariableValues() => false; // is slider required?
         public virtual string Name => throw new NotImplementedException();
         public virtual string ImageUrl => throw new NotImplementedException();
 

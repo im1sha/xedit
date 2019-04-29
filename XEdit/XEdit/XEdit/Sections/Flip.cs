@@ -15,7 +15,7 @@ namespace XEdit.Sections
 {
     public class Flip : CoreSection
     {
-        public override string Name { get; } = "Flip";
+        public override string Name => "Flip";
 
         public override Handler SelectedHandler
         {

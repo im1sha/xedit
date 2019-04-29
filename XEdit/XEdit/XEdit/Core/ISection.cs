@@ -8,6 +8,8 @@ namespace XEdit.Core
 {
     public interface ISection
     {
+        bool IsVariableValues(); // is slider required?
+
         string Name { get; }
         string ImageUrl { get; }
 
