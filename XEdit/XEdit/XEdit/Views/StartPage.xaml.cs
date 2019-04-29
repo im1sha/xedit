@@ -26,7 +26,7 @@ namespace XEdit.Views
             {
                 if (stream != null)
                 {
-                    AppDispatcher.Get<ImageManager>().Image = SKBitmap.Decode(stream);
+                    AppDispatcher.Get<ImageManager>().SetImage(SKBitmap.Decode(stream));
                     NavigateCommand.Execute(typeof(MainPage));
                 }
             }

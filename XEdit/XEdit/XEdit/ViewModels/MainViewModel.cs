@@ -31,6 +31,7 @@ namespace XEdit.ViewModels
                 {
                     _selectedSection = value;
                     OnPropertyChanged();
+                    _selectedSection.SelectCommand.Execute(null);
                 }
             }
         }
@@ -49,17 +50,12 @@ namespace XEdit.ViewModels
             }
         }
 
-        
-
-
-        public ICommand ApplyCommand
+        public MainViewModel()
         {
-            get
-            {
-                return new Command(canvas => { });
-            }
+            Sections.Add(new Sections.Flip());
+            SelectedSection = Sections.FirstOrDefault();
         }
-         
+
         #region INotifyPropertyChanged Support
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -72,3 +68,5 @@ namespace XEdit.ViewModels
         #endregion
     }
 }
+
+

@@ -16,12 +16,9 @@ namespace XEdit.Core
 
         public ObservableCollection<Handler> Handlers { get; set; } = new ObservableCollection<Handler>();
         public Handler _selectedHandler;
-        public Handler SelectedHandler
+        public virtual Handler SelectedHandler
         {
-            get
-            {
-                return _selectedHandler;
-            }
+            get => _selectedHandler;
             set
             {
                 if (_selectedHandler != value)
@@ -34,19 +31,19 @@ namespace XEdit.Core
   
         public virtual Command SelectCommand
         {
-            get => new Command(arg => SelectedHandler?.Start(arg));
+            get => new Command(obj => { });
         }
 
         public virtual Command LeaveCommand
         {
-            get => new Command(arg => SelectedHandler?.End(arg));          
+            get => new Command(obj => { });          
         }
 
         #region INotifyPropertyChanged Support
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

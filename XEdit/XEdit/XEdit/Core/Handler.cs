@@ -8,15 +8,23 @@ namespace XEdit.Core
     {
         public string Name { get; }
         public string ImageUrl { get; }
-        public Action<object> Start { get; }
-        public Action<object> End { get; }
 
-        public Handler(string name, string url, Action<object> startAction, Action<object> endAction)
+        /// <summary>
+        /// Should be called when Handler is selected
+        /// </summary>
+        public Func<object, object> Perform { get; }
+
+        /// <summary>
+        /// Should be called when Handler is deactivated 
+        /// </summary>
+        public Func<object, object> Exit { get; }
+
+        public Handler(string name, string url, Func<object, object> performAction, Func<object, object> exitAction)
         {
             Name = name;
             ImageUrl = url;
-            Start = startAction;
-            End = endAction;
+            Perform = performAction;
+            Exit = exitAction;
         }
     }
 }

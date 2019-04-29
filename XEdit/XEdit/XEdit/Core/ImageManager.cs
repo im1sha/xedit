@@ -22,31 +22,30 @@ namespace XEdit.Core
         {          
         }
 
-        private SKBitmap _image;
-        public SKBitmap Image
+        public static SKBitmap _image;
+
+        public void SetImage(SKBitmap value)
         {
-            get
+            _image = value;
+            OnPropertyChanged();
+            if (IsCanvasViewInitialized)
             {
-                lock (this)
-                {
-                    return _image;
-                }
-            }
-            set
-            {
-                lock (this)
-                {
-                    _image = value;
-                    OnPropertyChanged();
-                }
-            }
+                UpdateCanvasView();
+            }     
+        }
+
+        // replace with cloning
+        //return new SKBitmap(_image.Info);
+        public SKBitmap GetImage()
+        {
+            return _image;
         }
 
         //SKCanvasView is not in use now. Image 's using instead
         public async Task<bool> Save()
         {
             bool success = false;
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().Image; // to CHANGE
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage(); // to CHANGE
 
             if (bitmap == null)
             {
@@ -67,7 +66,7 @@ namespace XEdit.Core
                     if (isGranted)
                     {
                         success = await DependencyService.Get<IPhotoLibrary>().
-                            SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".png");
+                            SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".jpeg");
                     }
                 }
             }
@@ -75,6 +74,8 @@ namespace XEdit.Core
         }
 
         #region _canvasView
+
+        private bool IsCanvasViewInitialized => _canvasView != null;
 
         private SKCanvasView _canvasView;
 
@@ -92,7 +93,9 @@ namespace XEdit.Core
             _canvasView.PaintSurface += _previousUpdateHandler;
         }
 
-        private EventHandler<SKPaintSurfaceEventArgs> _previousUpdateHandler = (sender, args) =>
+        private EventHandler<SKPaintSurfaceEventArgs> _previousUpdateHandler = _standardUpdateHandler;
+
+        private readonly static EventHandler<SKPaintSurfaceEventArgs> _standardUpdateHandler = (sender, args) =>
         {
             SKImageInfo info = args.Info;
             SKSurface surface = args.Surface;
@@ -100,14 +103,27 @@ namespace XEdit.Core
 
             canvas.Clear();
 
-            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().Image, info.Rect, BitmapStretch.Uniform);
+            canvas.DrawBitmap(_image, info.Rect, BitmapStretch.Uniform);
         };
 
+        /// <summary>
+        /// Sets rendering handler for SKCanvasView
+        /// </summary>
+        /// <param name="eh">If null passed then it should set standard handler</param>
         public void SetUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh)
         {
+            if (eh == null)
+            {
+                eh = _standardUpdateHandler;
+            }
             _canvasView.PaintSurface -= _previousUpdateHandler;
             _previousUpdateHandler = eh;
             _canvasView.PaintSurface += eh;
+        }
+
+        public void UpdateCanvasView()
+        {
+            _canvasView.InvalidateSurface();
         }
 
         #endregion
