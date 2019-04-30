@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
+             xmlns:tt="clr-namespace:XEdit.TouchTracking;assembly=XEdit"
              x:Class="XEdit.Views.MainPage" >
     <ContentPage.Resources>
         <localViews:GridLengthConverter x:Key="gridLengthConverter" />
@@ -111,6 +112,9 @@
                 HorizontalOptions="Fill" 
                 VerticalOptions="Fill" >
                 <skia:SKCanvasView x:Name="skiaCanvasView"> </skia:SKCanvasView>
+                <Grid.Effects>
+                    <tt:TouchEffect  x:Name="touchTracker"  />
+                </Grid.Effects>
             </Grid>
 
             <Slider 

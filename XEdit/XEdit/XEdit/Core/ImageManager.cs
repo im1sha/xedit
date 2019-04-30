@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XEdit.Extensions;
+using XEdit.TouchTracking;
 
 namespace XEdit.Core
 {
@@ -34,13 +35,10 @@ namespace XEdit.Core
                 lock (this)
                 {
                     // fixes memory usage increasing when filter 's applying continiously  
+                    _tempBitmap = null;
                     GC.Collect(); 
                    
                     _tempBitmap = value;
-                    if (IsCanvasViewInitialized)
-                    {
-                        UpdateCanvasView();
-                    }
                 }               
             }
         }
@@ -51,21 +49,32 @@ namespace XEdit.Core
         {
             lock (this)
             {
+                _image = null;
+                GC.Collect();
+
                 _image = value;
-                if (IsCanvasViewInitialized)
-                {
-                    UpdateCanvasView();
-                }
             }           
         }
 
-        // replace with cloning
-        //return new SKBitmap(_image.Info);
-        public SKBitmap GetImage()
+        /// <summary>
+        /// Clones image
+        /// </summary>
+        /// <returns></returns>
+        public SKBitmap CloneImage()
         {
             lock (this)
             {
-                return _image;
+                SKBitmap result = new SKBitmap(_image.Info);
+                _image.CopyTo(result);
+                return result;
+            }
+        }
+
+        public SKImageInfo GetImageInfo()
+        {
+            lock (this)
+            {
+                return _image.Info;
             }
         }
 
@@ -73,7 +82,7 @@ namespace XEdit.Core
         public async Task<bool> Save()
         {
             bool success = false;
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage(); // to CHANGE
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().CloneImage(); 
 
             if (bitmap == null)
             {
@@ -98,6 +107,10 @@ namespace XEdit.Core
                     }
                 }
             }
+
+            bitmap = null;
+            GC.Collect();
+
             return success;
         }
 
@@ -105,9 +118,13 @@ namespace XEdit.Core
 
         #region _canvasView
 
-        private bool IsCanvasViewInitialized => _canvasView != null;
+        public bool IsCanvasViewInitialized => _canvasView != null;
 
-        private SKCanvasView _canvasView;   
+        private SKCanvasView _canvasView;
+        public float ViewCanvasSizeWidth => _canvasView.CanvasSize.Width;
+        public double ViewWidth => _canvasView.Width;
+        public float ViewCanvasSizeHeight => _canvasView.CanvasSize.Height;
+        public double ViewHeight => _canvasView.Height;
 
         public void SetCanvasViewReference(SKCanvasView c)
         {
@@ -142,21 +159,21 @@ namespace XEdit.Core
         /// <param name="eh">If null passed then it should set standard handler</param>
         public void SetCanvasUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh = null)
         {
-            lock (this)
+            if (eh == null)
             {
-                if (eh == null)
-                {
-                    eh = _standardCanvasUpdateHandler;
-                }
-                _canvasView.PaintSurface -= _previousCanvasUpdateHandler;
-                _previousCanvasUpdateHandler = eh;
-                _canvasView.PaintSurface += eh;
-            }          
+                eh = _standardCanvasUpdateHandler;
+            }
+            _canvasView.PaintSurface -= _previousCanvasUpdateHandler;
+            _previousCanvasUpdateHandler = eh;
+            _canvasView.PaintSurface += eh;
         }
 
-        private void UpdateCanvasView()
+        public void UpdateCanvasView()
         {
-            _canvasView.InvalidateSurface();
+            if (IsCanvasViewInitialized)
+            {
+                _canvasView.InvalidateSurface();
+            }
         }
 
         #endregion
@@ -165,7 +182,7 @@ namespace XEdit.Core
 
         #region _variableValuesSlider
 
-        private bool IsSliderInitialized => _variableValuesSlider != null;
+        public bool IsSliderInitialized => _variableValuesSlider != null;
 
         private Slider _variableValuesSlider;
 
@@ -190,22 +207,55 @@ namespace XEdit.Core
 
         public void SetSliderUpdateHandler(EventHandler<ValueChangedEventArgs> eh = null)
         {
-            lock (this)
+            if (eh == null)
             {
-                if (eh == null)
-                {
-                    eh = _standardSliderUpdateHandler;
-                }
-                _variableValuesSlider.ValueChanged -= _previousSliderUpdateHandler;
-                _previousSliderUpdateHandler = eh;
-                _variableValuesSlider.ValueChanged += eh;
+                eh = _standardSliderUpdateHandler;
             }
+            _variableValuesSlider.ValueChanged -= _previousSliderUpdateHandler;
+            _previousSliderUpdateHandler = eh;
+            _variableValuesSlider.ValueChanged += eh;
         }
 
         public void SetSliderReference(Slider s)
         {
             _variableValuesSlider = s;
             _variableValuesSlider.ValueChanged += _previousSliderUpdateHandler;
+        }
+
+        #endregion
+
+
+
+        #region _touchEffect
+
+        public bool IsTouchEffectInitialized => _touchEffect != null;
+
+        private TouchEffect _touchEffect;
+
+        private EventHandler<TouchActionEventArgs> _previousTouchEffectUpdateHandler =
+            _standardTouchEffectUpdateHandler;
+        private readonly static EventHandler<TouchActionEventArgs> _standardTouchEffectUpdateHandler =
+            (sender, args) => { };
+
+        public void SetTouchEffectUpdateHandler(EventHandler<TouchActionEventArgs> eh = null)
+        {
+            if (eh == null)
+            {
+                _touchEffect.Capture = false;
+                eh = _standardTouchEffectUpdateHandler;
+            }
+            
+            _touchEffect.TouchAction -= _previousTouchEffectUpdateHandler;
+            _previousTouchEffectUpdateHandler = eh;
+            _touchEffect.TouchAction += eh;
+            _touchEffect.Capture = true;
+        }
+
+        public void SetTouchEffectReference(TouchEffect effect)
+        {
+            _touchEffect = effect;
+            _touchEffect.Capture = false;
+            _touchEffect.TouchAction += _previousTouchEffectUpdateHandler;
         }
 
         #endregion

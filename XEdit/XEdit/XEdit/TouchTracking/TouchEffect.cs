@@ -1,12 +1,15 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace XEdit.TouchTracking
 {
     public class TouchEffect : RoutingEffect
     {
-        public event TouchActionEventHandler TouchAction;
+        //public event TouchActionEventHandler TouchAction;
 
-        public TouchEffect() : base("XamarinDocs.TouchEffect")
+        public event EventHandler<TouchActionEventArgs> TouchAction;
+
+        public TouchEffect() : base("im1sha.TouchEffect")
         {
         }
 
@@ -16,5 +19,6 @@ namespace XEdit.TouchTracking
         {
             TouchAction?.Invoke(element, args);
         }
+
     }
 }

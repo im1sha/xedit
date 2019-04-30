@@ -25,6 +25,7 @@ namespace XEdit.Views
             BindingContext = new MainViewModel();
             AppDispatcher.Get<ImageManager>().SetCanvasViewReference(skiaCanvasView);
             AppDispatcher.Get<ImageManager>().SetSliderReference(variableValuesSlider);
+            AppDispatcher.Get<ImageManager>().SetTouchEffectReference(touchTracker);
         }
   
         private async void OnBack(object sender, EventArgs e)

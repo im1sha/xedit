@@ -8,7 +8,7 @@ using Android.Views;
 
 using XEdit.TouchTracking;
 
-[assembly: ResolutionGroupName("XamarinDocs")]
+[assembly: ResolutionGroupName("im1sha")]
 [assembly: ExportEffect(typeof(XEdit.Droid.TouchEffect), "TouchEffect")]
 
 namespace XEdit.Droid

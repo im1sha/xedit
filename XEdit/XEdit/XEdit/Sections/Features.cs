@@ -73,7 +73,7 @@ namespace XEdit.Sections
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
         {        
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage();
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().CloneImage();
 
             SKBitmap newBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
             using (SKCanvas canvas = new SKCanvas(newBitmap))           
@@ -91,6 +91,10 @@ namespace XEdit.Sections
 
             //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
             AppDispatcher.Get<ImageManager>().TempBitmap = newBitmap ;
+            AppDispatcher.Get<ImageManager>().UpdateCanvasView();
+
+            bitmap = null;
+            GC.Collect();
         }
     }
 }

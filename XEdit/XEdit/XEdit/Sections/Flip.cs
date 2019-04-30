@@ -64,10 +64,9 @@ namespace XEdit.Sections
 
         void OnFlip(bool vertical)
         {
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().GetImage();
+            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().CloneImage();
 
             SKBitmap flippedBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
-
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
             {
                 canvas.Clear();
@@ -83,6 +82,10 @@ namespace XEdit.Sections
             }
 
             AppDispatcher.Get<ImageManager>().SetImage(flippedBitmap);
+            AppDispatcher.Get<ImageManager>().UpdateCanvasView();
+
+            bitmap = null;
+            GC.Collect();
         }
     } 
 }
