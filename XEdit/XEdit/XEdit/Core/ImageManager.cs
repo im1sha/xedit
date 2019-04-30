@@ -12,28 +12,36 @@ using XEdit.Extensions;
 
 namespace XEdit.Core
 {
-    public class ImageManager : INotifyPropertyChanged
+    public class ImageManager
     {
         private static readonly Lazy<ImageManager> _instance = new Lazy<ImageManager>(() => new ImageManager());
 
         public static ImageManager Instance { get => _instance.Value; }
 
-        protected ImageManager()
-        {          
-        }
-
         // for Transparency effect displaying
         private SKBitmap _tempBitmap;
         public SKBitmap TempBitmap
         {
-            get => _tempBitmap;
+            get
+            {
+                lock (this)
+                {
+                    return _tempBitmap;
+                }
+            }
             set
             {
-                _tempBitmap = value;
-                if (IsCanvasViewInitialized)
+                lock (this)
                 {
-                    UpdateCanvasView();
-                }
+                    // fixes memory usage increasing when filter 's applying continiously  
+                    GC.Collect(); 
+                   
+                    _tempBitmap = value;
+                    if (IsCanvasViewInitialized)
+                    {
+                        UpdateCanvasView();
+                    }
+                }               
             }
         }
 
@@ -41,19 +49,24 @@ namespace XEdit.Core
 
         public void SetImage(SKBitmap value)
         {
-            _image = value;
-            //OnPropertyChanged();
-            if (IsCanvasViewInitialized)
+            lock (this)
             {
-                UpdateCanvasView();
-            }
+                _image = value;
+                if (IsCanvasViewInitialized)
+                {
+                    UpdateCanvasView();
+                }
+            }           
         }
 
         // replace with cloning
         //return new SKBitmap(_image.Info);
         public SKBitmap GetImage()
         {
-            return _image;
+            lock (this)
+            {
+                return _image;
+            }
         }
 
         //SKCanvasView is not in use now. Image 's using instead
@@ -129,13 +142,16 @@ namespace XEdit.Core
         /// <param name="eh">If null passed then it should set standard handler</param>
         public void SetCanvasUpdateHandler(EventHandler<SKPaintSurfaceEventArgs> eh = null)
         {
-            if (eh == null)
+            lock (this)
             {
-                eh = _standardCanvasUpdateHandler;
-            }
-            _canvasView.PaintSurface -= _previousCanvasUpdateHandler;
-            _previousCanvasUpdateHandler = eh;
-            _canvasView.PaintSurface += eh;
+                if (eh == null)
+                {
+                    eh = _standardCanvasUpdateHandler;
+                }
+                _canvasView.PaintSurface -= _previousCanvasUpdateHandler;
+                _previousCanvasUpdateHandler = eh;
+                _canvasView.PaintSurface += eh;
+            }          
         }
 
         private void UpdateCanvasView()
@@ -154,15 +170,18 @@ namespace XEdit.Core
         private Slider _variableValuesSlider;
 
         public double SliderValue {
-            get => _variableValuesSlider.Value;
+            get { lock (this) { return _variableValuesSlider.Value; } }
             set
             {
-                if ((value <= _variableValuesSlider.Maximum) && (value >= _variableValuesSlider.Minimum))
+                lock (this)
                 {
-                    _variableValuesSlider.Value = value;
-                    return;
-                }
-                throw new ApplicationException("Invalid value has passed to SliderValue");
+                    if ((value <= _variableValuesSlider.Maximum) && (value >= _variableValuesSlider.Minimum))
+                    {
+                        _variableValuesSlider.Value = value;
+                        return;
+                    }
+                    throw new ApplicationException("Invalid value has passed to SliderValue");
+                }             
             }
         }
 
@@ -171,13 +190,16 @@ namespace XEdit.Core
 
         public void SetSliderUpdateHandler(EventHandler<ValueChangedEventArgs> eh = null)
         {
-            if (eh == null)
+            lock (this)
             {
-                eh = _standardSliderUpdateHandler;
+                if (eh == null)
+                {
+                    eh = _standardSliderUpdateHandler;
+                }
+                _variableValuesSlider.ValueChanged -= _previousSliderUpdateHandler;
+                _previousSliderUpdateHandler = eh;
+                _variableValuesSlider.ValueChanged += eh;
             }
-            _variableValuesSlider.ValueChanged -= _previousSliderUpdateHandler;
-            _previousSliderUpdateHandler = eh;
-            _variableValuesSlider.ValueChanged += eh;
         }
 
         public void SetSliderReference(Slider s)
@@ -187,19 +209,7 @@ namespace XEdit.Core
         }
 
         #endregion
-
-
-
-        #region INotifyPropertyChanged Support
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-     
     }
 }
+
+

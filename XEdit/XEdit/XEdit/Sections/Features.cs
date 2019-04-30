@@ -89,7 +89,7 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(bitmap, new SKPoint(), paint);
             }
 
-            //AppDispatcher.Get<ImageManager>().SetImage( newBitmap );
+            //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
             AppDispatcher.Get<ImageManager>().TempBitmap = newBitmap ;
         }
     }
