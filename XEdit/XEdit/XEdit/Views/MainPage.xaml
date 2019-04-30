@@ -81,24 +81,26 @@
                 <ImageButton 
                     Grid.Column="2"
                     Style="{StaticResource headerItemStyle}"                                                                 
-                    Source="Left.png">
+                    Source="Left.png"
+                    Command="{Binding CancelCommand }"
+                    >
                 </ImageButton>
                 <ImageButton
                     Grid.Column="3"
                     Style="{StaticResource headerItemStyle}"                                                      
-                    Source="Right.png">
+                    Source="Check.png"
+                    Command="{Binding CommitCommand }"
+                    >
                 </ImageButton>
                 <ImageButton 
                     Grid.Column="4"
                     Style="{StaticResource headerItemStyle}"                                                      
-                    Source="Check.png"                    
+                    Source="Save.png"                    
                     Command="{Binding SaveCommand }"
-                    CommandParameter="{Reference skiaCanvasView}" >
+                   >
                 </ImageButton>
             </Grid>
-
-          
-
+         
             <!--<ImageButton.CommandParameter>
                 <x:Array Type="{x:Type x:Object}">
                     <x:String>Y</x:String>

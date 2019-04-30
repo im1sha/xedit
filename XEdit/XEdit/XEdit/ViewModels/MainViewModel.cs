@@ -66,6 +66,27 @@ namespace XEdit.ViewModels
             }
         }
 
+        public ICommand CancelCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                });
+            }
+        }
+
+        public ICommand CommitCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                });
+            }
+        }
+
+
         public MainViewModel()
         {
             Sections.Add(new Sections.Flip());
