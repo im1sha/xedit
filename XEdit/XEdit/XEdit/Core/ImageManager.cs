@@ -19,8 +19,33 @@ namespace XEdit.Core
 
         public static ImageManager Instance { get => _instance.Value; }
 
+
+
+        #region _backupImage
+
+        private SKBitmap _backupImage;
+
+        public void CreateBackupImage()
+        {
+            _backupImage = null;
+            GC.Collect();
+            _backupImage = CloneImage(_image);
+        }
+
+        public SKBitmap GetBackupImage()
+        {
+            return CloneImage(_backupImage);
+        }
+
+        #endregion
+
+
+
+        #region _tempBitmap
+
         // for Transparency effect displaying
         private SKBitmap _tempBitmap;
+
         public SKBitmap TempBitmap
         {
             get
@@ -36,12 +61,18 @@ namespace XEdit.Core
                 {
                     // fixes memory usage increasing when filter 's applying continiously  
                     _tempBitmap = null;
-                    GC.Collect(); 
-                   
+                    GC.Collect();
+
                     _tempBitmap = value;
-                }               
+                }
             }
         }
+
+        #endregion
+
+
+
+        #region _image
 
         public static SKBitmap _image;
 
@@ -51,23 +82,31 @@ namespace XEdit.Core
             {
                 _image = null;
                 GC.Collect();
-
                 _image = value;
-            }           
+            }
         }
 
         /// <summary>
-        /// Clones image
+        /// Clones active image
         /// </summary>
         /// <returns></returns>
         public SKBitmap CloneImage()
         {
-            lock (this)
+            return CloneImage(_image);
+        }
+
+        private SKBitmap CloneImage(SKBitmap target)
+        {
+            if (target == null)
             {
-                SKBitmap result = new SKBitmap(_image.Info);
-                _image.CopyTo(result);
-                return result;
+                return null;
             }
+            SKBitmap result = new SKBitmap(target.Info);
+            lock (target)
+            {
+                target.CopyTo(result);
+            } 
+            return result;
         }
 
         public SKImageInfo GetImageInfo()
@@ -78,7 +117,6 @@ namespace XEdit.Core
             }
         }
 
-        //SKCanvasView is not in use now. Image 's using instead
         public async Task<bool> Save()
         {
             bool success = false;
@@ -114,6 +152,8 @@ namespace XEdit.Core
             return success;
         }
 
+        #endregion
+
 
 
         #region _canvasView
@@ -121,6 +161,7 @@ namespace XEdit.Core
         public bool IsCanvasViewInitialized => _canvasView != null;
 
         private SKCanvasView _canvasView;
+
         public float ViewCanvasSizeWidth => _canvasView.CanvasSize.Width;
         public double ViewWidth => _canvasView.Width;
         public float ViewCanvasSizeHeight => _canvasView.CanvasSize.Height;
@@ -128,16 +169,8 @@ namespace XEdit.Core
 
         public void SetCanvasViewReference(SKCanvasView c)
         {
-            // IT'LL BE THROWN WHEN NAVIGATING BACK AND SELECT PICTURE AGAIN 
-            //if (_canvasView != null)
-            //{
-            //    throw new ApplicationException("_canvasView is already set");
-            //}
-
             _canvasView = c;
-
-            //initial update handler
-            _canvasView.PaintSurface += _previousCanvasUpdateHandler;
+            _canvasView.PaintSurface += _standardCanvasUpdateHandler;
         }
 
         private EventHandler<SKPaintSurfaceEventArgs> _previousCanvasUpdateHandler = _standardCanvasUpdateHandler;
@@ -168,7 +201,7 @@ namespace XEdit.Core
             _canvasView.PaintSurface += eh;
         }
 
-        public void UpdateCanvasView()
+        public void InvalidateCanvasView()
         {
             if (IsCanvasViewInitialized)
             {
@@ -219,7 +252,7 @@ namespace XEdit.Core
         public void SetSliderReference(Slider s)
         {
             _variableValuesSlider = s;
-            _variableValuesSlider.ValueChanged += _previousSliderUpdateHandler;
+            _variableValuesSlider.ValueChanged += _standardSliderUpdateHandler;
         }
 
         #endregion
@@ -244,18 +277,21 @@ namespace XEdit.Core
                 _touchEffect.Capture = false;
                 eh = _standardTouchEffectUpdateHandler;
             }
+            else
+            {
+                _touchEffect.Capture = true;
+            }
             
             _touchEffect.TouchAction -= _previousTouchEffectUpdateHandler;
             _previousTouchEffectUpdateHandler = eh;
             _touchEffect.TouchAction += eh;
-            _touchEffect.Capture = true;
         }
 
         public void SetTouchEffectReference(TouchEffect effect)
         {
             _touchEffect = effect;
             _touchEffect.Capture = false;
-            _touchEffect.TouchAction += _previousTouchEffectUpdateHandler;
+            _touchEffect.TouchAction += _standardTouchEffectUpdateHandler;
         }
 
         #endregion

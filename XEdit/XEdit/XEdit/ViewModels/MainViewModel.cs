@@ -52,16 +52,15 @@ namespace XEdit.ViewModels
             }
         }
 
-        //      DeleteQuote = new Command<QuoteViewModel>(async vm => OnDeleteQuote(vm));
         //      CommandParameter="{Binding}"
 
         public ICommand SaveCommand
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    AppDispatcher.Get<ImageManager>().Save();
+                    await AppDispatcher.Get<ImageManager>().Save();
                 });
             }
         }
@@ -76,6 +75,9 @@ namespace XEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sets backup picture. Backup picture will be used on CancelCommand call
+        /// </summary>
         public ICommand CommitCommand
         {
             get

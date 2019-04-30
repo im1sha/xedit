@@ -144,7 +144,7 @@ namespace XEdit.Sections
                 break;
             }
 
-            AppDispatcher.Get<ImageManager>().UpdateCanvasView();
+            AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
         }
 
         void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)

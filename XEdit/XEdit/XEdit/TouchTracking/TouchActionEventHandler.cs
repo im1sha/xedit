@@ -2,7 +2,7 @@
 {
     // it should use       
     //    event EventHandler<TouchActionEventArgs> 
-    // instead
+    // instead of
 
     //public delegate void TouchActionEventHandler(object sender, TouchActionEventArgs args);
 }

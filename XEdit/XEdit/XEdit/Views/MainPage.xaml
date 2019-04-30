@@ -38,9 +38,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"  />
                 <RowDefinition Height="10*" />
-                <RowDefinition Height="0.4*" /> <!--slider : now not in use-->
-                <RowDefinition Height="1.5*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="0.5*" /> <!--slider : now not in use-->
+                <RowDefinition Height="1.75*" />
+                <RowDefinition Height="1.25*" />
             </Grid.RowDefinitions>
 
             <!--HEADER-->

@@ -27,17 +27,14 @@
                 <ColumnDefinition></ColumnDefinition>    
                 <ColumnDefinition></ColumnDefinition>    
             </Grid.ColumnDefinitions>
-
-            <!-- Command="{Binding NavigateCommand}"
-                CommandParameter="{x:Type core:PictureLoader}"    -->
             
             <ImageButton Grid.Row="0" Grid.Column="0" 
                 Clicked="OnSelectFromGallery"
-                Source="Gallery.jpg"
+                Source="Gallery.png"
                 Style="{StaticResource itemStyle}">
             </ImageButton>
 
-            <ImageButton Grid.Row="1" Grid.Column="0" Source="Camera.jpg" Style="{StaticResource itemStyle}" >
+            <ImageButton Grid.Row="1" Grid.Column="0" Source="Camera.png" Style="{StaticResource itemStyle}" >
             </ImageButton>
             
         </Grid>

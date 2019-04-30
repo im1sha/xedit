@@ -43,11 +43,19 @@ namespace XEdit.Sections
             { 
                 new Handler("Vertical", 
                     null,
-                    (obj) => { OnVerticalFlip(); AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(); }, 
+                    (obj) => {
+                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                        OnVerticalFlip();
+                        AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                    }, 
                     (obj) => { }),
                 new Handler("Horizontal",
                     null,
-                    (obj) => { OnHorizontalFlip(); AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(); },
+                    (obj) => {
+                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                        OnHorizontalFlip();
+                        AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                    },
                     (obj) => { }),
             };
         }
@@ -82,7 +90,6 @@ namespace XEdit.Sections
             }
 
             AppDispatcher.Get<ImageManager>().SetImage(flippedBitmap);
-            AppDispatcher.Get<ImageManager>().UpdateCanvasView();
 
             bitmap = null;
             GC.Collect();

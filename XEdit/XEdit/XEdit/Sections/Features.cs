@@ -91,7 +91,7 @@ namespace XEdit.Sections
 
             //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
             AppDispatcher.Get<ImageManager>().TempBitmap = newBitmap ;
-            AppDispatcher.Get<ImageManager>().UpdateCanvasView();
+            AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
 
             bitmap = null;
             GC.Collect();
