@@ -26,18 +26,24 @@ namespace XEdit.Core
                 {
                     _selectedHandler = value;
                     OnPropertyChanged();
+
+                    _selectedHandler.Prepare(); // example: create backup
+                    _selectedHandler.Perform(); // example: flip
                 }               
             }
         }
   
         public virtual Command SelectCommand
         {
-            get => new Command(obj => { });
+            get => null;
         }
 
         public virtual Command LeaveCommand
         {
-            get => new Command(obj => { });          
+            get => new Command(() => {
+                SelectedHandler?.Exit();
+                _selectedHandler = null;
+            });
         }
 
         #region INotifyPropertyChanged Support

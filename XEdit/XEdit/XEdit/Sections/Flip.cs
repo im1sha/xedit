@@ -18,46 +18,45 @@ namespace XEdit.Sections
     {
         public override string Name => "Flip";
 
-        public override Handler SelectedHandler
-        {
-            get
-            {
-                return _selectedHandler;
-            }
-            set
-            {
-                if (_selectedHandler != value)
-                {
-                    _selectedHandler?.Exit(null);
-                    _selectedHandler = value;
-                    OnPropertyChanged();
-                    _selectedHandler.Perform(null);
-                    _selectedHandler = null;
-                }
-            }
-        }
-
         public Flip()
         {
             Handlers = new ObservableCollection<Handler>()
-            { 
-                new Handler("Vertical", 
-                    null,
-                    (obj) => {
-                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
-                        OnVerticalFlip();
-                        AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
-                    }, 
-                    (obj) => { }),
-                new Handler("Horizontal",
-                    null,
-                    (obj) => {
-                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
-                        OnHorizontalFlip();
-                        AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
-                    },
-                    (obj) => { }),
+            {
+                CreateHandler(true),
+                CreateHandler(false)
             };
+        }
+
+        Handler CreateHandler(bool vertical)
+        {
+            Action performAction;
+
+            if (vertical)
+            {
+                performAction = () =>
+                {
+                     AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                     OnVerticalFlip();
+                     AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                };
+            }
+            else
+            {
+                performAction = () =>
+                {
+                    AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                    OnHorizontalFlip();
+                    AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                };
+            }
+
+            return new Handler("Vertical", null,
+                performAction: performAction,
+                commitAction: () => { },
+                prepareAction: () => { },
+                rollbackAction: () => { },
+                exitAction: () => { }
+                );
         }
 
         void OnVerticalFlip()
@@ -93,6 +92,9 @@ namespace XEdit.Sections
 
             bitmap = null;
             GC.Collect();
+
+            // it should be no selected item bc flipping is not continuos action
+            _selectedHandler = null;
         }
     } 
 }

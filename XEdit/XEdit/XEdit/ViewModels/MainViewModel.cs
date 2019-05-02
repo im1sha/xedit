@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -44,15 +45,17 @@ namespace XEdit.ViewModels
                 if (_selectedSection != value)
                 {
                     _selectedSection?.LeaveCommand?.Execute(null);
+
                     _selectedSection = value;
                     OnPropertyChanged();
+
                     IsVariableValues = _selectedSection.IsVariableValues();
                     _selectedSection.SelectCommand.Execute(null);
                 }
             }
         }
 
-        //      CommandParameter="{Binding}"
+        // CommandParameter="{Binding}"
 
         public ICommand SaveCommand
         {
@@ -60,6 +63,7 @@ namespace XEdit.ViewModels
             {
                 return new Command(async () =>
                 {
+                    await OnCommit();
                     await AppDispatcher.Get<ImageManager>().Save();
                 });
             }
@@ -69,10 +73,16 @@ namespace XEdit.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
+                    await OnCommit();
                 });
             }
+        }
+
+        private async Task OnCommit()
+        {
+            await new Task(() => { });
         }
 
         /// <summary>
@@ -87,6 +97,13 @@ namespace XEdit.ViewModels
                 });
             }
         }
+
+        public async Task OnPopScreen()
+        {
+            await new Task(() => { });
+        }
+
+
 
 
         public MainViewModel()

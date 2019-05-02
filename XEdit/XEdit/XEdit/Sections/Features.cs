@@ -26,10 +26,10 @@ namespace XEdit.Sections
             {
                 if (_selectedHandler != value)
                 {
-                    _selectedHandler?.Exit(null);
+                    _selectedHandler?.Exit();
                     _selectedHandler = value;
                     OnPropertyChanged();
-                    _selectedHandler.Perform(null);
+                    _selectedHandler.Perform();
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace XEdit.Sections
         public override Command LeaveCommand
         {
             get => new Command(obj => {
-                SelectedHandler?.Exit(null);
+                SelectedHandler?.Exit();
                 _selectedHandler = null;
             });
         }
@@ -48,11 +48,11 @@ namespace XEdit.Sections
             {
                 new Handler("Transparency",
                     null,
-                    (obj) => {
+                    () => {
                         AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(OnCanvaUpdate);
                         AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler(OnSliderValueChanged);
                     },
-                    (obj) => {
+                    () => {
                         AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler();
                         AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
                         AppDispatcher.Get<ImageManager>().SliderValue = 0;

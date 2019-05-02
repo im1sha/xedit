@@ -19,10 +19,15 @@ namespace XEdit.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainPage : ContentPage
 	{
+        MainViewModel vm;
+
         public MainPage()
 		{
 			InitializeComponent ();
-            BindingContext = new MainViewModel();
+
+            vm = new MainViewModel();
+            BindingContext = vm;
+
             AppDispatcher.Get<ImageManager>().SetCanvasViewReference(skiaCanvasView);
             AppDispatcher.Get<ImageManager>().SetSliderReference(variableValuesSlider);
             AppDispatcher.Get<ImageManager>().SetTouchEffectReference(touchTracker);
@@ -30,6 +35,7 @@ namespace XEdit.Views
   
         private async void OnBack(object sender, EventArgs e)
         {
+            await vm.OnPopScreen();
             await Navigation.PopAsync();
         }      
     }

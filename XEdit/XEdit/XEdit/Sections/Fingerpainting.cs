@@ -28,10 +28,10 @@ namespace XEdit.Sections
             {
                 if (_selectedHandler != value)
                 {
-                    _selectedHandler?.Exit(null);
+                    _selectedHandler?.Exit();
                     _selectedHandler = value;
                     OnPropertyChanged();
-                    _selectedHandler.Perform(null);
+                    _selectedHandler.Perform();
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace XEdit.Sections
         public override Command LeaveCommand
         {
             get => new Command(obj => {
-                SelectedHandler?.Exit(null);
+                SelectedHandler?.Exit();
                 _selectedHandler = null;
             });
         }
@@ -64,7 +64,7 @@ namespace XEdit.Sections
             return new Handler(
                 name,
                 null,
-                (obj) => {                  
+                () => {                  
                     _inProgressPaths = new Dictionary<long, SKPath>();
                     _completedPaths = new List<SKPath>();
                     _paint = GetSkPaint(color);
@@ -72,7 +72,7 @@ namespace XEdit.Sections
                     AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(OnCanvasViewPaintSurface);
                     AppDispatcher.Get<ImageManager>().SetTouchEffectUpdateHandler(OnTouchEffectAction);
                 },
-                (obj) => {
+                () => {
                     AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
                     AppDispatcher.Get<ImageManager>().SetTouchEffectUpdateHandler();
                 });

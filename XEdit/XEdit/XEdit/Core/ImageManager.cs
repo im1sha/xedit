@@ -25,16 +25,16 @@ namespace XEdit.Core
 
         private SKBitmap _backupImage;
 
-        public void CreateBackupImage()
+        public async Task CreateBackupImage()
         {
             _backupImage = null;
             GC.Collect();
-            _backupImage = CloneImage(_image);
+            await new Task(() => { _backupImage = CloneImage(_image); });
         }
 
-        public SKBitmap GetBackupImage()
+        public void RestoreImage()
         {
-            return CloneImage(_backupImage);
+            _image = CloneImage(_backupImage);
         }
 
         #endregion
@@ -43,7 +43,7 @@ namespace XEdit.Core
 
         #region _tempBitmap
 
-        // for Transparency effect displaying
+        // bitmap with no cloning
         private SKBitmap _tempBitmap;
 
         public SKBitmap TempBitmap
