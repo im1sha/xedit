@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms;
 
-namespace XEdit.Core
+namespace XEdit.Sections
 {
     public interface ISection
     {
@@ -13,8 +13,8 @@ namespace XEdit.Core
         string Name { get; }
         string ImageUrl { get; }
 
-        ObservableCollection<Handler> Handlers { get; }
-        Handler SelectedHandler { get; }
+        ObservableCollection<VisualHandler> Handlers { get; }
+        VisualHandler SelectedHandler { get; }
 
         /// <summary>
         /// Section is selected 

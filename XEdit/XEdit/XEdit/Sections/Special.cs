@@ -5,18 +5,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms;
-using XEdit.Core;
 using XEdit.Extensions;
 
 namespace XEdit.Sections
 {
-    class Features : Core.CoreSection
+    class Special : BaseSection
     {
         public override bool IsVariableValues() => true;
 
-        public override string Name { get; } = "Features";
+        public override string Name { get; } = "Special";
 
-        public override Handler SelectedHandler
+        public override VisualHandler SelectedHandler
         {
             get
             {
@@ -42,21 +41,22 @@ namespace XEdit.Sections
             });
         }
 
-        public Features()
+        public Special()
         {
-            Handlers = new ObservableCollection<Handler>()
+            Handlers = new ObservableCollection<VisualHandler>()
             {
-                new Handler("Transparency",
+                new VisualHandler("Transparency",
                     null,
                     () => {
-                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(OnCanvaUpdate);
-                        AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler(OnSliderValueChanged);
+                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler(OnCanvaUpdate);
+                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler(OnSliderValueChanged);
                     },
                     () => {
-                        AppDispatcher.Get<ImageManager>().SetSliderUpdateHandler();
-                        AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
-                        AppDispatcher.Get<ImageManager>().SliderValue = 0;
-                    }),
+                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler();
+                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
+                        UniqueInstancesManager.Get<VisualControl>().SliderValue = 0;
+                    },null                   
+                ),
             };
         }
 
@@ -68,12 +68,12 @@ namespace XEdit.Sections
 
             canvas.Clear();
 
-            canvas.DrawBitmap(AppDispatcher.Get<ImageManager>().TempBitmap, info.Rect, BitmapStretch.Uniform);
+            canvas.DrawBitmap(UniqueInstancesManager.Get<VisualControl>().TempBitmap, info.Rect, BitmapStretch.Uniform);
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
         {        
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().CloneImage();
+            SKBitmap bitmap = UniqueInstancesManager.Get<VisualControl>().CloneImage();
 
             SKBitmap newBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
             using (SKCanvas canvas = new SKCanvas(newBitmap))           
@@ -81,7 +81,7 @@ namespace XEdit.Sections
             {
                 canvas.Clear();
 
-                float progress = (float)AppDispatcher.Get<ImageManager>().SliderValue;
+                float progress = (float)UniqueInstancesManager.Get<VisualControl>().SliderValue;
 
                 paint.Color = paint.Color.WithAlpha(
                     (byte)(0xFF * (1 - progress)));
@@ -90,8 +90,8 @@ namespace XEdit.Sections
             }
 
             //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
-            AppDispatcher.Get<ImageManager>().TempBitmap = newBitmap ;
-            AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+            UniqueInstancesManager.Get<VisualControl>().TempBitmap = newBitmap ;
+            UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
 
             bitmap = null;
             GC.Collect();

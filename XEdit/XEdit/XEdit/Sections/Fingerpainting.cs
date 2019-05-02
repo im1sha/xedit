@@ -1,24 +1,20 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-
 using Xamarin.Forms;
-
-using XEdit.Core;
 using XEdit.Extensions;
 using XEdit.TouchTracking;
 
 namespace XEdit.Sections
 {
-    class FingerPainting : CoreSection
+    class FingerPainting : BaseSection
     {
         public override string Name { get; } = "Finger Painting";
 
-        public override Handler SelectedHandler
+        public override VisualHandler SelectedHandler
         {
             get
             {
@@ -46,22 +42,22 @@ namespace XEdit.Sections
 
         public FingerPainting()
         {
-            Handlers = new ObservableCollection<Handler>();
+            Handlers = new ObservableCollection<VisualHandler>();
             for (int i = 0; i < _colors.Length; i++)
             {
                 Handlers.Add(CreateHandler(_colors[i].color, _colors[i].name));
             }
 
-            _handlerToColorDictionary = new Dictionary<Handler, (SKColor, string)>();
+            _handlerToColorDictionary = new Dictionary<VisualHandler, (SKColor, string)>();
             for (int i = 0; i < Handlers.Count; i++)
             {
                 _handlerToColorDictionary.Add(Handlers[i], _colors[i]);
             }
         }
 
-        Handler CreateHandler(SKColor color, string name)
+        VisualHandler CreateHandler(SKColor color, string name)
         {
-            return new Handler(
+            return new VisualHandler(
                 name,
                 null,
                 () => {                  
@@ -69,13 +65,14 @@ namespace XEdit.Sections
                     _completedPaths = new List<SKPath>();
                     _paint = GetSkPaint(color);
 
-                    AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler(OnCanvasViewPaintSurface);
-                    AppDispatcher.Get<ImageManager>().SetTouchEffectUpdateHandler(OnTouchEffectAction);
+                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler(OnCanvasViewPaintSurface);
+                    UniqueInstancesManager.Get<VisualControl>().SetTouchEffectUpdateHandler(OnTouchEffectAction);
                 },
                 () => {
-                    AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
-                    AppDispatcher.Get<ImageManager>().SetTouchEffectUpdateHandler();
-                });
+                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
+                    UniqueInstancesManager.Get<VisualControl>().SetTouchEffectUpdateHandler();
+                },
+                null);
         }
 
         (SKColor color, string name) GetDefaultColor()
@@ -92,7 +89,7 @@ namespace XEdit.Sections
                 (SKColors.Blue, "Blue"),
             };
 
-        Dictionary<Handler, (SKColor color, string name)> _handlerToColorDictionary;
+        Dictionary<VisualHandler, (SKColor color, string name)> _handlerToColorDictionary;
         SKPaint GetSkPaint(SKColor c, float width = 20) {
              return new SKPaint {
                 Style = SKPaintStyle.Stroke,
@@ -144,7 +141,7 @@ namespace XEdit.Sections
                 break;
             }
 
-            AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+            UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
         }
 
         void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -153,7 +150,7 @@ namespace XEdit.Sections
             SKSurface surface = args.Surface;
             SKCanvas canvas = surface.Canvas;
 
-            var img = AppDispatcher.Get<ImageManager>().CloneImage();
+            var img = UniqueInstancesManager.Get<VisualControl>().CloneImage();
 
             using (canvas)
             using (SKPaint paint = new SKPaint())
@@ -177,10 +174,10 @@ namespace XEdit.Sections
         SKPoint ConvertToPixel(Point pt)
         {
             return new SKPoint(
-                (float)(AppDispatcher.Get<ImageManager>().ViewCanvasSizeWidth * pt.X /
-                AppDispatcher.Get<ImageManager>().ViewWidth),
-                (float)(AppDispatcher.Get<ImageManager>().ViewCanvasSizeHeight * pt.Y /
-                AppDispatcher.Get<ImageManager>().ViewHeight)
+                (float)(UniqueInstancesManager.Get<VisualControl>().ViewCanvasSizeWidth * pt.X /
+                UniqueInstancesManager.Get<VisualControl>().ViewWidth),
+                (float)(UniqueInstancesManager.Get<VisualControl>().ViewCanvasSizeHeight * pt.Y /
+                UniqueInstancesManager.Get<VisualControl>().ViewHeight)
                 );
         }        
     }

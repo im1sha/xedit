@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using XEdit.Core;
 
 [assembly:XamlCompilation(XamlCompilationOptions.Compile)]
 namespace XEdit
@@ -10,8 +9,8 @@ namespace XEdit
 	{
 		public App ()
 		{
-            AppDispatcher.Register(ImageManager.Instance); // register image handler
-            MainPage = new NavigationPage(new XEdit.Views.StartPage());
+            UniqueInstancesManager.Register(ImageWorker.Instance); // register image handler
+            MainPage = new NavigationPage(new Views.StartPage());
         }
 
         protected override void OnStart ()

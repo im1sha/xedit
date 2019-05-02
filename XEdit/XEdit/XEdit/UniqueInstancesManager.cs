@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Core
+namespace XEdit
 {
     /// <summary>
     /// Registers unique instanses
     /// </summary>
-    public static class AppDispatcher
+    public static class UniqueInstancesManager
     {
         private static List<object> _registeredInstances = new List<object>();
 

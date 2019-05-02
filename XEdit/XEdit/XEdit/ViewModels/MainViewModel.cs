@@ -11,15 +11,22 @@ using System.Windows.Input;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
-using XEdit.Core;
+using XEdit.Sections;
+using XEdit.TouchTracking;
 
 namespace XEdit.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private ImageWorker _imageWorker = UniqueInstancesManager.Get<ImageWorker>();
+        private CanvasViewWorker _canvasViewWorker;
+        private TouchWorker _touchWorker;
+        private SliderWorker _sliderWorker;
+
         public string Status { get; set; }
 
-        public ObservableCollection<ISection> Sections { get; set; } = new ObservableCollection<ISection>();
+        public ObservableCollection<ISection> Sections { get; set; } =
+            new ObservableCollection<ISection>();
 
         private bool _isVariableValues;
         public bool IsVariableValues
@@ -35,7 +42,6 @@ namespace XEdit.ViewModels
             }
         }
 
-        //private _ISection _previousSection;
         private ISection _selectedSection;
         public ISection SelectedSection
         {
@@ -55,65 +61,59 @@ namespace XEdit.ViewModels
             }
         }
 
-        // CommandParameter="{Binding}"
-
-        public ICommand SaveCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    await OnCommit();
-                    await AppDispatcher.Get<ImageManager>().Save();
-                });
-            }
-        }
-
-        public ICommand CancelCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    await OnCommit();
-                });
-            }
-        }
-
-        private async Task OnCommit()
-        {
-            await new Task(() => { });
-        }
-
-        /// <summary>
-        /// Sets backup picture. Backup picture will be used on CancelCommand call
-        /// </summary>
-        public ICommand CommitCommand
-        {
-            get
-            {
-                return new Command(() =>
-                {
-                });
-            }
-        }
-
-        public async Task OnPopScreen()
-        {
-            await new Task(() => { });
-        }
-
-
-
-
         public MainViewModel()
         {
             Sections.Add(new Sections.Flip());
-            Sections.Add(new Sections.Features());
+            Sections.Add(new Sections.Special());
             Sections.Add(new Sections.FingerPainting());
             SelectedSection = Sections.FirstOrDefault();
         }
 
+        // CommandParameter="{Binding}"
+
+        public ICommand SaveCommand
+        {
+            get => new Command(async () =>
+            {
+                await _imageWorker.SaveImage();
+            });
+        }
+
+        // '<-' was pressed
+        public ICommand CancelCommand 
+        {
+            get => new Command(async () =>
+            {
+            });
+        }
+
+        // ok was pressed
+        public ICommand CommitCommand 
+        {
+            get => new Command(async () =>
+            {
+            });            
+        }
+
+        public async Task OnPopScreen()
+        {
+        }
+
+        public void OnViewCreated(
+            SKCanvasView skiaCanvasView,
+            Slider variableValuesSlider,
+            TouchEffect touchTracker)
+        {
+            if (_imageWorker == null)
+            {
+                throw new ApplicationException("_imageWorker is not initialized");
+            }
+            _canvasViewWorker = new CanvasViewWorker(skiaCanvasView, _imageWorker);
+            _sliderWorker = new SliderWorker(variableValuesSlider);
+            _touchWorker = new TouchWorker(touchTracker);
+        }
+
+     
         #region INotifyPropertyChanged Support
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Xamarin.Forms;
-
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
-
 using XEdit.Extensions;
-using XEdit.Core;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace XEdit.Sections
 {
-    public class Flip : CoreSection
+    public class Flip : BaseSection
     {
         public override string Name => "Flip";
 
         public Flip()
         {
-            Handlers = new ObservableCollection<Handler>()
+            Handlers = new ObservableCollection<VisualHandler>()
             {
                 CreateHandler(true),
                 CreateHandler(false)
             };
         }
 
-        Handler CreateHandler(bool vertical)
+        VisualHandler CreateHandler(bool vertical)
         {
             Action performAction;
 
@@ -35,25 +31,23 @@ namespace XEdit.Sections
             {
                 performAction = () =>
                 {
-                     AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                     UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
                      OnVerticalFlip();
-                     AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                     UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
                 };
             }
             else
             {
                 performAction = () =>
                 {
-                    AppDispatcher.Get<ImageManager>().SetCanvasUpdateHandler();
+                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
                     OnHorizontalFlip();
-                    AppDispatcher.Get<ImageManager>().InvalidateCanvasView();
+                    UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
                 };
             }
 
-            return new Handler("Vertical", null,
+            return new VisualHandler("Vertical", null,
                 performAction: performAction,
-                commitAction: () => { },
-                prepareAction: () => { },
                 rollbackAction: () => { },
                 exitAction: () => { }
                 );
@@ -71,7 +65,7 @@ namespace XEdit.Sections
 
         void OnFlip(bool vertical)
         {
-            SKBitmap bitmap = AppDispatcher.Get<ImageManager>().CloneImage();
+            SKBitmap bitmap = UniqueInstancesManager.Get<VisualControl>().CloneImage();
 
             SKBitmap flippedBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
@@ -88,7 +82,7 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(bitmap, new SKPoint());
             }
 
-            AppDispatcher.Get<ImageManager>().SetImage(flippedBitmap);
+            UniqueInstancesManager.Get<VisualControl>().OnStart(flippedBitmap);
 
             bitmap = null;
             GC.Collect();

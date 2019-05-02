@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using XEdit.Core;
 using XEdit.Extensions;
 using XEdit.ViewModels;
 
@@ -27,10 +26,7 @@ namespace XEdit.Views
 
             vm = new MainViewModel();
             BindingContext = vm;
-
-            AppDispatcher.Get<ImageManager>().SetCanvasViewReference(skiaCanvasView);
-            AppDispatcher.Get<ImageManager>().SetSliderReference(variableValuesSlider);
-            AppDispatcher.Get<ImageManager>().SetTouchEffectReference(touchTracker);
+            vm.OnViewCreated(skiaCanvasView, variableValuesSlider, touchTracker);
         }
   
         private async void OnBack(object sender, EventArgs e)

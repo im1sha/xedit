@@ -8,7 +8,7 @@ using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Java.IO;
 using Xamarin.Forms;
-using XEdit.Core;
+using XEdit.PlatformSpecific;
 using XEdit.Droid;
 
 [assembly: Dependency(typeof(PhotoLibrary))]

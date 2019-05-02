@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace XEdit.Core
+namespace XEdit.PlatformSpecific
 {
     public interface IPhotoLibrary
     {
@@ -10,3 +10,4 @@ namespace XEdit.Core
         Task<bool> SavePhotoAsync(byte[] data, string folder, string filename);
     }
 }
+

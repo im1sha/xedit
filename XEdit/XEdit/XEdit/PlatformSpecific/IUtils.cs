@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XEdit.Core
+namespace XEdit.PlatformSpecific
 {
     public interface IUtils
     {

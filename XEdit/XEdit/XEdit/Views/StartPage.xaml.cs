@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using XEdit.Core;
+using XEdit.PlatformSpecific;
 
 namespace XEdit.Views
 {
@@ -26,7 +26,7 @@ namespace XEdit.Views
             {
                 if (stream != null)
                 {
-                    AppDispatcher.Get<ImageManager>().SetImage(SKBitmap.Decode(stream));
+                    UniqueInstancesManager.Get<ImageWorker>().Image = SKBitmap.Decode(stream);
                     NavigateCommand.Execute(typeof(MainPage));
                 }
             }

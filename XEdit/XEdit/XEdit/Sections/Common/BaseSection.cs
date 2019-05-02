@@ -5,19 +5,22 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Xamarin.Forms;
-using XEdit.Core;
 
-namespace XEdit.Core
+namespace XEdit.Sections
 {
-    public class CoreSection : INotifyPropertyChanged, ISection
+    public class BaseSection : INotifyPropertyChanged, ISection
     {
         public virtual bool IsVariableValues() => false; // is slider required?
+
         public virtual string Name => throw new NotImplementedException();
+
         public virtual string ImageUrl => throw new NotImplementedException();
 
-        public ObservableCollection<Handler> Handlers { get; set; } = new ObservableCollection<Handler>();
-        public Handler _selectedHandler;
-        public virtual Handler SelectedHandler
+        public ObservableCollection<VisualHandler> Handlers { get; set; } =
+            new ObservableCollection<VisualHandler>();
+
+        public VisualHandler _selectedHandler;
+        public virtual VisualHandler SelectedHandler
         {
             get => _selectedHandler;
             set
@@ -26,8 +29,6 @@ namespace XEdit.Core
                 {
                     _selectedHandler = value;
                     OnPropertyChanged();
-
-                    _selectedHandler.Prepare(); // example: create backup
                     _selectedHandler.Perform(); // example: flip
                 }               
             }
@@ -35,7 +36,7 @@ namespace XEdit.Core
   
         public virtual Command SelectCommand
         {
-            get => null;
+            get => new Command(() => { });
         }
 
         public virtual Command LeaveCommand

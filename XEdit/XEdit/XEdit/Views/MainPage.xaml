@@ -36,11 +36,11 @@
         <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="White" >
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"  />
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="0.5*" /> <!--slider : now not in use-->
-                <RowDefinition Height="1.75*" />
-                <RowDefinition Height="1.25*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="0.5*"/> 
+                <RowDefinition Height="1.75*"/>
+                <RowDefinition Height="1.25*"/>
             </Grid.RowDefinitions>
 
             <!--HEADER-->
@@ -51,8 +51,7 @@
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill" 
                 ColumnSpacing="0" 
-                RowSpacing="0" 
-                 >
+                RowSpacing="0">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
@@ -79,7 +78,7 @@
                        TextColor="Black" >
                 </Label>
                 <ImageButton 
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Style="{StaticResource headerItemStyle}"                                                                 
                     Source="Left.png"
                     Command="{Binding CancelCommand }"
@@ -138,7 +137,7 @@
                     ItemsLayout="{x:Static ListItemsLayout.HorizontalList}"
                     SelectionMode="Single" 
                     ItemsSource="{Binding SelectedSection.Handlers}"
-                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}" >  <!--!!-->
+                    SelectedItem="{Binding SelectedSection.SelectedHandler, Mode=TwoWay}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" 
