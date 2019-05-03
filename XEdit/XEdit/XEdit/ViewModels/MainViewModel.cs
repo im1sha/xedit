@@ -80,7 +80,6 @@ namespace XEdit.ViewModels
                 {
                     SliderWorker.SetDefaultSliderValue();
                 }
-                ImageWorker.CommitImage();
                 string name = await ImageWorker.SaveImage();
                 MessagingCenter.Send(this, Messages.SaveSuccess, name);
             });
@@ -89,9 +88,9 @@ namespace XEdit.ViewModels
         // '<-' was pressed
         public ICommand CancelCommand 
         {
-            get => new Command(async () =>
+            get => new Command(() =>
             {
-                await ImageWorker.RestorePreviousImageState();
+                ImageWorker.RestorePreviousImageState();
 
                 // mb check updatehandler
                 CanvasViewWorker.Invalidate();

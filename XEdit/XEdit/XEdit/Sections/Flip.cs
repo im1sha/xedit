@@ -79,7 +79,6 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(bitmap, new SKPoint());
             }
 
-            //task.Wait();                                // wait until image is copied
             _mainVM.ImageWorker.Image = flippedBitmap;  // set new image
 
             // it should be no selected item bc flipping is not continuous action

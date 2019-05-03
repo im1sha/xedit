@@ -54,20 +54,18 @@ namespace XEdit
             _stateStorage.Add(CloneImage(_image));
         }
 
-        public async Task RestorePreviousImageState()
+        public void RestorePreviousImageState()
         {
-            await new Task(() => {
-                MoveToTrash(_image);
-                if (_stateStorage.Count > 0)
-                {
-                    _image = _stateStorage[_stateStorage.Count - 1];
-                    _stateStorage.RemoveAt(_stateStorage.Count - 1);
-                }
-                else
-                {
-                    _image = CloneImage(_backupImage);
-                }             
-            });
+            MoveToTrash(_image);
+            if (_stateStorage.Count > 0)
+            {
+                _image = _stateStorage[_stateStorage.Count - 1];
+                _stateStorage.RemoveAt(_stateStorage.Count - 1);
+            }
+            else
+            {
+                _image = CloneImage(_backupImage);
+            }             
         }
 
         public void CommitImage()
