@@ -15,7 +15,7 @@ namespace XEdit.TouchTracking
 
         public long Id { private set; get; }
 
-        public TouchActionType Type { private set; get; }
+        public TouchActionType Type { set; get; }
 
         public Point Location { private set; get; }
 

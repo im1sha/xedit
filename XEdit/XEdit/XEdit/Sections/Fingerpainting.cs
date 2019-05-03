@@ -129,9 +129,8 @@ namespace XEdit.Sections
             if (location.X > rect.Right || location.X < rect.Left ||
                 location.Y < rect.Top || location.Y > rect.Bottom)
             {
-                return;
+                args.Type = TouchActionType.Released;
             }
-
             switch (args.Type)
             {
                 case TouchActionType.Pressed:
