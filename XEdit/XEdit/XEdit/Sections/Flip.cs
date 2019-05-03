@@ -31,7 +31,7 @@ namespace XEdit.Sections
         private VisualHandler CreateHandler(bool vertical)
         {
             return new VisualHandler(
-                name : vertical ? "Vertical" : "Horizontal", 
+                name: vertical ? "Vertical" : "Horizontal",
                 url: null,
                 performAction: () =>
                 {
@@ -45,9 +45,7 @@ namespace XEdit.Sections
                         OnHorizontalFlip();
                     }
                     _mainVM.CanvasViewWorker.Invalidate();
-                },
-                rollbackAction: () => { },
-                exitAction: () => { }
+                }
                 );
         }
 
@@ -63,10 +61,9 @@ namespace XEdit.Sections
 
         void OnFlip(bool vertical)
         {
-            var task = UniqueInstancesManager.Get<ImageWorker>().AddImageState();
-            task.Start();
+            _mainVM.ImageWorker.AddImageState();
 
-            SKBitmap bitmap = UniqueInstancesManager.Get<ImageWorker>().Image;
+            SKBitmap bitmap = _mainVM.ImageWorker.Image;
             SKBitmap flippedBitmap = new SKBitmap(bitmap.Info);
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
             {
@@ -82,7 +79,7 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(bitmap, new SKPoint());
             }
 
-            task.Wait();                                // wait until image is copied
+            //task.Wait();                                // wait until image is copied
             _mainVM.ImageWorker.Image = flippedBitmap;  // set new image
 
             // it should be no selected item bc flipping is not continuous action

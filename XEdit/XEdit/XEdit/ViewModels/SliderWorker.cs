@@ -33,6 +33,8 @@ namespace XEdit.ViewModels
             }
         }
 
+        public void SetDefaultSliderValue() { SliderValue = 0; }
+
         public SliderWorker(Slider s)
         {
             _slider = s;

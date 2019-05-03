@@ -22,37 +22,41 @@ namespace XEdit
         /// <summary>
         /// Image created when you select new visual handler
         /// </summary>   
-        private SKBitmap _backupImage = new SKBitmap(); 
-        
+        private SKBitmap _backupImage = new SKBitmap();
+
         /// <summary>
         /// Image states when working with image 
         /// </summary>
         private List<SKBitmap> _stateStorage = new List<SKBitmap>();
         private static readonly int maxStateStorageSize = 5;
-        public SKBitmap _image = new SKBitmap();
+        private SKBitmap _image = new SKBitmap();
 
-        #region backup
+        #region backup methods
 
-        public Task AddImageState(bool withBackup = false)
+        public void AddBackupImage()
         {
-             return new Task(() => {          
-                 if (_stateStorage.Count >= maxStateStorageSize)
-                 {
-                     MoveToTrash(_stateStorage[0]);
-                     _stateStorage.RemoveAt(0);
-                 }
-                 _stateStorage.Add(CloneImage(_image));
-
-                 if (withBackup)
-                 {
-                     _backupImage = CloneImage(_image);
-                 }
-             });
+            _backupImage = CloneImage(_image);
         }
 
-        public Task RestorePreviousImageState()
+        public void RestoreFromBackupImage()
         {
-            return new Task(() => {
+            MoveToTrash(_image);
+            _image = CloneImage(_backupImage);
+        }
+
+        public void AddImageState()
+        {
+            if (_stateStorage.Count >= maxStateStorageSize)
+            {
+                MoveToTrash(_stateStorage[0]);
+                _stateStorage.RemoveAt(0);
+            }
+            _stateStorage.Add(CloneImage(_image));
+        }
+
+        public async Task RestorePreviousImageState()
+        {
+            await new Task(() => {
                 MoveToTrash(_image);
                 if (_stateStorage.Count > 0)
                 {
@@ -66,9 +70,8 @@ namespace XEdit
             });
         }
 
-        public async Task CommitImage()
+        public void CommitImage()
         {
-            await new Task(() => {
                 bool shouldCollect = false;
                 lock (_stateStorage)
                 {
@@ -86,7 +89,6 @@ namespace XEdit
                 {
                     GC.Collect();
                 }
-            });
         }
 
         #endregion 
@@ -109,7 +111,12 @@ namespace XEdit
                 }
             }
         }
- 
+
+        /// <summary>
+        /// Clones SKBitmap using lock
+        /// </summary>
+        /// <param name="target">Image to copy</param>
+        /// <returns>Cloned image</returns>
         public SKBitmap CloneImage(SKBitmap target)
         {
             if (target == null)
@@ -124,14 +131,17 @@ namespace XEdit
             return result;
         }
 
-        public async Task<bool> SaveImage()
+        public async Task<string> SaveImage()
         {
             bool success = false;
+
+            string fileName = $"X{DateTime.Now.ToBinary().ToString()}.jpeg";
+
             SKBitmap bitmap = CloneImage(Image);
 
             if (bitmap == null)
             {
-                return false;
+                return null;
             }
 
             SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Jpeg;
@@ -148,14 +158,20 @@ namespace XEdit
                     if (isGranted)
                     {
                         success = await DependencyService.Get<IPhotoLibrary>().
-                            SavePhotoAsync(data, "testFolder", DateTime.Now.ToBinary().ToString() + ".jpeg");
+                            SavePhotoAsync(data, "XEdit", fileName);
                     }
                 }
             }
 
             MoveToTrash(bitmap);
-
-            return success;
+            if (!success)
+            {
+                return null;
+            }
+            else
+            {
+                return fileName;
+            }
         }
 
         /// <summary>

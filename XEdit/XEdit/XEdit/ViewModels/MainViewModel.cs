@@ -13,6 +13,7 @@ using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using XEdit.Sections;
 using XEdit.TouchTracking;
+using XEdit.Views;
 
 namespace XEdit.ViewModels
 {
@@ -73,32 +74,40 @@ namespace XEdit.ViewModels
 
         public ICommand SaveCommand
         {
-            get => new Command(async () =>
+            get => new Command(async() =>
             {
-                await ImageWorker.SaveImage();
+                if (IsVariableValues)
+                {
+                    SliderWorker.SetDefaultSliderValue();
+                }
+                ImageWorker.CommitImage();
+                string name = await ImageWorker.SaveImage();
+                MessagingCenter.Send(this, Messages.SaveSuccess, name);
             });
         }
 
         // '<-' was pressed
         public ICommand CancelCommand 
         {
-            get => new Command(() =>
+            get => new Command(async () =>
             {
+                await ImageWorker.RestorePreviousImageState();
+
+                // mb check updatehandler
+                CanvasViewWorker.Invalidate();
             });
         }
 
         // ok was pressed
         public ICommand CommitCommand 
         {
-            get => new Command(async () =>
+            get => new Command(() =>
             {
-                await CommonActions.DefaultCommit();
+                ImageWorker.CommitImage();
             });            
         }
 
-        public async Task OnPopScreen()
-        {
-        }
+        public async Task OnPopScreen() { }
 
         public void OnViewCreated(
             SKCanvasView skiaCanvasView,

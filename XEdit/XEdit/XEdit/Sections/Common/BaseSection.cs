@@ -29,6 +29,7 @@ namespace XEdit.Sections
                 {
                     _selectedHandler = value;
                     OnPropertyChanged();
+                    UniqueInstancesManager.Get<ImageWorker>().AddBackupImage();
                     _selectedHandler.Perform(); // example: flip
                 }               
             }
@@ -42,7 +43,6 @@ namespace XEdit.Sections
         public virtual Command LeaveCommand
         {
             get => new Command(() => {
-                SelectedHandler?.Exit();
                 _selectedHandler = null;
             });
         }

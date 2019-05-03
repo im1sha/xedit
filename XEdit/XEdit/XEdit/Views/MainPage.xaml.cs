@@ -27,6 +27,13 @@ namespace XEdit.Views
             vm = new MainViewModel();
             BindingContext = vm;
             vm.OnViewCreated(skiaCanvasView, variableValuesSlider, touchTracker);
+
+            MessagingCenter.Subscribe<MainViewModel, string>(
+                this, 
+                Messages.SaveSuccess,   
+                async (sender, name) => {
+                    await DisplayAlert("Save", $"Saved at XEdit as {name}", "OK");
+                });    
         }
   
         private async void OnBack(object sender, EventArgs e)
