@@ -102,7 +102,7 @@ namespace XEdit.ViewModels
         {
             get => new Command(() =>
             {
-                ImageWorker.CommitImage();
+                ImageWorker.AddBackupImage();
             });            
         }
 

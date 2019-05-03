@@ -70,23 +70,23 @@ namespace XEdit
 
         public void CommitImage()
         {
-                bool shouldCollect = false;
-                lock (_stateStorage)
-                {
-                    shouldCollect = _stateStorage.Count > 1;
-                    if (shouldCollect)
-                    { 
-                        for (int i = 0; i < _stateStorage.Count; i++)
-                        {
-                            _stateStorage[i] = null;
-                        }
-                        _stateStorage.Clear();
-                    }
-                }
+            bool shouldCollect = false;
+            lock (_stateStorage)
+            {
+                shouldCollect = _stateStorage.Count > 1;
                 if (shouldCollect)
-                {
-                    GC.Collect();
+                { 
+                    for (int i = 0; i < _stateStorage.Count; i++)
+                    {
+                        _stateStorage[i] = null;
+                    }
+                    _stateStorage.Clear();
                 }
+            }
+            if (shouldCollect)
+            {
+                GC.Collect();
+            }
         }
 
         #endregion 
