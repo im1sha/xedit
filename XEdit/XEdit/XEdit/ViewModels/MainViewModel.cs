@@ -90,8 +90,9 @@ namespace XEdit.ViewModels
         // ok was pressed
         public ICommand CommitCommand 
         {
-            get => new Command(() =>
+            get => new Command(async () =>
             {
+                await CommonActions.DefaultCommit();
             });            
         }
 

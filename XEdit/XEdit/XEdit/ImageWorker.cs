@@ -19,31 +19,73 @@ namespace XEdit
         public static ImageWorker Instance { get => _instance.Value; }
         private ImageWorker() { }
 
-        private List<SKBitmap> _backupStorage = new List<SKBitmap>();
-        private static readonly int maxBackupStorageSize = 5;
+        /// <summary>
+        /// Image created when you select new visual handler
+        /// </summary>   
+        private SKBitmap _backupImage = new SKBitmap(); 
+        
+        /// <summary>
+        /// Image states when working with image 
+        /// </summary>
+        private List<SKBitmap> _stateStorage = new List<SKBitmap>();
+        private static readonly int maxStateStorageSize = 5;
         public SKBitmap _image = new SKBitmap();
 
         #region backup
 
-        public Task CreateBackupImage()
+        public Task AddImageState(bool withBackup = false)
         {
-             return new Task(() => {
-                 if (_backupStorage.Count >= maxBackupStorageSize)
+             return new Task(() => {          
+                 if (_stateStorage.Count >= maxStateStorageSize)
                  {
-                     MoveToTrash(_backupStorage[0]);
-                     _backupStorage.RemoveAt(0);
+                     MoveToTrash(_stateStorage[0]);
+                     _stateStorage.RemoveAt(0);
                  }
-                 _backupStorage.Add(CloneImage(_image));
+                 _stateStorage.Add(CloneImage(_image));
+
+                 if (withBackup)
+                 {
+                     _backupImage = CloneImage(_image);
+                 }
              });
         }
 
-        public Task RestoreImage()
+        public Task RestorePreviousImageState()
         {
             return new Task(() => {
                 MoveToTrash(_image);
-                _image = CloneImage(_backupStorage[_backupStorage.Count - 1]);
-                MoveToTrash(_backupStorage[_backupStorage.Count - 1]);
-                _backupStorage.RemoveAt(_backupStorage.Count - 1);
+                if (_stateStorage.Count > 0)
+                {
+                    _image = _stateStorage[_stateStorage.Count - 1];
+                    _stateStorage.RemoveAt(_stateStorage.Count - 1);
+                }
+                else
+                {
+                    _image = CloneImage(_backupImage);
+                }             
+            });
+        }
+
+        public async Task CommitImage()
+        {
+            await new Task(() => {
+                bool shouldCollect = false;
+                lock (_stateStorage)
+                {
+                    shouldCollect = _stateStorage.Count > 1;
+                    if (shouldCollect)
+                    { 
+                        for (int i = 0; i < _stateStorage.Count; i++)
+                        {
+                            _stateStorage[i] = null;
+                        }
+                        _stateStorage.Clear();
+                    }
+                }
+                if (shouldCollect)
+                {
+                    GC.Collect();
+                }
             });
         }
 

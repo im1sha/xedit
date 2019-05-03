@@ -63,7 +63,7 @@ namespace XEdit.Sections
 
         void OnFlip(bool vertical)
         {
-            var task = UniqueInstancesManager.Get<ImageWorker>().CreateBackupImage();
+            var task = UniqueInstancesManager.Get<ImageWorker>().AddImageState();
             task.Start();
 
             SKBitmap bitmap = UniqueInstancesManager.Get<ImageWorker>().Image;
