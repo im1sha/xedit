@@ -15,6 +15,12 @@ namespace XEdit.ViewModels
         private readonly static EventHandler<ValueChangedEventArgs> _standardUpdateHandler =
             (sender, args) => { };
 
+        private EventHandler _previousDragCompletedHandler =
+            _standardDragCompletedHandler;
+
+        private readonly static EventHandler _standardDragCompletedHandler =
+            (sender, args) => { };
+
         public double SliderValue
         {
             get
@@ -39,6 +45,7 @@ namespace XEdit.ViewModels
         {
             _slider = s;
             _slider.ValueChanged += _standardUpdateHandler;
+            _slider.DragCompleted += _standardDragCompletedHandler;
         }
 
         public void SetUpdateHandler(EventHandler<ValueChangedEventArgs> eh = null)
@@ -50,7 +57,18 @@ namespace XEdit.ViewModels
             _slider.ValueChanged -= _previousUpdateHandler;
             _previousUpdateHandler = eh;
             _slider.ValueChanged += eh;
-        }  
+        }
+
+        public void SetDragCompletedHandler(EventHandler eh = null)
+        {
+            if (eh == null)
+            {
+                eh = _standardDragCompletedHandler;
+            }
+            _slider.DragCompleted -= _previousDragCompletedHandler;
+            _previousDragCompletedHandler = eh;
+            _slider.DragCompleted += eh;
+        }
     }
 }
 

@@ -25,5 +25,11 @@ namespace XEdit.Sections
         /// Another section's been chosen
         /// </summary>
         Command LeaveCommand { get; }
+
+        /// <summary>
+        /// Call this one if required synchronize data that holds Section with ImageWorker etc.
+        /// </summary>
+        //Command Sync { get; }
+
     }
 }

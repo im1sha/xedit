@@ -11,12 +11,12 @@ namespace XEdit.ViewModels
     {       
         private static ImageWorker _imageWorker;
 
-        private SKCanvasView _canvasView;
+        public SKCanvasView CanvasView { get; private set; }
 
-        public float ViewCanvasSizeWidth => _canvasView.CanvasSize.Width;
-        public double ViewWidth => _canvasView.Width;
-        public float ViewCanvasSizeHeight => _canvasView.CanvasSize.Height;
-        public double ViewHeight => _canvasView.Height;
+        public float ViewCanvasSizeWidth => CanvasView.CanvasSize.Width;
+        public double ViewWidth => CanvasView.Width;
+        public float ViewCanvasSizeHeight => CanvasView.CanvasSize.Height;
+        public double ViewHeight => CanvasView.Height;
 
         private EventHandler<SKPaintSurfaceEventArgs> _previousUpdateHandler = 
             _standardUpdateHandler;
@@ -40,8 +40,8 @@ namespace XEdit.ViewModels
         public CanvasViewWorker(SKCanvasView c, ImageWorker iw)
         {
             _imageWorker = iw;
-            _canvasView = c;
-            _canvasView.PaintSurface += _standardUpdateHandler;
+            CanvasView = c;
+            CanvasView.PaintSurface += _standardUpdateHandler;
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace XEdit.ViewModels
             {
                 eh = _standardUpdateHandler;
             }
-            _canvasView.PaintSurface -= _previousUpdateHandler;
+            CanvasView.PaintSurface -= _previousUpdateHandler;
             _previousUpdateHandler = eh;
-            _canvasView.PaintSurface += eh;
+            CanvasView.PaintSurface += eh;
         }
 
         public void Invalidate()
         {
-             _canvasView.InvalidateSurface();
+             CanvasView.InvalidateSurface();
         }
     }
 }

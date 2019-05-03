@@ -33,16 +33,16 @@ namespace XEdit
 
         #region backup methods
 
-        public void AddBackupImage()
-        {
-            _backupImage = CloneImage(_image);
-        }
+        //public void AddBackupImage()
+        //{
+        //    _backupImage = CloneImage(_image);
+        //}
 
-        public void RestoreFromBackupImage()
-        {
-            MoveToTrash(_image);
-            _image = CloneImage(_backupImage);
-        }
+        //public void RestoreFromBackupImage()
+        //{
+        //    MoveToTrash(_image);
+        //    _image = CloneImage(_backupImage);
+        //}
 
         public void AddImageState(SKBitmap img = null)
         {
@@ -72,26 +72,25 @@ namespace XEdit
             {
                 _image = _stateStorage[_stateStorage.Count - 1];
                 _stateStorage.RemoveAt(_stateStorage.Count - 1);
-            }
-            else
-            {
-                _image = CloneImage(_backupImage);
-            }             
+            }          
         }
 
+        /// <summary>
+        /// Clean up backup list
+        /// </summary>
         public void CommitImage()
         {
             bool shouldCollect = false;
             lock (_stateStorage)
             {
-                shouldCollect = _stateStorage.Count > 1;
+                shouldCollect = _stateStorage.Count > 0;
                 if (shouldCollect)
                 { 
-                    for (int i = 0; i < _stateStorage.Count; i++)
+                    for (int i = 0; i < _stateStorage.Count ; i++)
                     {
                         _stateStorage[i] = null;
                     }
-                    _stateStorage.Clear();
+                    _stateStorage.RemoveRange(0, _stateStorage.Count );
                 }
             }
             if (shouldCollect)

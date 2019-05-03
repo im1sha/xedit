@@ -12,13 +12,13 @@ using System.Linq;
 
 namespace XEdit.Sections
 {
-    class FingerPainting : BaseSection
+    class Painting : BaseSection
     {
         readonly MainViewModel _mainVM;
 
         public override string Name { get; } = "Paint";
 
-        public FingerPainting(MainViewModel vm)
+        public Painting(MainViewModel vm)
         {
             _mainVM = vm;
 
@@ -44,13 +44,15 @@ namespace XEdit.Sections
                 {
                     _inProgressPathsInPixels = new Dictionary<long, SKPath>();
                     _inProgressPathsOnImage = new Dictionary<long, SKPath>();
-                    //_completedPaths = new List<SKPath>();
                     _paint = GetSkPaint(color);
 
                     _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);
                     _mainVM.TouchWorker.SetUpdateHandler(OnTouchEffectAction);
-                }
-                );
+                },
+                close: () => {
+                    _mainVM.CanvasViewWorker.SetUpdateHandler();
+                    _mainVM.TouchWorker.SetUpdateHandler();
+                });
         }
 
         private (SKColor color, string name) GetDefaultColor()
@@ -82,7 +84,6 @@ namespace XEdit.Sections
 
         private Dictionary<long, SKPath> _inProgressPathsInPixels;
         private Dictionary<long, SKPath> _inProgressPathsOnImage;
-        //private List<SKPath> _completedPaths;
         private SKPath _completedPathInPixels;
         private SKPath _completedPathOnImage;
         private SKPaint _paint;

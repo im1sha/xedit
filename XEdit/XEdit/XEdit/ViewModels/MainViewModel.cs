@@ -50,14 +50,18 @@ namespace XEdit.ViewModels
             set
             {
                 if (_selectedSection != value)
-                {
+                { 
+                    // closes handler and then asign null to it
                     _selectedSection?.LeaveCommand?.Execute(null);
 
                     _selectedSection = value;
                     OnPropertyChanged();
 
-                    IsVariableValues = _selectedSection.IsVariableValues();
-                    _selectedSection.SelectCommand.Execute(null);
+                    if (_selectedSection != null)
+                    {
+                        IsVariableValues = _selectedSection.IsVariableValues();
+                        _selectedSection.SelectCommand?.Execute(null);
+                    }             
                 }
             }
         }
@@ -65,21 +69,16 @@ namespace XEdit.ViewModels
         public MainViewModel()
         {
             Sections.Add(new Flip(this));
-            //Sections.Add(new Sections.Special(this));
-            Sections.Add(new Sections.FingerPainting(this));
+            Sections.Add(new Transparency(this));
+            Sections.Add(new Painting(this));
             SelectedSection = Sections.FirstOrDefault();
         }
-
-        // CommandParameter="{Binding}"
 
         public ICommand SaveCommand
         {
             get => new Command(async() =>
             {
-                if (IsVariableValues)
-                {
-                    SliderWorker.SetDefaultSliderValue();
-                }
+                CommitCommand.Execute(null);
                 string name = await ImageWorker.SaveImage();
                 MessagingCenter.Send(this, Messages.SaveSuccess, name);
             });
@@ -90,9 +89,14 @@ namespace XEdit.ViewModels
         {
             get => new Command(() =>
             {
-                ImageWorker.RestorePreviousImageState();
+                if (SelectedSection != null)
+                {
+                    SelectedSection.SelectedHandler?.Close();
+                    SelectedSection.SelectedHandler = null;                 
+                }
 
-                // mb check updatehandler
+                SliderWorker.SetDefaultSliderValue();
+                ImageWorker.RestorePreviousImageState();
                 CanvasViewWorker.Invalidate();
             });
         }
@@ -102,7 +106,15 @@ namespace XEdit.ViewModels
         {
             get => new Command(() =>
             {
-                ImageWorker.AddBackupImage();
+                if ((SelectedSection != null) && (SelectedSection.SelectedHandler != null))
+                {
+                    SelectedSection.SelectedHandler.Close();
+                    SelectedSection.SelectedHandler = null;
+                }
+
+                SliderWorker.SetDefaultSliderValue();
+                //ImageWorker.AddBackupImage();
+                ImageWorker.CommitImage();
             });            
         }
 

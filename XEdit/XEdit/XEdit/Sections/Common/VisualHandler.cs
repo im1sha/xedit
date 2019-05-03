@@ -11,18 +11,19 @@ namespace XEdit.Sections
 
         public string ImageUrl { get; }
     
-
         /// <summary>
         /// Should be called when Handler is selected to set view or to do calculations
         /// </summary>
         public Action Perform { get; }
 
-        public VisualHandler(string name, string url, Action perform)
+        public Action Close { get; }
+
+        public VisualHandler(string name, string url, Action perform, Action close)
         {
             Name = name;
             ImageUrl = url;
+            Close = close;
             Perform = perform;
-      
         }
     }
 }

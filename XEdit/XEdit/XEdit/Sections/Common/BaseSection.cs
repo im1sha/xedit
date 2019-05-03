@@ -32,13 +32,13 @@ namespace XEdit.Sections
 
                     if (value != null)
                     {
-                        UniqueInstancesManager.Get<ImageWorker>().AddBackupImage();
+                        //UniqueInstancesManager.Get<ImageWorker>().AddBackupImage();
                         _selectedHandler.Perform(); // example: flip
                     }               
                 }               
             }
         }
-  
+
         public virtual Command SelectCommand
         {
             get => new Command(() => { });
@@ -47,6 +47,7 @@ namespace XEdit.Sections
         public virtual Command LeaveCommand
         {
             get => new Command(() => {
+                SelectedHandler?.Close();
                 _selectedHandler = null;
             });
         }

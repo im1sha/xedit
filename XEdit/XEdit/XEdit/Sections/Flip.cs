@@ -45,7 +45,8 @@ namespace XEdit.Sections
                         OnHorizontalFlip();
                     }
                     _mainVM.CanvasViewWorker.Invalidate();
-                }
+                },
+                close: () => { }
                 );
         }
 
