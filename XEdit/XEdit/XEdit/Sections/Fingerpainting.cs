@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using XEdit.Extensions;
 using XEdit.TouchTracking;
 using XEdit.ViewModels;
+using System.Linq;
 
 namespace XEdit.Sections
 {
@@ -42,7 +43,7 @@ namespace XEdit.Sections
                 perform: () =>
                 {
                     _inProgressPathsInPixels = new Dictionary<long, SKPath>();
-                    _inProgressPathsInPoints = new Dictionary<long, SKPath>();
+                    _inProgressPathsOnImage = new Dictionary<long, SKPath>();
                     //_completedPaths = new List<SKPath>();
                     _paint = GetSkPaint(color);
 
@@ -80,78 +81,141 @@ namespace XEdit.Sections
         }
 
         private Dictionary<long, SKPath> _inProgressPathsInPixels;
-        private Dictionary<long, SKPath> _inProgressPathsInPoints;
+        private Dictionary<long, SKPath> _inProgressPathsOnImage;
         //private List<SKPath> _completedPaths;
         private SKPath _completedPathInPixels;
-        private SKPath _completedPathInPoints;
+        private SKPath _completedPathOnImage;
         private SKPaint _paint;
-        private volatile bool _newCompletedPath = false;
+        private volatile bool _isPathCompleted = false;
 
         private void OnTouchEffectAction(object sender, TouchActionEventArgs args)
         {
+            if (!(sender is Grid))
+            {
+                return;
+            }
+            var grid = (sender as Grid);
+
+            SKSize canvasViewSize = (grid.Children.Where((i) =>
+                i.GetType() == typeof(SKCanvasView)).
+                    ToArray().FirstOrDefault() as SKCanvasView).CanvasSize;
+
+            SKBitmap bitmap = _mainVM.ImageWorker.Image;
+
+            SKRect rect;
+            float scale; // determines image orientation
+            if (canvasViewSize.Height / canvasViewSize.Width > bitmap.Height / bitmap.Width)
+            {
+                scale = bitmap.Width / (float)canvasViewSize.Width;
+                rect = new SKRect(0, 
+                    (float)(canvasViewSize.Height - bitmap.Height / scale) / 2,
+                    (float)canvasViewSize.Width, 
+                    (float)(canvasViewSize.Height + bitmap.Height / scale) / 2
+                    );
+            }
+            else
+            {
+                scale = bitmap.Height / (float)canvasViewSize.Height;
+                rect = new SKRect(
+                    (float)(canvasViewSize.Width - bitmap.Width / scale) / 2,
+                    0,
+                    (float)(canvasViewSize.Width + bitmap.Width / scale) / 2,
+                    (float)canvasViewSize.Height
+                    );
+            }
+
+            SKPoint location = ConvertToPixel(args.Location);
+
+            if (location.X > rect.Right || location.X < rect.Left ||
+                location.Y < rect.Top || location.Y > rect.Bottom)
+            {
+                return;
+            }
+
             switch (args.Type)
             {
                 case TouchActionType.Pressed:
                     if (!_inProgressPathsInPixels.ContainsKey(args.Id))
                     {
+
                         SKPath pathInPixels = new SKPath();
-                        pathInPixels.MoveTo(ConvertToPixel(args.Location));
+                        pathInPixels.MoveTo(location);
                         _inProgressPathsInPixels.Add(args.Id, pathInPixels);
 
                         //
-                        SKPath pathInPoints = new SKPath();
-                        pathInPoints.MoveTo(new SKPoint((float) args.Location.X*2, (float) args.Location.Y * 2));
-                        _inProgressPathsInPoints.Add(args.Id, pathInPoints);
+                        SKPath pathOnImage = new SKPath();
+                        pathOnImage.MoveTo(ConvertToPositionOnImage(
+                            location, 
+                            rect,
+                            bitmap.Height / rect.Height
+                            ));
+
+                        _inProgressPathsOnImage.Add(args.Id, pathOnImage);
                     }
                     break;
                 case TouchActionType.Moved:
                     if (_inProgressPathsInPixels.ContainsKey(args.Id))
                     {
-                        SKPath path = _inProgressPathsInPixels[args.Id];
-                        path.LineTo(ConvertToPixel(args.Location));
+                        SKPath pathInPixels = _inProgressPathsInPixels[args.Id];
+                        pathInPixels.LineTo(location);
 
                         //
-                        SKPath pathInPoints = _inProgressPathsInPoints[args.Id];
-                        pathInPoints.LineTo(new SKPoint((float)args.Location.X * 2, (float)args.Location.Y * 2));
+                        SKPath pathOnImage = _inProgressPathsOnImage[args.Id];
+                        pathOnImage.LineTo(ConvertToPositionOnImage(
+                            location,
+                            rect,
+                            scale
+                            ));
                     }
                     break;
                 case TouchActionType.Released:
                     if (_inProgressPathsInPixels.ContainsKey(args.Id))
                     {
-                        _newCompletedPath = true;
+                        _isPathCompleted = true;
 
                         _completedPathInPixels = _inProgressPathsInPixels[args.Id];
                         _inProgressPathsInPixels.Remove(args.Id);
 
                         //
-                        _completedPathInPoints = _inProgressPathsInPoints[args.Id];
-                        _inProgressPathsInPoints.Remove(args.Id);
+                        _completedPathOnImage = _inProgressPathsOnImage[args.Id];
+                        _inProgressPathsOnImage.Remove(args.Id);
                     }
                     break;
                 case TouchActionType.Cancelled:
                     if (_inProgressPathsInPixels.ContainsKey(args.Id))
                     {
                         _inProgressPathsInPixels.Remove(args.Id);
-                        _inProgressPathsInPoints.Remove(args.Id);
+
+                        //
+                        _inProgressPathsOnImage.Remove(args.Id);
                     }
                     break;
             }
 
-            if (_newCompletedPath)
+            if (_isPathCompleted)
             {
-                var bitmap = _mainVM.ImageWorker.Image;
                 _mainVM.ImageWorker.AddImageState(bitmap);
 
+                SKPaint paint = new SKPaint() {
+                    Style = _paint.Style,
+                    StrokeCap = _paint.StrokeCap,
+                    StrokeJoin = _paint.StrokeJoin,
+                    Color = _paint.Color,
+                    StrokeWidth = _paint.StrokeWidth * scale,
+                };
+
                 SKBitmap newBitmap = new SKBitmap(bitmap.Info);
+
                 using (SKCanvas canvas = new SKCanvas(newBitmap))
+                using (paint)
                 {
                     canvas.Clear();
                     canvas.DrawBitmap(bitmap, new SKPoint());
-                    canvas.DrawPath(_completedPathInPoints, _paint);                    
+                    canvas.DrawPath(_completedPathOnImage, paint);
                 }
 
                 _mainVM.ImageWorker.Image = newBitmap;
-                _newCompletedPath = false;
+                _isPathCompleted = false;
             }
 
             _mainVM.CanvasViewWorker.Invalidate();
@@ -185,6 +249,14 @@ namespace XEdit.Sections
                 );
         }
 
-
+        /// <summary>
+        /// Converts position of point on canva to position on image
+        /// </summary>
+        private SKPoint ConvertToPositionOnImage(SKPoint point, SKRect rect, 
+            float bitmapSizeToRectSize)
+        {
+            return new SKPoint(((float)point.X - rect.Left) * bitmapSizeToRectSize,
+                ((float)point.Y - rect.Top) * bitmapSizeToRectSize);
+        }
     }
 }

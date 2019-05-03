@@ -113,7 +113,7 @@ namespace XEdit.Extensions
             }
         }
 
-        static SKRect CalculateDisplayRect(SKRect dest, float bmpWidth, float bmpHeight, 
+        static public SKRect CalculateDisplayRect(SKRect dest, float bmpWidth, float bmpHeight, 
                                            BitmapAlignment horizontal, BitmapAlignment vertical)
         {
             float x = 0;
