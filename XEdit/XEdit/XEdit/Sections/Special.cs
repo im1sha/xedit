@@ -1,100 +1,105 @@
-﻿using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using Xamarin.Forms;
-using XEdit.Extensions;
+﻿//using SkiaSharp;
+//using SkiaSharp.Views.Forms;
+//using System;
+//using System.Collections.Generic;
+//using System.Collections.ObjectModel;
+//using System.Text;
+//using Xamarin.Forms;
+//using XEdit.Extensions;
+//using XEdit.ViewModels;
 
-namespace XEdit.Sections
-{
-    class Special : BaseSection
-    {
-        public override bool IsVariableValues() => true;
+//namespace XEdit.Sections
+//{
+//    class Special : BaseSection
+//    {
+//        readonly MainViewModel _mainVM;
 
-        public override string Name { get; } = "Special";
+//        public override bool IsVariableValues() => true;
 
-        public override VisualHandler SelectedHandler
-        {
-            get
-            {
-                return _selectedHandler;
-            }
-            set
-            {
-                if (_selectedHandler != value)
-                {
-                    _selectedHandler?.Exit();
-                    _selectedHandler = value;
-                    OnPropertyChanged();
-                    _selectedHandler.Perform();
-                }
-            }
-        }
+//        public override string Name { get; } = "Special";
 
-        public override Command LeaveCommand
-        {
-            get => new Command(obj => {
-                SelectedHandler?.Exit();
-                _selectedHandler = null;
-            });
-        }
+//        public override VisualHandler SelectedHandler
+//        {
+//            get
+//            {
+//                return _selectedHandler;
+//            }
+//            set
+//            {
+//                if (_selectedHandler != value)
+//                {
+//                    _selectedHandler?.Exit();
+//                    _selectedHandler = value;
+//                    OnPropertyChanged();
+//                    _selectedHandler.Perform();
+//                }
+//            }
+//        }
 
-        public Special()
-        {
-            Handlers = new ObservableCollection<VisualHandler>()
-            {
-                new VisualHandler("Transparency",
-                    null,
-                    () => {
-                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler(OnCanvaUpdate);
-                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler(OnSliderValueChanged);
-                    },
-                    () => {
-                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler();
-                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
-                        UniqueInstancesManager.Get<VisualControl>().SliderValue = 0;
-                    },null                   
-                ),
-            };
-        }
+//        public override Command LeaveCommand
+//        {
+//            get => new Command(obj => {
+//                SelectedHandler?.Exit();
+//                _selectedHandler = null;
+//            });
+//        }
 
-        void OnCanvaUpdate(object sender, SKPaintSurfaceEventArgs args)
-        {
-            SKImageInfo info = args.Info;
-            SKSurface surface = args.Surface;
-            SKCanvas canvas = surface.Canvas;
+//        public Special(MainViewModel vm)
+//        {
+//            _mainVM = vm;
+       
+//            Handlers = new ObservableCollection<VisualHandler>()
+//            {
+//                new VisualHandler("Transparency",
+//                    null,
+//                    () => {
+//                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler(OnCanvaUpdate);
+//                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler(OnSliderValueChanged);
+//                    },
+//                    () => {
+//                        UniqueInstancesManager.Get<VisualControl>().SetSliderUpdateHandler();
+//                        UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
+//                        UniqueInstancesManager.Get<VisualControl>().SliderValue = 0;
+//                    },null                   
+//                ),
+//            };
+//        }
 
-            canvas.Clear();
+//        void OnCanvaUpdate(object sender, SKPaintSurfaceEventArgs args)
+//        {
+//            SKImageInfo info = args.Info;
+//            SKSurface surface = args.Surface;
+//            SKCanvas canvas = surface.Canvas;
 
-            canvas.DrawBitmap(UniqueInstancesManager.Get<VisualControl>().TempBitmap, info.Rect, BitmapStretch.Uniform);
-        }
+//            canvas.Clear();
 
-        void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
-        {        
-            SKBitmap bitmap = UniqueInstancesManager.Get<VisualControl>().CloneImage();
+//            canvas.DrawBitmap(UniqueInstancesManager.Get<VisualControl>().TempBitmap, info.Rect, BitmapStretch.Uniform);
+//        }
 
-            SKBitmap newBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
-            using (SKCanvas canvas = new SKCanvas(newBitmap))           
-            using (SKPaint paint = new SKPaint())
-            {
-                canvas.Clear();
+//        void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
+//        {        
+//            SKBitmap bitmap = UniqueInstancesManager.Get<VisualControl>().CloneImage();
 
-                float progress = (float)UniqueInstancesManager.Get<VisualControl>().SliderValue;
+//            SKBitmap newBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
+//            using (SKCanvas canvas = new SKCanvas(newBitmap))           
+//            using (SKPaint paint = new SKPaint())
+//            {
+//                canvas.Clear();
 
-                paint.Color = paint.Color.WithAlpha(
-                    (byte)(0xFF * (1 - progress)));
+//                float progress = (float)UniqueInstancesManager.Get<VisualControl>().SliderValue;
 
-                canvas.DrawBitmap(bitmap, new SKPoint(), paint);
-            }
+//                paint.Color = paint.Color.WithAlpha(
+//                    (byte)(0xFF * (1 - progress)));
 
-            //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
-            UniqueInstancesManager.Get<VisualControl>().TempBitmap = newBitmap ;
-            UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
+//                canvas.DrawBitmap(bitmap, new SKPoint(), paint);
+//            }
 
-            bitmap = null;
-            GC.Collect();
-        }
-    }
-}
+//            //AppDispatcher.Get<ImageManager>().SetImage(newBitmap);
+//            UniqueInstancesManager.Get<VisualControl>().TempBitmap = newBitmap ;
+//            UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
+
+//            bitmap = null;
+//            GC.Collect();
+//        }
+//    }
+//}

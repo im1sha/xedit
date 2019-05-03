@@ -7,15 +7,20 @@ using SkiaSharp.Views.Forms;
 using XEdit.Extensions;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using XEdit.ViewModels;
 
 namespace XEdit.Sections
 {
     public class Flip : BaseSection
     {
+        private readonly MainViewModel _mainVM;
+       
         public override string Name => "Flip";
 
-        public Flip()
+        public Flip(MainViewModel vm)
         {
+            _mainVM = vm;
+       
             Handlers = new ObservableCollection<VisualHandler>()
             {
                 CreateHandler(true),
@@ -23,31 +28,24 @@ namespace XEdit.Sections
             };
         }
 
-        VisualHandler CreateHandler(bool vertical)
+        private VisualHandler CreateHandler(bool vertical)
         {
-            Action performAction;
-
-            if (vertical)
-            {
-                performAction = () =>
+            return new VisualHandler(
+                name : vertical ? "Vertical" : "Horizontal", 
+                url: null,
+                performAction: () =>
                 {
-                     UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
-                     OnVerticalFlip();
-                     UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
-                };
-            }
-            else
-            {
-                performAction = () =>
-                {
-                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
-                    OnHorizontalFlip();
-                    UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
-                };
-            }
-
-            return new VisualHandler("Vertical", null,
-                performAction: performAction,
+                    _mainVM.CanvasViewWorker.SetUpdateHandler();
+                    if (vertical)
+                    {
+                        OnVerticalFlip();
+                    }
+                    else
+                    {
+                        OnHorizontalFlip();
+                    }
+                    _mainVM.CanvasViewWorker.Invalidate();
+                },
                 rollbackAction: () => { },
                 exitAction: () => { }
                 );
@@ -65,9 +63,11 @@ namespace XEdit.Sections
 
         void OnFlip(bool vertical)
         {
-            SKBitmap bitmap = UniqueInstancesManager.Get<VisualControl>().CloneImage();
+            var task = UniqueInstancesManager.Get<ImageWorker>().CreateBackupImage();
+            task.Start();
 
-            SKBitmap flippedBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
+            SKBitmap bitmap = UniqueInstancesManager.Get<ImageWorker>().Image;
+            SKBitmap flippedBitmap = new SKBitmap(bitmap.Info);
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
             {
                 canvas.Clear();
@@ -82,12 +82,10 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(bitmap, new SKPoint());
             }
 
-            UniqueInstancesManager.Get<VisualControl>().OnStart(flippedBitmap);
+            task.Wait();                                // wait until image is copied
+            _mainVM.ImageWorker.Image = flippedBitmap;  // set new image
 
-            bitmap = null;
-            GC.Collect();
-
-            // it should be no selected item bc flipping is not continuos action
+            // it should be no selected item bc flipping is not continuous action
             _selectedHandler = null;
         }
     } 

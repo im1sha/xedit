@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,30 +13,37 @@ using XEdit.TouchTracking;
 
 namespace XEdit
 {
-    class ImageWorker
+    public class ImageWorker
     {
         private static readonly Lazy<ImageWorker> _instance = new Lazy<ImageWorker>(() => new ImageWorker());
         public static ImageWorker Instance { get => _instance.Value; }
         private ImageWorker() { }
 
-        private SKBitmap _backupImage;
-        public SKBitmap _image;
+        private List<SKBitmap> _backupStorage = new List<SKBitmap>();
+        private static readonly int maxBackupStorageSize = 5;
+        public SKBitmap _image = new SKBitmap();
 
         #region backup
 
-        public async Task CreateBackupImage()
+        public Task CreateBackupImage()
         {
-            await new Task(() => {
-                MoveToTrash(_backupImage);
-                _backupImage = CloneImage(_image);
-            });
+             return new Task(() => {
+                 if (_backupStorage.Count >= maxBackupStorageSize)
+                 {
+                     MoveToTrash(_backupStorage[0]);
+                     _backupStorage.RemoveAt(0);
+                 }
+                 _backupStorage.Add(CloneImage(_image));
+             });
         }
 
-        public async void RestoreImage()
+        public Task RestoreImage()
         {
-            await new Task(() => {
+            return new Task(() => {
                 MoveToTrash(_image);
-                _image = CloneImage(_backupImage);
+                _image = CloneImage(_backupStorage[_backupStorage.Count - 1]);
+                MoveToTrash(_backupStorage[_backupStorage.Count - 1]);
+                _backupStorage.RemoveAt(_backupStorage.Count - 1);
             });
         }
 

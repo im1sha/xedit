@@ -5,7 +5,7 @@ using XEdit.TouchTracking;
 
 namespace XEdit.ViewModels
 {
-    class TouchWorker
+    public class TouchWorker
     {
         private TouchEffect _touchEffect;
 

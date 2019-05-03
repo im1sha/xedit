@@ -56,9 +56,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
                         Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
-                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag},
-                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
+                        Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />  
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
                         Mode=TwoWay, Converter={StaticResource gridLengthConverter}}" />
                     <ColumnDefinition Width="{Binding Height, Source={x:Reference menuImageButtonTag}, 
@@ -70,20 +70,22 @@
                     Style="{StaticResource headerItemStyle}"                                                                                        
                     Source="Close.png"
                     Clicked="OnBack">
+                </ImageButton> 
+                
+                <ImageButton 
+                    Grid.Column="1"
+                    Style="{StaticResource headerItemStyle}"                                                                 
+                    Source="Left.png"
+                    Command="{Binding CancelCommand }" >  
                 </ImageButton>
-                <Label Grid.Column="1"
+
+                <Label Grid.Column="2"
                        Text="{Binding Status, Mode=TwoWay}"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"
                        TextColor="Black" >
                 </Label>
-                <ImageButton 
-                    Grid.Column="3"
-                    Style="{StaticResource headerItemStyle}"                                                                 
-                    Source="Left.png"
-                    Command="{Binding CancelCommand }"
-                    >
-                </ImageButton>
+              
                 <ImageButton
                     Grid.Column="3"
                     Style="{StaticResource headerItemStyle}"                                                      

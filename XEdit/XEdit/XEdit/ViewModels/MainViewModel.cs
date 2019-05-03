@@ -18,10 +18,10 @@ namespace XEdit.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private ImageWorker _imageWorker = UniqueInstancesManager.Get<ImageWorker>();
-        private CanvasViewWorker _canvasViewWorker;
-        private TouchWorker _touchWorker;
-        private SliderWorker _sliderWorker;
+        public ImageWorker ImageWorker { get; private set; } = UniqueInstancesManager.Get<ImageWorker>();
+        public CanvasViewWorker CanvasViewWorker { get; private set; }
+        public TouchWorker TouchWorker { get; private set; }
+        public SliderWorker SliderWorker { get; private set; }
 
         public string Status { get; set; }
 
@@ -63,9 +63,9 @@ namespace XEdit.ViewModels
 
         public MainViewModel()
         {
-            Sections.Add(new Sections.Flip());
-            Sections.Add(new Sections.Special());
-            Sections.Add(new Sections.FingerPainting());
+            Sections.Add(new Flip(this));
+            //Sections.Add(new Sections.Special(this));
+            //Sections.Add(new Sections.FingerPainting(this));
             SelectedSection = Sections.FirstOrDefault();
         }
 
@@ -75,14 +75,14 @@ namespace XEdit.ViewModels
         {
             get => new Command(async () =>
             {
-                await _imageWorker.SaveImage();
+                await ImageWorker.SaveImage();
             });
         }
 
         // '<-' was pressed
         public ICommand CancelCommand 
         {
-            get => new Command(async () =>
+            get => new Command(() =>
             {
             });
         }
@@ -90,7 +90,7 @@ namespace XEdit.ViewModels
         // ok was pressed
         public ICommand CommitCommand 
         {
-            get => new Command(async () =>
+            get => new Command(() =>
             {
             });            
         }
@@ -104,13 +104,13 @@ namespace XEdit.ViewModels
             Slider variableValuesSlider,
             TouchEffect touchTracker)
         {
-            if (_imageWorker == null)
+            if (ImageWorker == null)
             {
                 throw new ApplicationException("_imageWorker is not initialized");
             }
-            _canvasViewWorker = new CanvasViewWorker(skiaCanvasView, _imageWorker);
-            _sliderWorker = new SliderWorker(variableValuesSlider);
-            _touchWorker = new TouchWorker(touchTracker);
+            CanvasViewWorker = new CanvasViewWorker(skiaCanvasView, ImageWorker);
+            SliderWorker = new SliderWorker(variableValuesSlider);
+            TouchWorker = new TouchWorker(touchTracker);
         }
 
      

@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace XEdit.ViewModels
 {
-    class SliderWorker
+    public class SliderWorker
     {
         private Slider _slider;
 

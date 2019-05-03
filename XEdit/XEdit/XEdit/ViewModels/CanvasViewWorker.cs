@@ -7,7 +7,7 @@ using XEdit.Extensions;
 
 namespace XEdit.ViewModels
 {
-    class CanvasViewWorker
+    public class CanvasViewWorker
     {       
         private static ImageWorker _imageWorker;
 
@@ -57,7 +57,7 @@ namespace XEdit.ViewModels
             _canvasView.PaintSurface += eh;
         }
 
-        public void InvalidateCanvasView()
+        public void Invalidate()
         {
              _canvasView.InvalidateSurface();
         }
