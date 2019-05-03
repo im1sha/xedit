@@ -44,14 +44,25 @@ namespace XEdit
             _image = CloneImage(_backupImage);
         }
 
-        public void AddImageState()
+        public void AddImageState(SKBitmap img = null)
         {
+            SKBitmap target;
+            if (img == null)
+            {
+                target = _image;
+            }
+            else
+            {
+                target = img;
+            }
+
             if (_stateStorage.Count >= maxStateStorageSize)
             {
                 MoveToTrash(_stateStorage[0]);
                 _stateStorage.RemoveAt(0);
             }
-            _stateStorage.Add(CloneImage(_image));
+
+            _stateStorage.Add(CloneImage(target));
         }
 
         public void RestorePreviousImageState()

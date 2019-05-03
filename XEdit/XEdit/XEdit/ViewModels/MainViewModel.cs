@@ -66,7 +66,7 @@ namespace XEdit.ViewModels
         {
             Sections.Add(new Flip(this));
             //Sections.Add(new Sections.Special(this));
-            //Sections.Add(new Sections.FingerPainting(this));
+            Sections.Add(new Sections.FingerPainting(this));
             SelectedSection = Sections.FirstOrDefault();
         }
 

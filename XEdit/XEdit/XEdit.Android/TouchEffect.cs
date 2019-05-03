@@ -110,6 +110,7 @@ namespace XEdit.Droid
                         {
                             senderView.GetLocationOnScreen(twoIntArray);
 
+                            
                             screenPointerCoords = new Point(twoIntArray[0] + motionEvent.GetX(pointerIndex),
                                                             twoIntArray[1] + motionEvent.GetY(pointerIndex));
 

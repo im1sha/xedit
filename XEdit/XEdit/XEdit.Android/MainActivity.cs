@@ -12,7 +12,9 @@ using Xamarin.Forms;
 
 namespace XEdit.Droid
 {
-    [Activity(Label = "XEdit", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "XEdit", Icon = "@mipmap/icon", Theme = "@style/MainTheme",
+        MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }

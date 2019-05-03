@@ -26,12 +26,14 @@ namespace XEdit.ViewModels
                 SKImageInfo info = args.Info;
                 SKSurface surface = args.Surface;
                 SKCanvas canvas = surface.Canvas;
-
-                canvas.Clear();
-
-                if (_imageWorker != null && _imageWorker.Image != null)
+                using (canvas)
                 {
-                    canvas.DrawBitmap(_imageWorker.Image, info.Rect, BitmapStretch.Uniform);
+                    canvas.Clear();
+
+                    if (_imageWorker != null && _imageWorker.Image != null)
+                    {
+                        canvas.DrawBitmap(_imageWorker.Image, info.Rect, BitmapStretch.Uniform);
+                    }
                 }
             };
 

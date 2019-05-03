@@ -33,7 +33,7 @@ namespace XEdit.Sections
             return new VisualHandler(
                 name: vertical ? "Vertical" : "Horizontal",
                 url: null,
-                performAction: () =>
+                perform: () =>
                 {
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
                     if (vertical)
@@ -82,7 +82,7 @@ namespace XEdit.Sections
             _mainVM.ImageWorker.Image = flippedBitmap;  // set new image
 
             // it should be no selected item bc flipping is not continuous action
-            _selectedHandler = null;
+            SelectedHandler = null;
         }
     } 
 }

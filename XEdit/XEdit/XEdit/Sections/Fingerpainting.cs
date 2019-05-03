@@ -1,189 +1,190 @@
-﻿//using SkiaSharp;
-//using SkiaSharp.Views.Forms;
-//using System;
-//using System.Collections.Generic;
-//using System.Collections.ObjectModel;
-//using System.Text;
-//using Xamarin.Forms;
-//using XEdit.Extensions;
-//using XEdit.TouchTracking;
-//using XEdit.ViewModels;
+﻿using SkiaSharp;
+using SkiaSharp.Views.Forms;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
+using Xamarin.Forms;
+using XEdit.Extensions;
+using XEdit.TouchTracking;
+using XEdit.ViewModels;
 
-//namespace XEdit.Sections
-//{
-//    class FingerPainting : BaseSection
-//    {
-//        readonly MainViewModel _mainVM;
+namespace XEdit.Sections
+{
+    class FingerPainting : BaseSection
+    {
+        readonly MainViewModel _mainVM;
 
-//        public override string Name { get; } = "Finger Painting";
+        public override string Name { get; } = "Paint";
 
-//        public override VisualHandler SelectedHandler
-//        {
-//            get
-//            {
-//                return _selectedHandler;
-//            }
-//            set
-//            {
-//                if (_selectedHandler != value)
-//                {
-//                    _selectedHandler?.Exit();
-//                    _selectedHandler = value;
-//                    OnPropertyChanged();
-//                    _selectedHandler.Perform();
-//                }
-//            }
-//        }
+        public FingerPainting(MainViewModel vm)
+        {
+            _mainVM = vm;
 
-//        public override Command LeaveCommand
-//        {
-//            get => new Command(obj => {
-//                SelectedHandler?.Exit();
-//                _selectedHandler = null;
-//            });
-//        }
+            Handlers = new ObservableCollection<VisualHandler>();
+            for (int i = 0; i < _colors.Length; i++)
+            {
+                Handlers.Add(CreateHandler(_colors[i].color, _colors[i].name));
+            }
 
-//        public FingerPainting(MainViewModel vm)
-//        {
-//            _mainVM = vm;
+            _handlerToColorDictionary = new Dictionary<VisualHandler, (SKColor, string)>();
+            for (int i = 0; i < Handlers.Count; i++)
+            {
+                _handlerToColorDictionary.Add(Handlers[i], _colors[i]);
+            }
+        }
 
-//            Handlers = new ObservableCollection<VisualHandler>();
-//            for (int i = 0; i < _colors.Length; i++)
-//            {
-//                Handlers.Add(CreateHandler(_colors[i].color, _colors[i].name));
-//            }
+        private VisualHandler CreateHandler(SKColor color, string name)
+        {
+            return new VisualHandler(
+                name: name,
+                url: null,
+                perform: () =>
+                {
+                    _inProgressPathsInPixels = new Dictionary<long, SKPath>();
+                    _inProgressPathsInPoints = new Dictionary<long, SKPath>();
+                    //_completedPaths = new List<SKPath>();
+                    _paint = GetSkPaint(color);
 
-//            _handlerToColorDictionary = new Dictionary<VisualHandler, (SKColor, string)>();
-//            for (int i = 0; i < Handlers.Count; i++)
-//            {
-//                _handlerToColorDictionary.Add(Handlers[i], _colors[i]);
-//            }
-//        }
+                    _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);
+                    _mainVM.TouchWorker.SetUpdateHandler(OnTouchEffectAction);
+                }
+                );
+        }
 
-//        VisualHandler CreateHandler(SKColor color, string name)
-//        {
-//            return new VisualHandler(
-//                name,
-//                null,
-//                () => {                  
-//                    _inProgressPaths = new Dictionary<long, SKPath>();
-//                    _completedPaths = new List<SKPath>();
-//                    _paint = GetSkPaint(color);
+        private (SKColor color, string name) GetDefaultColor()
+        {
+            return (SKColors.Cyan, "Cyan");
+        }
 
-//                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler(OnCanvasViewPaintSurface);
-//                    UniqueInstancesManager.Get<VisualControl>().SetTouchEffectUpdateHandler(OnTouchEffectAction);
-//                },
-//                () => {
-//                    UniqueInstancesManager.Get<VisualControl>().SetCanvasUpdateHandler();
-//                    UniqueInstancesManager.Get<VisualControl>().SetTouchEffectUpdateHandler();
-//                },
-//                null);
-//        }
+        private (SKColor color, string name)[] _colors = {
+                (SKColors.Cyan, "Cyan"),
+                (SKColors.Magenta, "Magenta"),
+                (SKColors.Yellow, "Yellow"),
+                (SKColors.Red, "Red"),
+                (SKColors.Green, "Green"),
+                (SKColors.Blue, "Blue"),
+            };
 
-//        (SKColor color, string name) GetDefaultColor()
-//        {
-//            return (SKColors.Cyan, "Cyan");
-//        }
+        private Dictionary<VisualHandler, (SKColor color, string name)> _handlerToColorDictionary;
+        private SKPaint GetSkPaint(SKColor c, float width = 10)
+        {
+            return new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                StrokeCap = SKStrokeCap.Round,
+                StrokeJoin = SKStrokeJoin.Round,
+                Color = c,
+                StrokeWidth = width,
+            };
+        }
 
-//        (SKColor color, string name)[] _colors = {
-//                (SKColors.Cyan, "Cyan"),
-//                (SKColors.Magenta, "Magenta"),
-//                (SKColors.Yellow, "Yellow"),
-//                (SKColors.Red, "Red"),
-//                (SKColors.Green, "Green"),
-//                (SKColors.Blue, "Blue"),
-//            };
+        private Dictionary<long, SKPath> _inProgressPathsInPixels;
+        private Dictionary<long, SKPath> _inProgressPathsInPoints;
+        //private List<SKPath> _completedPaths;
+        private SKPath _completedPathInPixels;
+        private SKPath _completedPathInPoints;
+        private SKPaint _paint;
+        private volatile bool _newCompletedPath = false;
 
-//        Dictionary<VisualHandler, (SKColor color, string name)> _handlerToColorDictionary;
-//        SKPaint GetSkPaint(SKColor c, float width = 20) {
-//             return new SKPaint {
-//                Style = SKPaintStyle.Stroke,
-//                StrokeCap = SKStrokeCap.Round,
-//                StrokeJoin = SKStrokeJoin.Round,
-//                Color = c,
-//                StrokeWidth = width,
-//            };
-//        }
+        private void OnTouchEffectAction(object sender, TouchActionEventArgs args)
+        {
+            switch (args.Type)
+            {
+                case TouchActionType.Pressed:
+                    if (!_inProgressPathsInPixels.ContainsKey(args.Id))
+                    {
+                        SKPath pathInPixels = new SKPath();
+                        pathInPixels.MoveTo(ConvertToPixel(args.Location));
+                        _inProgressPathsInPixels.Add(args.Id, pathInPixels);
 
-//        //TouchAction="OnTouchEffectAction" 
-//        //Capture="True"
+                        //
+                        SKPath pathInPoints = new SKPath();
+                        pathInPoints.MoveTo(new SKPoint((float) args.Location.X*2, (float) args.Location.Y * 2));
+                        _inProgressPathsInPoints.Add(args.Id, pathInPoints);
+                    }
+                    break;
+                case TouchActionType.Moved:
+                    if (_inProgressPathsInPixels.ContainsKey(args.Id))
+                    {
+                        SKPath path = _inProgressPathsInPixels[args.Id];
+                        path.LineTo(ConvertToPixel(args.Location));
 
-//        Dictionary<long, SKPath> _inProgressPaths;
-//        List<SKPath> _completedPaths;
-//        SKPaint _paint;
-             
-//        void OnTouchEffectAction(object sender, TouchActionEventArgs args)
-//        {         
-//            switch (args.Type)
-//            {
-//            case TouchActionType.Pressed:
-//                if (!_inProgressPaths.ContainsKey(args.Id))
-//                {
-//                    SKPath path = new SKPath();
-//                    path.MoveTo(ConvertToPixel(args.Location));
-//                    _inProgressPaths.Add(args.Id, path);
-//                }
-//                break;
-//            case TouchActionType.Moved:
-//                if (_inProgressPaths.ContainsKey(args.Id))
-//                {
-//                    SKPath path = _inProgressPaths[args.Id];
-//                    path.LineTo(ConvertToPixel(args.Location));
-//                }
-//                break;
-//            case TouchActionType.Released:
-//                if (_inProgressPaths.ContainsKey(args.Id))
-//                {
-//                    _completedPaths.Add(_inProgressPaths[args.Id]);
-//                    _inProgressPaths.Remove(args.Id);
-//                }
-//                break;
-//            case TouchActionType.Cancelled:
-//                if (_inProgressPaths.ContainsKey(args.Id))
-//                {
-//                    _inProgressPaths.Remove(args.Id);
-//                }
-//                break;
-//            }
+                        //
+                        SKPath pathInPoints = _inProgressPathsInPoints[args.Id];
+                        pathInPoints.LineTo(new SKPoint((float)args.Location.X * 2, (float)args.Location.Y * 2));
+                    }
+                    break;
+                case TouchActionType.Released:
+                    if (_inProgressPathsInPixels.ContainsKey(args.Id))
+                    {
+                        _newCompletedPath = true;
 
-//            UniqueInstancesManager.Get<VisualControl>().InvalidateCanvasView();
-//        }
+                        _completedPathInPixels = _inProgressPathsInPixels[args.Id];
+                        _inProgressPathsInPixels.Remove(args.Id);
 
-//        void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
-//        {
-//            SKImageInfo info = args.Info;
-//            SKSurface surface = args.Surface;
-//            SKCanvas canvas = surface.Canvas;
+                        //
+                        _completedPathInPoints = _inProgressPathsInPoints[args.Id];
+                        _inProgressPathsInPoints.Remove(args.Id);
+                    }
+                    break;
+                case TouchActionType.Cancelled:
+                    if (_inProgressPathsInPixels.ContainsKey(args.Id))
+                    {
+                        _inProgressPathsInPixels.Remove(args.Id);
+                        _inProgressPathsInPoints.Remove(args.Id);
+                    }
+                    break;
+            }
 
-//            var img = UniqueInstancesManager.Get<VisualControl>().CloneImage();
+            if (_newCompletedPath)
+            {
+                var bitmap = _mainVM.ImageWorker.Image;
+                _mainVM.ImageWorker.AddImageState(bitmap);
 
-//            using (canvas)
-//            using (SKPaint paint = new SKPaint())
-//            {
-//                canvas.Clear();
-//                canvas.DrawBitmap(img, info.Rect, BitmapStretch.Uniform);
-//                foreach (SKPath path in _completedPaths)
-//                {
-//                    canvas.DrawPath(path, _paint);
-//                }
-//                foreach (SKPath path in _inProgressPaths.Values)
-//                {
-//                    canvas.DrawPath(path, _paint);
-//                }
-//            }
+                SKBitmap newBitmap = new SKBitmap(bitmap.Info);
+                using (SKCanvas canvas = new SKCanvas(newBitmap))
+                {
+                    canvas.Clear();
+                    canvas.DrawBitmap(bitmap, new SKPoint());
+                    canvas.DrawPath(_completedPathInPoints, _paint);                    
+                }
 
-//            img = null;
-//            GC.Collect();
-//        }
+                _mainVM.ImageWorker.Image = newBitmap;
+                _newCompletedPath = false;
+            }
 
-//        SKPoint ConvertToPixel(Point pt)
-//        {
-//            return new SKPoint(
-//                (float)(UniqueInstancesManager.Get<VisualControl>().ViewCanvasSizeWidth * pt.X /
-//                UniqueInstancesManager.Get<VisualControl>().ViewWidth),
-//                (float)(UniqueInstancesManager.Get<VisualControl>().ViewCanvasSizeHeight * pt.Y /
-//                UniqueInstancesManager.Get<VisualControl>().ViewHeight)
-//                );
-//        }        
-//    }
-//}
+            _mainVM.CanvasViewWorker.Invalidate();
+        }
+
+        private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
+
+            using (canvas)
+            {
+                canvas.Clear();
+                canvas.DrawBitmap(_mainVM.ImageWorker.Image, info.Rect, BitmapStretch.Uniform);
+
+                foreach (SKPath path in _inProgressPathsInPixels.Values)
+                {
+                    canvas.DrawPath(path, _paint);
+                }
+            }
+        }
+
+        private SKPoint ConvertToPixel(Point point)
+        {
+            return new SKPoint(
+                (float)(_mainVM.CanvasViewWorker.ViewCanvasSizeWidth * point.X /
+                _mainVM.CanvasViewWorker.ViewWidth),
+                (float)(_mainVM.CanvasViewWorker.ViewCanvasSizeHeight * point.Y /
+                _mainVM.CanvasViewWorker.ViewHeight)
+                );
+        }
+
+
+    }
+}

@@ -19,7 +19,7 @@ namespace XEdit.Sections
         public ObservableCollection<VisualHandler> Handlers { get; set; } =
             new ObservableCollection<VisualHandler>();
 
-        public VisualHandler _selectedHandler;
+        protected VisualHandler _selectedHandler;
         public virtual VisualHandler SelectedHandler
         {
             get => _selectedHandler;
@@ -29,8 +29,12 @@ namespace XEdit.Sections
                 {
                     _selectedHandler = value;
                     OnPropertyChanged();
-                    UniqueInstancesManager.Get<ImageWorker>().AddBackupImage();
-                    _selectedHandler.Perform(); // example: flip
+
+                    if (value != null)
+                    {
+                        UniqueInstancesManager.Get<ImageWorker>().AddBackupImage();
+                        _selectedHandler.Perform(); // example: flip
+                    }               
                 }               
             }
         }

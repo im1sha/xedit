@@ -13,8 +13,8 @@ namespace XEdit.Sections
         string Name { get; }
         string ImageUrl { get; }
 
-        ObservableCollection<VisualHandler> Handlers { get; }
-        VisualHandler SelectedHandler { get; }
+        ObservableCollection<VisualHandler> Handlers { get; set; }
+        VisualHandler SelectedHandler { get; set; }
 
         /// <summary>
         /// Section is selected 
