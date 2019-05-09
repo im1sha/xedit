@@ -49,7 +49,7 @@ namespace XEdit.Sections
                     _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);
                     _mainVM.TouchWorker.SetUpdateHandler(OnTouchEffectAction);
                 },
-                close: () => {
+                close: (success) => {
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
                     _mainVM.TouchWorker.SetUpdateHandler();
                 });

@@ -16,9 +16,12 @@ namespace XEdit.Sections
         /// </summary>
         public Action Perform { get; }
 
-        public Action Close { get; }
+        /// <summary>
+        /// Closes without cancellation of uncommited changes(true) or with one(false)
+        /// </summary>
+        public Action<bool> Close { get; }
 
-        public VisualHandler(string name, string url, Action perform, Action close)
+        public VisualHandler(string name, string url, Action perform, Action<bool> close)
         {
             Name = name;
             ImageUrl = url;

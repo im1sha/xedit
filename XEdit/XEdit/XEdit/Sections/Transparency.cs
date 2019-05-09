@@ -36,7 +36,7 @@ namespace XEdit.Sections
             {
                 Handlers.Add(new VisualHandler($"Glass {i + 1}", null, 
                     perform : GetHandler(i),
-                    close : () =>
+                    close : (success) =>
                     {
                         SaveImage();
 
@@ -53,7 +53,7 @@ namespace XEdit.Sections
             return () =>
             {
                 _localImageCopy = _mainVM.ImageWorker.CloneImage(_mainVM.ImageWorker.Image);
-
+                _mainVM.ImageWorker.MoveToTrash(_filterImage);
                 _filterImage = _resourceLoader.LoadSKBitmap(ResourceLoader.ImageFolder.Glass, index);
 
                _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);

@@ -46,7 +46,7 @@ namespace XEdit.Sections
                     }
                     _mainVM.CanvasViewWorker.Invalidate();
                 },
-                close: () => { }
+                close: (success) => { }
                 );
         }
 

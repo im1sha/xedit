@@ -70,7 +70,7 @@ namespace XEdit.Sections
                     _mainVM.CanvasViewWorker.SetUpdateHandler(handler);
                     _mainVM.CanvasViewWorker.Invalidate();
                 },
-                close: () =>
+                close: (success) =>
                 {
                 }
                 );

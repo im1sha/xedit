@@ -47,7 +47,7 @@ namespace XEdit.Sections
         public virtual Command LeaveCommand
         {
             get => new Command(() => {
-                SelectedHandler?.Close();
+                SelectedHandler?.Close(false);
                 _selectedHandler = null;
             });
         }

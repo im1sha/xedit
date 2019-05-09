@@ -84,6 +84,7 @@ namespace XEdit.ViewModels
             get => new Command(async() =>
             {
                 CommitCommand.Execute(null);
+                ImageWorker.DeleteStates();
                 string name = await ImageWorker.SaveImage();
                 MessagingCenter.Send(this, Messages.SaveSuccess, name);
             });
@@ -96,7 +97,7 @@ namespace XEdit.ViewModels
             {
                 if (SelectedSection != null)
                 {
-                    SelectedSection.SelectedHandler?.Close();
+                    SelectedSection.SelectedHandler?.Close(false);
                     SelectedSection.SelectedHandler = null;                 
                 }
 
@@ -113,13 +114,11 @@ namespace XEdit.ViewModels
             {
                 if ((SelectedSection != null) && (SelectedSection.SelectedHandler != null))
                 {
-                    SelectedSection.SelectedHandler.Close();
+                    SelectedSection.SelectedHandler.Close(true);
                     SelectedSection.SelectedHandler = null;
                 }
 
                 SliderWorker.SetDefaultSliderValue();
-                //ImageWorker.AddBackupImage();
-                ImageWorker.CommitImage();
             });            
         }
 

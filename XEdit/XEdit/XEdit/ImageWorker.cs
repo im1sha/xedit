@@ -80,7 +80,7 @@ namespace XEdit
         /// <summary>
         /// Clean up backup list
         /// </summary>
-        public void CommitImage()
+        public void DeleteStates()
         {
             bool shouldCollect = false;
             lock (_stateStorage)
@@ -104,7 +104,7 @@ namespace XEdit
         #endregion 
 
         public void ResetData() {
-            CommitImage();
+            DeleteStates();
         }
 
         public SKBitmap Image
@@ -195,7 +195,7 @@ namespace XEdit
         /// Assign null to target and forces garbage collection
         /// </summary>
         /// <param name="target">image to collect</param>
-        private void MoveToTrash(SKBitmap target)
+        public void MoveToTrash(SKBitmap target)
         {
             target = null;
             GC.Collect();
