@@ -19,16 +19,18 @@ namespace XEdit
         public static ImageWorker Instance { get => _instance.Value; }
         private ImageWorker() { }
 
+        private static readonly string _homeFolder = "XEdit";
+
         /// <summary>
         /// Image created when you select new visual handler
         /// </summary>   
-        private SKBitmap _backupImage = new SKBitmap();
+        //private SKBitmap _backupImage = new SKBitmap();
 
         /// <summary>
         /// Image states when working with image 
         /// </summary>
         private List<SKBitmap> _stateStorage = new List<SKBitmap>();
-        private static readonly int maxStateStorageSize = 5;
+        private static readonly int maxStateStorageSize = 10;
         private SKBitmap _image = new SKBitmap();
 
         #region backup methods
@@ -137,13 +139,18 @@ namespace XEdit
                 target.CopyTo(result);
             }
             return result;
-        }
+        }      
 
-        public async Task<string> SaveImage()
+        public async Task<string> SaveImage(string name = null, SKEncodedImageFormat format = SKEncodedImageFormat.Jpeg)
         {
+            if (format != SKEncodedImageFormat.Jpeg && format != SKEncodedImageFormat.Png)
+            {
+                return null;
+            }
+
             bool success = false;
 
-            string fileName = $"X{DateTime.Now.ToBinary().ToString()}.jpeg";
+            string fileName = name ?? $"X{DateTime.Now.ToBinary().ToString()}";
 
             SKBitmap bitmap = CloneImage(Image);
 
@@ -152,21 +159,19 @@ namespace XEdit
                 return null;
             }
 
-            SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Jpeg;
-            int quality = 100;
-
             using (MemoryStream memStream = new MemoryStream())
             using (SKManagedWStream wstream = new SKManagedWStream(memStream))
             {
-                bitmap.Encode(wstream, imageFormat, quality);
+                bitmap.Encode(wstream, format, 100);
                 byte[] data = memStream.ToArray();
                 if (data != null && data.Length != 0)
                 {
                     bool isGranted = DependencyService.Get<IUtils>().AskForWriteStoragePermission();
                     if (isGranted)
                     {
+                        fileName += "." + format.ToString();
                         success = await DependencyService.Get<IPhotoLibrary>().
-                            SavePhotoAsync(data, "XEdit", fileName);
+                            SavePhotoAsync(data, _homeFolder, fileName);
                     }
                 }
             }

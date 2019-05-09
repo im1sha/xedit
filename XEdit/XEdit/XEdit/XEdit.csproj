@@ -19,6 +19,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Media\Glass\0.jpg" />
+    <None Remove="Media\Glass\1.jpg" />
+    <None Remove="Media\Glass\2.jpg" />
+    <None Remove="Media\Glass\3.jpg" />
+    <None Remove="Media\Glass\4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Glass\4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Glass\1.jpg" />
+    <EmbeddedResource Include="Media\Glass\3.jpg" />
+    <EmbeddedResource Include="Media\Glass\0.jpg" />
+    <EmbeddedResource Include="Media\Glass\2.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />

@@ -13,6 +13,7 @@ using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using XEdit.Sections;
 using XEdit.TouchTracking;
+using XEdit.Utils;
 using XEdit.Views;
 
 namespace XEdit.ViewModels
@@ -20,6 +21,8 @@ namespace XEdit.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         public ImageWorker ImageWorker { get; private set; } = UniqueInstancesManager.Get<ImageWorker>();
+        public ResourceLoader ResourceLoader { get; } = new ResourceLoader();
+
         public CanvasViewWorker CanvasViewWorker { get; private set; }
         public TouchWorker TouchWorker { get; private set; }
         public SliderWorker SliderWorker { get; private set; }

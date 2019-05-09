@@ -32,7 +32,14 @@ namespace XEdit.Views
                 this, 
                 Messages.SaveSuccess,   
                 async (sender, name) => {
-                    await DisplayAlert("Save", $"Saved at XEdit as {name}", "OK");
+                    if (name != null)
+                    {
+                        await DisplayAlert("Save", $"Saved at XEdit as {name}", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Save", $"Permisson is required. Give permisson and save again.", "OK");
+                    }
                 });    
         }
   
