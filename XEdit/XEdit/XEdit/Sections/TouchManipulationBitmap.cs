@@ -7,14 +7,14 @@ namespace XEdit.Sections
 {
     class TouchManipulationBitmap
     {
-        private SKBitmap _bitmap;
-
+        public SKBitmap Bitmap { get; private set; }
+        public SKImageInfo BitmapInfo => Bitmap.Info;
         private Dictionary<long, TouchManipulationInfo> _touchDictionary =
             new Dictionary<long, TouchManipulationInfo>();
 
         public TouchManipulationBitmap(SKBitmap bitmap)
         {
-            _bitmap = bitmap;
+            Bitmap = bitmap;
             Matrix = SKMatrix.MakeIdentity();
 
             TouchManager = new TouchManipulationManager
@@ -28,11 +28,11 @@ namespace XEdit.Sections
         public SKMatrix Matrix { set; get; }
 
         public void Paint(SKCanvas canvas)
-        {
+        {    
             canvas.Save();
             SKMatrix matrix = Matrix;
             canvas.Concat(ref matrix);
-            canvas.DrawBitmap(_bitmap, 0, 0);
+            canvas.DrawBitmap(Bitmap, 0, 0);
             canvas.Restore();
         }
 
@@ -47,7 +47,7 @@ namespace XEdit.Sections
                 SKPoint transformedPoint = inverseMatrix.MapPoint(location);
 
                 // Check if it's in the untransformed bitmap rectangle
-                SKRect rect = new SKRect(0, 0, _bitmap.Width, _bitmap.Height);
+                SKRect rect = new SKRect(0, 0, Bitmap.Width, Bitmap.Height);
                 return rect.Contains(transformedPoint);
             }
             return false;
@@ -84,7 +84,7 @@ namespace XEdit.Sections
             }
         }
 
-        void Manipulate()
+        private void Manipulate()
         {
             TouchManipulationInfo[] infos = new TouchManipulationInfo[_touchDictionary.Count];
             _touchDictionary.Values.CopyTo(infos, 0);
@@ -94,7 +94,7 @@ namespace XEdit.Sections
             {
                 SKPoint prevPoint = infos[0].PreviousPoint;
                 SKPoint newPoint = infos[0].NewPoint;
-                SKPoint pivotPoint = Matrix.MapPoint(_bitmap.Width / 2, _bitmap.Height / 2);
+                SKPoint pivotPoint = Matrix.MapPoint(Bitmap.Width / 2, Bitmap.Height / 2);
 
                 touchMatrix = TouchManager.OneFingerManipulate(prevPoint, newPoint, pivotPoint);
             }

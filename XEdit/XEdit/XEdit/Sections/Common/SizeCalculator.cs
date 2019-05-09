@@ -12,21 +12,21 @@ namespace XEdit.Sections
             float scale; // determines image orientation
             if ((canvasViewSize.Height / canvasViewSize.Width) > (1.0 * bitmap.Height / bitmap.Width))
             {
-                scale = bitmap.Width / (float)canvasViewSize.Width;
+                scale = bitmap.Width / canvasViewSize.Width;
                 rect = new SKRect(0,
-                    (float)(canvasViewSize.Height - bitmap.Height / scale) / 2,
-                    (float)canvasViewSize.Width,
-                    (float)(canvasViewSize.Height + bitmap.Height / scale) / 2
+                    (canvasViewSize.Height - bitmap.Height / scale) / 2,
+                    canvasViewSize.Width,
+                    (canvasViewSize.Height + bitmap.Height / scale) / 2
                     );
             }
             else
             {
-                scale = bitmap.Height / (float)canvasViewSize.Height;
+                scale = bitmap.Height / canvasViewSize.Height;
                 rect = new SKRect(
-                    (float)(canvasViewSize.Width - bitmap.Width / scale) / 2,
+                    (canvasViewSize.Width - bitmap.Width / scale) / 2,
                     0,
-                    (float)(canvasViewSize.Width + bitmap.Width / scale) / 2,
-                    (float)canvasViewSize.Height
+                    (canvasViewSize.Width + bitmap.Width / scale) / 2,
+                    canvasViewSize.Height
                     );
             }
 

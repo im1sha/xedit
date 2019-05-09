@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Xamarin.Forms;
@@ -33,6 +34,19 @@ namespace XEdit.Sections
                 _bitmapCollection = new List<TouchManipulationBitmap>();
                 _bitmapDictionary = new Dictionary<long, TouchManipulationBitmap>();
             });
+        }
+
+        public override Command LeaveCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    _mainVM.TouchWorker.SetUpdateHandler();
+                    _mainVM.CanvasViewWorker.SetUpdateHandler();
+                    SaveImage();
+                });
+            }
         }
 
         public Image(MainViewModel vm)
@@ -70,12 +84,10 @@ namespace XEdit.Sections
                     _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);
                     _mainVM.CanvasViewWorker.Invalidate();
 
-                    SelectedHandler = null;
+                    _selectedHandler = null;
                 },
                 close: (success) => {
-                    _mainVM.TouchWorker.SetUpdateHandler();
-                    _mainVM.CanvasViewWorker.SetUpdateHandler();
-                    _mainVM.CanvasViewWorker.Invalidate();
+                 
                 }
                 );
         }
@@ -139,17 +151,68 @@ namespace XEdit.Sections
             SKCanvas canvas = surface.Canvas;
 
             canvas.Clear();
-            canvas.DrawBitmap(_mainVM.ImageWorker.Image, info.Rect, BitmapStretch.Uniform);
+            canvas.DrawBitmap(_mainVM.ImageWorker.Image, info.Rect, BitmapStretch.Uniform);     
 
-            foreach (TouchManipulationBitmap bitmap in _bitmapCollection)
+            foreach (TouchManipulationBitmap tmbitmap in _bitmapCollection)
             {
-                bitmap.Paint(canvas);
-            }
+                tmbitmap.Paint(canvas);
+            }       
         }
 
-        void OnSave()
+        void SaveImage()
         {
+            SKSize canvasViewSize = _mainVM.CanvasViewWorker.CanvasView.CanvasSize;
+          
+            _mainVM.ImageWorker.AddImageState();
+            SKBitmap newBitmap = new SKBitmap(_backgroundBitmap.Info);
+            _backgroundBitmap.CopyTo(newBitmap);
 
+            using (SKCanvas canvas = new SKCanvas(newBitmap))
+            using (var paint = new SKPaint())
+            {
+                foreach (TouchManipulationBitmap tmBitmap in _bitmapCollection)
+                {
+                    var matrix = tmBitmap.Matrix;
+                    var bitmap = tmBitmap.Bitmap;
+                    float scale;
+                    SKRect backgroundImageRect; 
+                    (scale, backgroundImageRect) = SizeCalculator.GetScaleAndRect(canvasViewSize, _backgroundBitmap);
+
+                    SKMatrix shiftMatrix = new SKMatrix();
+                    SKPoint point = new SKPoint(-backgroundImageRect.Left * scale, -backgroundImageRect.Top * scale);
+                    shiftMatrix.SetScaleTranslate(scale, scale, point.X, point.Y);
+                    
+                    canvas.Save();
+                    canvas.Concat(ref shiftMatrix);
+                    canvas.Concat(ref matrix);
+                    canvas.DrawBitmap(tmBitmap.Bitmap, 0, 0);
+                    canvas.Restore();
+                }
+            }
+            _mainVM.ImageWorker.Image = newBitmap;
+            _mainVM.CanvasViewWorker.Invalidate();
+        }
+
+
+        /// <summary>
+        /// Converts position of point on canva to position on image
+        /// </summary>
+        private SKPoint ConvertToPositionOnImage(SKPoint point, SKRect rect,
+            float bitmapSizeToRectSize)
+        {
+            return new SKPoint(((float)point.X - rect.Left) * bitmapSizeToRectSize,
+                ((float)point.Y - rect.Top) * bitmapSizeToRectSize);
+        }
+
+
+        private SKPoint ConvertToPixel(Point point)
+        {
+            return new SKPoint(
+                (float)(_mainVM.CanvasViewWorker.ViewCanvasSizeWidth * point.X /
+                _mainVM.CanvasViewWorker.ViewWidth),
+                (float)(_mainVM.CanvasViewWorker.ViewCanvasSizeHeight * point.Y /
+                _mainVM.CanvasViewWorker.ViewHeight)
+                );
         }
     }
 }
