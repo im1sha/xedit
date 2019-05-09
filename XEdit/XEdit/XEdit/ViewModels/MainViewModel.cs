@@ -75,6 +75,7 @@ namespace XEdit.ViewModels
             Sections.Add(new Crop(this));
             Sections.Add(new Flip(this));
             Sections.Add(new Transparency(this));
+            Sections.Add(new Sections.Image(this));
             Sections.Add(new Painting(this));
             SelectedSection = Sections.FirstOrDefault();
         }

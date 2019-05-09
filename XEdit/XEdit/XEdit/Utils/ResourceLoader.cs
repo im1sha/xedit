@@ -9,9 +9,9 @@ namespace XEdit.Utils
 {
     public class ResourceLoader
     {
-        public enum ImageFolder { Glass }
+        public enum ImageFolder { Glass, Image }
 
-        private readonly Dictionary<ImageFolder, (string name, int totalImages)> ImageFolderDictionary;
+        private readonly Dictionary<ImageFolder, (string name, int totalImages, string extension)> ImageFolderDictionary;
 
         public int GetAmountOfImages(ImageFolder folder)
         {
@@ -22,9 +22,10 @@ namespace XEdit.Utils
 
         public ResourceLoader()
         {
-            ImageFolderDictionary = new Dictionary<ImageFolder, (string, int)>
+            ImageFolderDictionary = new Dictionary<ImageFolder, (string, int, string)>
             {
-                { ImageFolder.Glass, ("Glass", 5) },
+                { ImageFolder.Glass, ("Glass", 5, "jpg") },
+                { ImageFolder.Image, ("Image", 2, "png") },
             };
         }
 
@@ -37,7 +38,8 @@ namespace XEdit.Utils
 
             SKBitmap resourceBitmap = null;
 
-            string resourceID = $"XEdit.Media.{ImageFolderDictionary[folder].name}.{imageId}.jpg";
+            string resourceID = $"XEdit.Media.{ImageFolderDictionary[folder].name}." +
+                $"{imageId}.{ImageFolderDictionary[folder].extension}";
             Assembly assembly = GetType().GetTypeInfo().Assembly;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceID))

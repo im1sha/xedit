@@ -24,6 +24,12 @@
     <None Remove="Media\Glass\2.jpg" />
     <None Remove="Media\Glass\3.jpg" />
     <None Remove="Media\Glass\4.jpg" />
+    <None Remove="Media\Image\0.png" />
+    <None Remove="Media\Image\1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Image\1.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +41,7 @@
     <EmbeddedResource Include="Media\Glass\3.jpg" />
     <EmbeddedResource Include="Media\Glass\0.jpg" />
     <EmbeddedResource Include="Media\Glass\2.jpg" />
+    <EmbeddedResource Include="Media\Image\0.png" />
   </ItemGroup>
 
   <ItemGroup>
