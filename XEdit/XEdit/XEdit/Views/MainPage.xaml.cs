@@ -45,7 +45,7 @@ namespace XEdit.Views
   
         private async void OnBack(object sender, EventArgs e)
         {
-            await vm.OnPopScreen();
+            vm.OnPopScreen();
             await Navigation.PopAsync();
         }      
     }

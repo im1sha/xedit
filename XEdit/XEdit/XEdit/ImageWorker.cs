@@ -103,6 +103,10 @@ namespace XEdit
 
         #endregion 
 
+        public void ResetData() {
+            CommitImage();
+        }
+
         public SKBitmap Image
         {
             get

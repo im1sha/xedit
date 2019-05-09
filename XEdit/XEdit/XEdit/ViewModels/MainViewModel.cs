@@ -71,6 +71,7 @@ namespace XEdit.ViewModels
 
         public MainViewModel()
         {
+            Sections.Add(new ColorFilters(this));
             Sections.Add(new Flip(this));
             Sections.Add(new Transparency(this));
             Sections.Add(new Painting(this));
@@ -121,7 +122,10 @@ namespace XEdit.ViewModels
             });            
         }
 
-        public async Task OnPopScreen() { }
+        public void OnPopScreen()
+        {
+            ImageWorker.ResetData();
+        }
 
         public void OnViewCreated(
             SKCanvasView skiaCanvasView,
