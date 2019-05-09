@@ -1,14 +1,17 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 using XEdit.Extensions;
 
 namespace XEdit.ViewModels
 {
     public class CanvasViewWorker
-    {       
+    {
+        private Layout<View> _container;
         private static ImageWorker _imageWorker;
 
         public SKCanvasView CanvasView { get; private set; }
@@ -37,11 +40,27 @@ namespace XEdit.ViewModels
                 }
             };
 
-        public CanvasViewWorker(SKCanvasView c, ImageWorker iw)
+        public CanvasViewWorker(Layout<View> container, SKCanvasView c, ImageWorker iw)
         {
+            _container = container;
             _imageWorker = iw;
             CanvasView = c;
             CanvasView.PaintSurface += _standardUpdateHandler;
+        }
+
+        public bool ChangeCanvas(SKCanvasView newCanvasView)
+        {
+            View itemToRemove = _container.Children.Where(i => i is SKCanvasView).FirstOrDefault();
+
+            if (itemToRemove != null)
+            {
+                _container.Children.Remove(itemToRemove);
+                _container.Children.Add(newCanvasView);
+                CanvasView = newCanvasView;
+
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

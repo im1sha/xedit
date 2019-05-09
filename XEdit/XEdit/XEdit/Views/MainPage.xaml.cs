@@ -26,7 +26,7 @@ namespace XEdit.Views
 
             vm = new MainViewModel();
             BindingContext = vm;
-            vm.OnViewCreated(skiaCanvasView, variableValuesSlider, touchTracker);
+            vm.OnViewCreated(skiaWrapper, skiaCanvasView, variableValuesSlider, touchTracker);
 
             MessagingCenter.Subscribe<MainViewModel, string>(
                 this, 

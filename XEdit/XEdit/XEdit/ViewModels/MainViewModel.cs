@@ -72,6 +72,7 @@ namespace XEdit.ViewModels
         public MainViewModel()
         {
             Sections.Add(new ColorFilters(this));
+            Sections.Add(new Crop(this));
             Sections.Add(new Flip(this));
             Sections.Add(new Transparency(this));
             Sections.Add(new Painting(this));
@@ -128,6 +129,7 @@ namespace XEdit.ViewModels
         }
 
         public void OnViewCreated(
+            Layout<View> container,
             SKCanvasView skiaCanvasView,
             Slider variableValuesSlider,
             TouchEffect touchTracker)
@@ -136,7 +138,7 @@ namespace XEdit.ViewModels
             {
                 throw new ApplicationException("_imageWorker is not initialized");
             }
-            CanvasViewWorker = new CanvasViewWorker(skiaCanvasView, ImageWorker);
+            CanvasViewWorker = new CanvasViewWorker(container, skiaCanvasView, ImageWorker);
             SliderWorker = new SliderWorker(variableValuesSlider);
             TouchWorker = new TouchWorker(touchTracker);
         }
