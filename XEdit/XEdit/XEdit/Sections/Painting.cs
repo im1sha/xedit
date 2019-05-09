@@ -60,6 +60,7 @@ namespace XEdit.Sections
             return (SKColors.Cyan, "Cyan");
         }
 
+
         private (SKColor color, string name)[] _colors = {
                 (SKColors.Cyan, "Cyan"),
                 (SKColors.Magenta, "Magenta"),
@@ -87,6 +88,8 @@ namespace XEdit.Sections
         private SKPath _completedPathInPixels;
         private SKPath _completedPathOnImage;
         private SKPaint _paint;
+        private float _paintWidth { get { return _paint == null ? -1 : _paint.StrokeWidth; } }
+
         private volatile bool _isPathCompleted = false;
 
         private void OnTouchEffectAction(object sender, TouchActionEventArgs args)
@@ -109,8 +112,8 @@ namespace XEdit.Sections
 
             SKPoint location = ConvertToPixel(args.Location);
 
-            if (location.X > rect.Right || location.X < rect.Left ||
-                location.Y < rect.Top || location.Y > rect.Bottom)
+            if ((location.X  > rect.Right - _paintWidth / 2) || (location.X < rect.Left + _paintWidth / 2) ||
+                (location.Y < rect.Top + _paintWidth / 2) || (location.Y > rect.Bottom - _paintWidth / 2))
             {
                 args.Type = TouchActionType.Released;
             }

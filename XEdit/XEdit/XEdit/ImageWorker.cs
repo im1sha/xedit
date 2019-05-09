@@ -192,7 +192,7 @@ namespace XEdit
         }
 
         /// <summary>
-        /// Assign null to target and forces garbage collection
+        /// Assigns null to target and forces garbage collection
         /// </summary>
         /// <param name="target">image to collect</param>
         public void MoveToTrash(SKBitmap target)

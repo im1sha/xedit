@@ -23,31 +23,89 @@ namespace XEdit.Sections
        
             Handlers = new ObservableCollection<VisualHandler>()
             {
-                CreateHandler(true),
-                CreateHandler(false)
+                CreateHandler(true, true),
+                CreateHandler(true, false),
+                CreateHandler(false, true),
+                CreateHandler(false, false),
             };
         }
 
-        private VisualHandler CreateHandler(bool vertical)
+        private VisualHandler CreateHandler(bool flip, bool verticalOrLeft)
         {
+            string name = null;
+            Action action = null;
+            if (flip && verticalOrLeft)
+            {
+                action = OnVerticalFlip;
+                name = "Vertical Flip";
+            }
+            else if (flip && !verticalOrLeft)
+            {
+                action = OnHorizontalFlip;
+                name = "Horizontal Flip";
+            }
+            else if (!flip && verticalOrLeft)
+            {
+                action = OnLeftRotate;
+                name = "Left Rotate";
+            }
+            else
+            {
+                action = OnRightRotate;
+                name = "Right Rotate";
+            }
+
             return new VisualHandler(
-                name: vertical ? "Vertical" : "Horizontal",
+                name: name,
                 url: null,
                 perform: () =>
                 {
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
-                    if (vertical)
-                    {
-                        OnVerticalFlip();
-                    }
-                    else
-                    {
-                        OnHorizontalFlip();
-                    }
+                    action();
                     _mainVM.CanvasViewWorker.Invalidate();
                 },
                 close: (success) => { }
                 );
+        }
+
+
+        private void OnRotate(bool left)
+        {
+            _mainVM.ImageWorker.AddImageState();
+
+            SKBitmap bitmap = _mainVM.ImageWorker.Image;
+
+            double radians = Math.PI * 0.5;
+            float sine = (float)Math.Abs(Math.Sin(radians));
+            float cosine = (float)Math.Abs(Math.Cos(radians));
+            int originalWidth = bitmap.Width;
+            int originalHeight = bitmap.Height;
+            int rotatedWidth = (int)(cosine * originalWidth + sine * originalHeight);
+            int rotatedHeight = (int)(cosine * originalHeight + sine * originalWidth);
+
+            SKBitmap newBitmap = new SKBitmap(rotatedWidth, rotatedHeight);
+
+            using (SKCanvas canvas = new SKCanvas(newBitmap))
+            {
+                canvas.Clear(SKColors.LightPink);
+                canvas.Translate(rotatedWidth / 2, rotatedHeight / 2);
+                canvas.RotateDegrees(90);
+                canvas.Translate(-originalWidth / 2, -originalHeight / 2);
+                canvas.DrawBitmap(bitmap, new SKPoint());
+            }
+
+            _mainVM.ImageWorker.Image = newBitmap; 
+            SelectedHandler = null;
+        }
+
+        private void OnRightRotate()
+        {
+            OnRotate(false);
+        }
+
+        private void OnLeftRotate()
+        {
+            OnRotate(true);
         }
 
         void OnVerticalFlip()
@@ -85,5 +143,5 @@ namespace XEdit.Sections
             // it should be no selected item bc flipping is not continuous action
             SelectedHandler = null;
         }
-    } 
+    }    
 }

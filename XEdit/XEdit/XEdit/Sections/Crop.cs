@@ -50,8 +50,12 @@ namespace XEdit.Sections
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
                     _mainVM.TouchWorker.SetUpdateHandler();
                     _mainVM.CanvasViewWorker.Invalidate();          
-                }
+                }         
                 );
-        }     
+        }
+
+        //VisualHandler GetHandler() {
+
+        //}
     }
 }

@@ -10,7 +10,7 @@ namespace XEdit.Sections
         public static (float scale, SKRect rect) GetScaleAndRect(SKSize canvasViewSize, SKBitmap bitmap) {
             SKRect rect;
             float scale; // determines image orientation
-            if (canvasViewSize.Height / canvasViewSize.Width > bitmap.Height / bitmap.Width)
+            if ((canvasViewSize.Height / canvasViewSize.Width) > (1.0 * bitmap.Height / bitmap.Width))
             {
                 scale = bitmap.Width / (float)canvasViewSize.Width;
                 rect = new SKRect(0,
