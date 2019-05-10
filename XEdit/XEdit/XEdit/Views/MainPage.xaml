@@ -41,11 +41,11 @@
         <Grid RowSpacing="0" ColumnSpacing="0" BackgroundColor="White" >
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="0.5*"/> 
-                <RowDefinition Height="1.75*"/>
-                <RowDefinition Height="1.25*"/>
+                <RowDefinition Height="1.5*"/>
+                <RowDefinition Height="1.15*"/>
             </Grid.RowDefinitions>
 
             <!--HEADER-->

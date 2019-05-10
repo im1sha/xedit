@@ -33,5 +33,6 @@ namespace XEdit.Sections
             return (scale, rect);
         }
 
+      
     }
 }

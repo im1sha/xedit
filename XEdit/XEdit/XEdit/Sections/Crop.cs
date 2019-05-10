@@ -43,6 +43,7 @@ namespace XEdit.Sections
                 close: (success) => {
                     if (success)
                     {
+                        _mainVM.ImageWorker.AddImageState();
                         _mainVM.ImageWorker.Image = _photoCropper.CroppedBitmap;                     
                     }
                     else
@@ -55,9 +56,5 @@ namespace XEdit.Sections
                 }         
                 );
         }
-
-        //VisualHandler GetHandler() {
-
-        //}
     }
 }

@@ -8,27 +8,6 @@ using Xamarin.Forms.Xaml;
 
 namespace XEdit.Views
 {
-    /// <summary>
-    /// Loads images using a Resource ID specified in XAML
-    /// </summary>
-    //[ContentProperty(nameof(Source))]
-    //public class ImageResourceExtension : IMarkupExtension
-    //{
-    //    public string Source { get; set; }
-
-    //    public object ProvideValue(IServiceProvider serviceProvider)
-    //    {
-    //        if (Source == null)
-    //        {
-    //            return null;
-    //        }
-
-    //        var imageSource = ImageSource.FromResource(Source, typeof(ImageResourceExtension).GetTypeInfo().Assembly);
-
-    //        return imageSource;
-    //    }
-    //}
-
     public class ImageResourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

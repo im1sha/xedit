@@ -24,7 +24,7 @@ namespace XEdit.Sections
 
         private SKBitmap _localImageCopy;
         private SKBitmap _filterImage;
-        const double MAX_OPACITY = 0.7;
+        const double MAX_OPACITY = 0.8;
 
         public Transparency(MainViewModel vm)
         {
@@ -83,10 +83,13 @@ namespace XEdit.Sections
                 double progress = _mainVM.SliderWorker.SliderValue;
 
                 canvas.DrawBitmap(_localImageCopy, info.Rect, BitmapStretch.Uniform, paint: paint);
+
+                
                 (_, SKRect rect) = SizeCalculator.GetScaleAndRect(new SKSize(info.Rect.Width, info.Rect.Height), _localImageCopy);
+                (_, SKRect filterRect) = SizeCalculator.GetScaleAndRect(new SKSize(_filterImage.Width, _filterImage.Height), _localImageCopy);
 
                 paint.Color = paint.Color.WithAlpha((byte)(0xFF * (MAX_OPACITY * progress)));
-                canvas.DrawBitmap(_filterImage, rect, BitmapStretch.Fill, paint:paint);
+                canvas.DrawBitmap(_filterImage, filterRect, rect, paint);
             }
         }
 
@@ -108,9 +111,8 @@ namespace XEdit.Sections
 
                 canvas.DrawBitmap(_filterImage, 
                     new SKRect(0, 0, _localImageCopy.Width, _localImageCopy.Height), 
-                    BitmapStretch.Fill, 
+                    BitmapStretch.UniformToFill, 
                     paint: paint);
-
             }
             _mainVM.ImageWorker.Image = newBitmap;
             _mainVM.CanvasViewWorker.Invalidate();

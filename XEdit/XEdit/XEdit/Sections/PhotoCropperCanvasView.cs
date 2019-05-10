@@ -28,14 +28,14 @@ namespace XEdit.Sections
         readonly SKPaint _cornerStroke = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
-            Color = SKColors.White,
+            Color = SKColors.DarkGray,
             StrokeWidth = 10
         };
         readonly SKPaint _edgeStroke = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
             Color = SKColors.White,
-            StrokeWidth = 2
+            StrokeWidth = 1
         };
 
         public PhotoCropperCanvasView(TouchWorker touchWorker, SKBitmap bitmap, float? aspectRatio = null)
