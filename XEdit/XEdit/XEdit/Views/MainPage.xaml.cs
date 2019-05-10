@@ -23,7 +23,7 @@ namespace XEdit.Views
         public MainPage()
 		{
 			InitializeComponent ();
-
+  
             vm = new MainViewModel();
             BindingContext = vm;
             vm.OnViewCreated(skiaWrapper, skiaCanvasView, variableValuesSlider, touchTracker);

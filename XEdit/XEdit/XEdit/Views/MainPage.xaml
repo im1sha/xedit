@@ -4,7 +4,7 @@
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
              xmlns:tt="clr-namespace:XEdit.TouchTracking;assembly=XEdit"
-             x:Class="XEdit.Views.MainPage" >
+             x:Class="XEdit.Views.MainPage"  >
     <ContentPage.Resources>
         <localViews:GridLengthConverter x:Key="gridLengthConverter" />
     

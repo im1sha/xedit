@@ -2,42 +2,40 @@
 <local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XEdit.Views.StartPage"
-             xmlns:local="clr-namespace:XEdit.Views" >
+             xmlns:local="clr-namespace:XEdit.Views"
+             >
     
     <ContentPage.Resources>
         <Style TargetType="ImageButton" x:Key="itemStyle">
             <Setter Property="BackgroundColor" Value="White"/>
             <Setter Property="Padding" Value="15"/>
-            
+        </Style>
+        <Style TargetType="Label" x:Key="labelStyle">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="Medium"/>
         </Style>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         
-
         <Grid ColumnSpacing="10" RowSpacing="10" BackgroundColor="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-           
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>    
-                <ColumnDefinition></ColumnDefinition>    
-            </Grid.ColumnDefinitions>
-            
-            <ImageButton Grid.Row="0" Grid.Column="0" 
-                Clicked="OnSelectFromGallery"
-                Source="Gallery.png"
-                Style="{StaticResource itemStyle}">
+                       
+            <ImageButton  Grid.Row="0"
+                    Clicked="OnSelectFromGallery"
+                    Source="Gallery.png"
+                    Style="{StaticResource itemStyle}">
             </ImageButton>
 
-            <ImageButton Grid.Row="1" Grid.Column="0" 
-                         Clicked="OnSelectTakePhoto"
-                         Source="Camera.png" 
-                         Style="{StaticResource itemStyle}" 
-                         >
+            <ImageButton Grid.Row="1"
+                    Clicked="OnSelectTakePhoto"
+                    Source="Camera.png" 
+                    Style="{StaticResource itemStyle}" >
             </ImageButton>
             
         </Grid>

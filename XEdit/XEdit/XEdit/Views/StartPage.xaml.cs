@@ -20,7 +20,6 @@ namespace XEdit.Views
 		public StartPage() 
 		{
             InitializeComponent();
-
             MessagingCenter.Subscribe<Application, bool>(
                this,
                Messages.Camera,

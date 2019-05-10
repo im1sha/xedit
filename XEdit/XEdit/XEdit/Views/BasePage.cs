@@ -16,7 +16,7 @@ namespace XEdit.Views
             NavigateCommand = new Command<Type>(async (Type pageType) =>
             {
                 Page page = (Page)Activator.CreateInstance(pageType);
-                NavigationPage.SetHasNavigationBar(page, false);
+                NavigationPage.SetHasNavigationBar(page, false);           
                 await Navigation.PushAsync(page);
             });
 
