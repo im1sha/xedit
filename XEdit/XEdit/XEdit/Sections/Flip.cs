@@ -96,7 +96,7 @@ namespace XEdit.Sections
             {
                 canvas.Clear(SKColors.LightPink);
                 canvas.Translate(rotatedWidth / 2, rotatedHeight / 2);
-                canvas.RotateDegrees(90);
+                canvas.RotateDegrees(left ? -90 : 90);
                 canvas.Translate(-originalWidth / 2, -originalHeight / 2);
                 canvas.DrawBitmap(bitmap, new SKPoint());
             }
@@ -117,15 +117,15 @@ namespace XEdit.Sections
 
         void OnVerticalFlip()
         {
-            OnFlip(true);
+            OnFlip(false);
         }
 
         void OnHorizontalFlip()
         {
-            OnFlip(false);
+            OnFlip(true);
         }
 
-        void OnFlip(bool vertical)
+        void OnFlip(bool horizontal)
         {
             _mainVM.ImageWorker.AddImageState();
 
@@ -134,7 +134,7 @@ namespace XEdit.Sections
             using (SKCanvas canvas = new SKCanvas(flippedBitmap))
             {
                 canvas.Clear();
-                if (vertical)
+                if (horizontal)
                 {
                     canvas.Scale(-1, 1, bitmap.Width / 2, 0);
                 }

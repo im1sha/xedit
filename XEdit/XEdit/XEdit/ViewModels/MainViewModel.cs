@@ -96,15 +96,21 @@ namespace XEdit.ViewModels
         {
             get => new Command(() =>
             {
-                if (SelectedSection != null)
+                if (SelectedSection != null && SelectedSection.IsInteractive())
                 {
-                    SelectedSection.SelectedHandler?.Close(false);
-                    SelectedSection.SelectedHandler = null;                 
+                    SelectedSection.CancelCommand.Execute(null);
                 }
-
-                SliderWorker.SetDefaultSliderValue();
-                ImageWorker.RestorePreviousImageState();
-                CanvasViewWorker.Invalidate();
+                else
+                {                
+                    if (SelectedSection != null)
+                    {
+                        SelectedSection.SelectedHandler?.Close(false);
+                        SelectedSection.SelectedHandler = null;
+                    }                                       
+                    SliderWorker.SetDefaultSliderValue();
+                    ImageWorker.RestorePreviousImageState();
+                    CanvasViewWorker.Invalidate();
+                }
             });
         }
 
@@ -113,12 +119,7 @@ namespace XEdit.ViewModels
         {
             get => new Command(() =>
             {
-                if ((SelectedSection != null) && (SelectedSection.SelectedHandler != null))
-                {
-                    SelectedSection.SelectedHandler.Close(true);
-                    SelectedSection.SelectedHandler = null;
-                }
-
+                SelectedSection?.CommitCommand?.Execute(null);
                 SliderWorker.SetDefaultSliderValue();
             });            
         }

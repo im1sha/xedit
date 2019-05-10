@@ -12,6 +12,8 @@ namespace XEdit.Sections
     {
         public virtual bool IsVariableValues() => false; // is slider required?
 
+        public virtual bool IsInteractive() => false;
+
         public virtual string Name => throw new NotImplementedException();
 
         public virtual string ImageUrl => throw new NotImplementedException();
@@ -44,11 +46,24 @@ namespace XEdit.Sections
             get => new Command(() => { });
         }
 
+        public virtual Command CommitCommand
+        {
+            get => new Command(() => {               
+                SelectedHandler?.Close(true);
+                SelectedHandler = null;               
+            });
+        }
+
+        public virtual Command CancelCommand
+        {
+            get => new Command(() => { });
+        }
+
         public virtual Command LeaveCommand
         {
             get => new Command(() => {
                 SelectedHandler?.Close(false);
-                _selectedHandler = null;
+                SelectedHandler = null;
             });
         }
 

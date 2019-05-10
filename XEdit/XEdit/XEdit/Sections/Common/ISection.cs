@@ -9,6 +9,7 @@ namespace XEdit.Sections
     public interface ISection
     {
         bool IsVariableValues(); // is slider required?
+        bool IsInteractive(); // section deal with multiple interactive objects and handles cancellation itself
 
         string Name { get; }
         string ImageUrl { get; }
@@ -26,10 +27,8 @@ namespace XEdit.Sections
         /// </summary>
         Command LeaveCommand { get; }
 
-        /// <summary>
-        /// Call this one if required synchronize data that holds Section with ImageWorker etc.
-        /// </summary>
-        //Command Sync { get; }
+        Command CommitCommand { get; }
 
+        Command CancelCommand { get; }
     }
 }

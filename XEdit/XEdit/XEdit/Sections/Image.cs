@@ -19,6 +19,9 @@ namespace XEdit.Sections
     {
         List<TouchManipulationBitmap> _bitmapCollection;
         Dictionary<long, TouchManipulationBitmap> _bitmapDictionary;
+        Stack<TouchManipulationBitmap> _sequenceStorage;
+
+        public override bool IsInteractive() => true;
 
         private readonly ResourceLoader _resourceLoader;
 
@@ -34,6 +37,7 @@ namespace XEdit.Sections
             get => new Command(() => {
                 _bitmapCollection = new List<TouchManipulationBitmap>();
                 _bitmapDictionary = new Dictionary<long, TouchManipulationBitmap>();
+                _sequenceStorage = new Stack<TouchManipulationBitmap>();
             });
         }
 
@@ -45,10 +49,37 @@ namespace XEdit.Sections
                 {
                     _mainVM.TouchWorker.SetUpdateHandler();
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
-                    SaveImage();
                     _backgroundBitmap = null; // check
+                    _mainVM.CanvasViewWorker.Invalidate();
                 });
             }
+        }
+
+        public override Command CommitCommand
+        {
+            get => new Command(() =>
+            {
+                _mainVM.TouchWorker.SetUpdateHandler();
+                _mainVM.CanvasViewWorker.SetUpdateHandler();
+                SaveImage();
+            });
+        }
+
+        public override Command CancelCommand
+        {
+            get => new Command(() =>
+            {
+                if (_bitmapCollection.Count > 0)
+                {
+                    var last = _sequenceStorage.Pop();
+                    _bitmapCollection.Remove(last);
+                }
+                else
+                {
+                    _mainVM.ImageWorker.RestorePreviousImageState();
+                }
+                _mainVM.CanvasViewWorker.Invalidate();
+            });
         }
 
         public Image(MainViewModel vm)
@@ -77,10 +108,14 @@ namespace XEdit.Sections
                 {
                     _backgroundBitmap = _mainVM.ImageWorker.CloneImage(_mainVM.ImageWorker.Image);
                     SKPoint position = new SKPoint();
-                    _bitmapCollection.Add(new TouchManipulationBitmap(_resourceLoader.LoadSKBitmap(ResourceLoader.ImageFolder.Image, i))
+
+                    var newtmBitmap = new TouchManipulationBitmap(_resourceLoader.LoadSKBitmap(ResourceLoader.ImageFolder.Image, i))
                     {
                         Matrix = SKMatrix.MakeTranslation(position.X, position.Y),
-                    });
+                    };
+
+                    _bitmapCollection.Add(newtmBitmap);
+                    _sequenceStorage.Push(newtmBitmap);
 
                     _mainVM.TouchWorker.SetUpdateHandler(OnTouchEffectAction);
                     _mainVM.CanvasViewWorker.SetUpdateHandler(OnCanvasViewPaintSurface);
