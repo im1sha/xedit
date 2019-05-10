@@ -9,8 +9,8 @@ namespace XEdit.Sections
     {
         public string Name { get; }
 
-        public string ImageUrl { get; }
-    
+        public string ImageUrl { get; set; }
+
         /// <summary>
         /// Should be called when Handler is selected to set view or to do calculations
         /// </summary>
@@ -22,9 +22,9 @@ namespace XEdit.Sections
         public Action<bool> Close { get; }
 
         public VisualHandler(string name, string url, Action perform, Action<bool> close)
-        {
+        {           
+            ImageUrl = url;           
             Name = name;
-            ImageUrl = url;
             Close = close;
             Perform = perform;
         }

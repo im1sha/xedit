@@ -17,6 +17,7 @@ namespace XEdit.Sections
         private enum Filter { Grayscale, Pastel }
 
         public override string Name => "Filters";
+        public override string ImageUrl => "XEdit.Media.Sections.Filters.filter.png";
 
         private SKBitmap _bitmap;
 
@@ -46,15 +47,19 @@ namespace XEdit.Sections
         {
             string name = null;
 
-            EventHandler<SKPaintSurfaceEventArgs> handler = null; 
+            EventHandler<SKPaintSurfaceEventArgs> handler = null;
+
+            string url = null;
 
             switch (filter)
             {
                 case Filter.Grayscale:
+                    url = "XEdit.Media.Sections.Filters.grayscale.png";
                     handler = OnGrayscale;
                     name = Filter.Grayscale.ToString();
                     break;
                 case Filter.Pastel:
+                    url = "XEdit.Media.Sections.Filters.pastel.png";
                     handler = OnPastel;
                     name = Filter.Pastel.ToString();
                     break;
@@ -64,7 +69,7 @@ namespace XEdit.Sections
 
             return new VisualHandler(
                 name: name,
-                url: null,
+                url: url,
                 perform: () =>
                 {
                     _mainVM.CanvasViewWorker.SetUpdateHandler(handler);

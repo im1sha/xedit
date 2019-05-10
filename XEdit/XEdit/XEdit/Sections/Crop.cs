@@ -16,6 +16,8 @@ namespace XEdit.Sections
 
         public override string Name => "Crop";
 
+        public override string ImageUrl => "XEdit.Media.Sections.Crop.crop.png";
+
         public Crop(MainViewModel vm)
         {
             _mainVM = vm;
@@ -32,7 +34,7 @@ namespace XEdit.Sections
         {
             return new VisualHandler(
                 name: "Free",
-                url: null,
+                url: "XEdit.Media.Sections.Crop.free.png",
                 perform: () =>
                 {
                     _photoCropper = new PhotoCropperCanvasView(_mainVM.TouchWorker, _mainVM.ImageWorker.Image);

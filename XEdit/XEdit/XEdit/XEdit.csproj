@@ -26,6 +26,31 @@
     <None Remove="Media\Glass\4.jpg" />
     <None Remove="Media\Image\0.png" />
     <None Remove="Media\Image\1.png" />
+    <None Remove="Media\Image\2.png" />
+    <None Remove="Media\Sections\Crop\crop.png" />
+    <None Remove="Media\Sections\Crop\free.png" />
+    <None Remove="Media\Sections\Filters\filter.png" />
+    <None Remove="Media\Sections\Filters\grayscale.png" />
+    <None Remove="Media\Sections\Filters\pastel.png" />
+    <None Remove="Media\Sections\Flip\horizontal_flip.png" />
+    <None Remove="Media\Sections\Flip\rotate_and_flip.png" />
+    <None Remove="Media\Sections\Flip\rotate_left.png" />
+    <None Remove="Media\Sections\Flip\rotate_right.png" />
+    <None Remove="Media\Sections\Flip\vertical_flip.png" />
+    <None Remove="Media\Sections\Images\images.png" />
+    <None Remove="Media\Sections\Paint\blue.png" />
+    <None Remove="Media\Sections\Paint\cyan.png" />
+    <None Remove="Media\Sections\Paint\green.png" />
+    <None Remove="Media\Sections\Paint\magenta.png" />
+    <None Remove="Media\Sections\Paint\paint.png" />
+    <None Remove="Media\Sections\Paint\red.png" />
+    <None Remove="Media\Sections\Paint\yellow.png" />
+    <None Remove="Media\Sections\Transparency\0.jpg" />
+    <None Remove="Media\Sections\Transparency\1.jpg" />
+    <None Remove="Media\Sections\Transparency\2.jpg" />
+    <None Remove="Media\Sections\Transparency\3.jpg" />
+    <None Remove="Media\Sections\Transparency\4.jpg" />
+    <None Remove="Media\Sections\Transparency\transparent.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +67,29 @@
     <EmbeddedResource Include="Media\Glass\0.jpg" />
     <EmbeddedResource Include="Media\Glass\2.jpg" />
     <EmbeddedResource Include="Media\Image\0.png" />
+    <EmbeddedResource Include="Media\Image\2.png" />
+    <EmbeddedResource Include="Media\Sections\Crop\crop.png" />
+    <EmbeddedResource Include="Media\Sections\Crop\free.png" />
+    <EmbeddedResource Include="Media\Sections\Filters\filter.png" />
+    <EmbeddedResource Include="Media\Sections\Filters\grayscale.png" />
+    <EmbeddedResource Include="Media\Sections\Filters\pastel.png" />
+    <EmbeddedResource Include="Media\Sections\Flip\horizontal_flip.png" />
+    <EmbeddedResource Include="Media\Sections\Flip\rotate_and_flip.png" />
+    <EmbeddedResource Include="Media\Sections\Flip\rotate_left.png" />
+    <EmbeddedResource Include="Media\Sections\Flip\rotate_right.png" />
+    <EmbeddedResource Include="Media\Sections\Images\images.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\blue.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\cyan.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\green.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\magenta.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\paint.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\red.png" />
+    <EmbeddedResource Include="Media\Sections\Paint\yellow.png" />
+    <EmbeddedResource Include="Media\Sections\Transparency\0.jpg" />
+    <EmbeddedResource Include="Media\Sections\Transparency\1.jpg" />
+    <EmbeddedResource Include="Media\Sections\Transparency\3.jpg" />
+    <EmbeddedResource Include="Media\Sections\Transparency\4.jpg" />
+    <EmbeddedResource Include="Media\Sections\Transparency\transparent.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +97,14 @@
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Sections\Flip\vertical_flip.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Media\Sections\Transparency\2.jpg" />
   </ItemGroup>
 
   <ItemGroup>

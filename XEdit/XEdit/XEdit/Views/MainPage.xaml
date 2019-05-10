@@ -5,8 +5,13 @@
              xmlns:localViews="clr-namespace:XEdit.Views;assembly=XEdit"
              xmlns:tt="clr-namespace:XEdit.TouchTracking;assembly=XEdit"
              x:Class="XEdit.Views.MainPage"  >
+
     <ContentPage.Resources>
-        <localViews:GridLengthConverter x:Key="gridLengthConverter" />
+        <ResourceDictionary>
+            <localViews:ImageResourceConverter x:Key="pathConverter" />
+            <localViews:GridLengthConverter x:Key="gridLengthConverter" />
+        </ResourceDictionary>
+        
     
         <Style TargetType="Grid" x:Key="activeItemStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -144,18 +149,35 @@
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}" 
                                 WidthRequest="{Binding Height, Source={x:Reference filtersTag}}">
-                                <Label                                     
+                                <Image Margin="10"
+                                    Source ="{Binding ImageUrl, Converter={StaticResource pathConverter}}">
+                                </Image>
+                            </Grid>     
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
+            <!--<Label                                     
                                     Text="{Binding Name}" 
                                     TextColor="Black" 
                                     FontSize="Micro" 
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="CenterAndExpand" >
-                                </Label>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
+            </Label>-->
+
+            <!--<ImageButton 
+                                Padding="5" 
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill" 
+                                BackgroundColor="Yellow"
+                                WidthRequest="{Binding Height, Source={x:Reference filtersTag}}"
+
+                                Source ="{Binding ., Converter={StaticResource pathConverter}}">
+
+            </ImageButton>-->
+
+          
 
             <!--<Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ButtonCommand}"    
@@ -175,12 +197,9 @@
                         <DataTemplate>
                             <Grid Style="{StaticResource activeItemStyle}"  
                                 WidthRequest="{Binding Height, Source={x:Reference sectionsTag}}">
-                                <Label Text="{Binding Name}"
-                                    TextColor="Black"
-                                    FontSize="Micro"                                 
-                                    HorizontalOptions="CenterAndExpand"
-                                    VerticalOptions="CenterAndExpand" >
-                                </Label>
+                                <Image Margin="5"
+                                    Source ="{Binding ImageUrl, Converter={StaticResource pathConverter}}">
+                                </Image>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

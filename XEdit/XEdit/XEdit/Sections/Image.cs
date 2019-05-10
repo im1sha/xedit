@@ -27,6 +27,7 @@ namespace XEdit.Sections
         private SKBitmap _backgroundBitmap;
 
         public override string Name => "Image";
+        public override string ImageUrl => "XEdit.Media.Sections.Images.images.png";
 
         public override Command SelectCommand
         {
@@ -45,6 +46,7 @@ namespace XEdit.Sections
                     _mainVM.TouchWorker.SetUpdateHandler();
                     _mainVM.CanvasViewWorker.SetUpdateHandler();
                     SaveImage();
+                    _backgroundBitmap = null; // check
                 });
             }
         }
@@ -70,7 +72,7 @@ namespace XEdit.Sections
 
             return new VisualHandler(
                 name: name,
-                url: null,
+                url: $"XEdit.Media.Image.{i}.png",
                 perform: () =>
                 {
                     _backgroundBitmap = _mainVM.ImageWorker.CloneImage(_mainVM.ImageWorker.Image);

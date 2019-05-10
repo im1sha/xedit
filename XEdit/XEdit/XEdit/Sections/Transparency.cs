@@ -20,6 +20,8 @@ namespace XEdit.Sections
 
         public override string Name { get; } = "Transparency";
 
+        public override string ImageUrl => "XEdit.Media.Sections.Transparency.transparent.png";
+
         private SKBitmap _localImageCopy;
         private SKBitmap _filterImage;
         const double MAX_OPACITY = 0.7;
@@ -34,7 +36,8 @@ namespace XEdit.Sections
             var totalImages = _resourceLoader.GetAmountOfImages(ResourceLoader.ImageFolder.Glass);
             for (int i = 0; i < totalImages; i++)
             {
-                Handlers.Add(new VisualHandler($"Glass {i + 1}", null, 
+                Handlers.Add(new VisualHandler($"Glass {i + 1}",
+                    $"XEdit.Media.Sections.Transparency.{i}.jpg",
                     perform : GetHandler(i),
                     close : (success) =>
                     {

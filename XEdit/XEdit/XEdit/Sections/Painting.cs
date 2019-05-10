@@ -18,6 +18,8 @@ namespace XEdit.Sections
 
         public override string Name { get; } = "Paint";
 
+        public override string ImageUrl => "XEdit.Media.Sections.Paint.paint.png";
+
         public Painting(MainViewModel vm)
         {
             _mainVM = vm;
@@ -39,7 +41,7 @@ namespace XEdit.Sections
         {
             return new VisualHandler(
                 name: name,
-                url: null,
+                url: $"XEdit.Media.Sections.Paint.{name.ToLower()}.png",
                 perform: () =>
                 {
                     _inProgressPathsInPixels = new Dictionary<long, SKPath>();

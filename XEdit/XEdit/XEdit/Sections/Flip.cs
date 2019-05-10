@@ -17,6 +17,8 @@ namespace XEdit.Sections
        
         public override string Name => "Flip";
 
+        public override string ImageUrl => "XEdit.Media.Sections.Flip.rotate_and_flip.png";
+
         public Flip(MainViewModel vm)
         {
             _mainVM = vm;
@@ -34,30 +36,35 @@ namespace XEdit.Sections
         {
             string name = null;
             Action action = null;
+            string url = null;
             if (flip && verticalOrLeft)
             {
+                url = "XEdit.Media.Sections.Flip.vertical_flip.png";
                 action = OnVerticalFlip;
                 name = "Vertical Flip";
             }
             else if (flip && !verticalOrLeft)
             {
+                url = "XEdit.Media.Sections.Flip.horizontal_flip.png";
                 action = OnHorizontalFlip;
                 name = "Horizontal Flip";
             }
             else if (!flip && verticalOrLeft)
             {
+                url = "XEdit.Media.Sections.Flip.rotate_left.png";
                 action = OnLeftRotate;
                 name = "Left Rotate";
             }
             else
             {
+                url = "XEdit.Media.Sections.Flip.rotate_right.png";
                 action = OnRightRotate;
                 name = "Right Rotate";
             }
 
             return new VisualHandler(
                 name: name,
-                url: null,
+                url: url,
                 perform: () =>
                 {
                     _mainVM.CanvasViewWorker.SetUpdateHandler();

@@ -25,7 +25,7 @@ namespace XEdit.Utils
             ImageFolderDictionary = new Dictionary<ImageFolder, (string, int, string)>
             {
                 { ImageFolder.Glass, ("Glass", 5, "jpg") },
-                { ImageFolder.Image, ("Image", 2, "png") },
+                { ImageFolder.Image, ("Image", 3, "png") },
             };
         }
 
