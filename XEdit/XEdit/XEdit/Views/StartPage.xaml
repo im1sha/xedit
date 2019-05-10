@@ -2,8 +2,7 @@
 <local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XEdit.Views.StartPage"
-             xmlns:local="clr-namespace:XEdit.Views" 
-             xmlns:core="clr-namespace:XEdit.Core">
+             xmlns:local="clr-namespace:XEdit.Views" >
     
     <ContentPage.Resources>
         <Style TargetType="ImageButton" x:Key="itemStyle">
@@ -34,7 +33,11 @@
                 Style="{StaticResource itemStyle}">
             </ImageButton>
 
-            <ImageButton Grid.Row="1" Grid.Column="0" Source="Camera.png" Style="{StaticResource itemStyle}" >
+            <ImageButton Grid.Row="1" Grid.Column="0" 
+                         Clicked="OnSelectTakePhoto"
+                         Source="Camera.png" 
+                         Style="{StaticResource itemStyle}" 
+                         >
             </ImageButton>
             
         </Grid>

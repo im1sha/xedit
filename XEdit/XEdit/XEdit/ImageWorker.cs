@@ -154,7 +154,7 @@ namespace XEdit
 
             bool success = false;
 
-            string fileName = name ?? $"X{DateTime.Now.ToBinary().ToString()}";
+            string fileName = name ?? $"{DateTime.Now.ToString("dd.MM.yyyy_hh.mm.ss")}";
 
             SKBitmap bitmap = CloneImage(Image);
 

@@ -6,6 +6,8 @@ namespace XEdit.Views
 {
     public static class Messages
     {
-        public static string SaveSuccess = "Save";
+        public static readonly string SaveSuccess = "Save";
+
+        public static readonly string Camera = "Camera";
     }
 }
