@@ -57,7 +57,7 @@ namespace XEdit.Views
         }
 
         public async Task TakePhoto()
-        {
+        {          
             await CrossMedia.Current.Initialize();
 
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)

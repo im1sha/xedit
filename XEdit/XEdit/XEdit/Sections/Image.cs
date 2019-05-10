@@ -72,8 +72,8 @@ namespace XEdit.Sections
                 name: name,
                 url: null,
                 perform: () =>
-                {             
-                    _backgroundBitmap = _mainVM.ImageWorker.Image;
+                {
+                    _backgroundBitmap = _mainVM.ImageWorker.CloneImage(_mainVM.ImageWorker.Image);
                     SKPoint position = new SKPoint();
                     _bitmapCollection.Add(new TouchManipulationBitmap(_resourceLoader.LoadSKBitmap(ResourceLoader.ImageFolder.Image, i))
                     {
@@ -87,7 +87,7 @@ namespace XEdit.Sections
                     _selectedHandler = null;
                 },
                 close: (success) => {
-                 
+                    _backgroundBitmap = null;
                 }
                 );
         }
@@ -161,6 +161,11 @@ namespace XEdit.Sections
 
         void SaveImage()
         {
+            if (_backgroundBitmap == null)
+            {
+                return;
+            }
+            
             SKSize canvasViewSize = _mainVM.CanvasViewWorker.CanvasView.CanvasSize;
           
             _mainVM.ImageWorker.AddImageState();
