@@ -48,6 +48,11 @@ namespace XEdit.Views
             vm.OnPopScreen();
             await Navigation.PopAsync();
         }      
+
+        protected override bool OnBackButtonPressed()
+        {           
+            return true;           
+        }
     }
 }
 
