@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace XEdit.Utils
+namespace XEdit.Extensions
 {
     public class ResourceLoader
     {

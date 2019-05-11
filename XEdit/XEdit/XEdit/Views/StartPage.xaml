@@ -24,15 +24,16 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
                        
-            <ImageButton  Grid.Row="0"
+            <ImageButton  Grid.Row="1"
                     Clicked="OnSelectFromGallery"
                     Source="Gallery.png"
                     Style="{StaticResource itemStyle}">
             </ImageButton>
 
-            <ImageButton Grid.Row="1"
+            <ImageButton Grid.Row="2"
                     Clicked="OnSelectTakePhoto"
                     Source="Camera.png" 
                     Style="{StaticResource itemStyle}" >

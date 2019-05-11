@@ -10,25 +10,25 @@ using XEdit.ViewModels;
 
 namespace XEdit.Sections
 {
-    class ColorFilters : BaseSection
+    class Filter : BaseSection
     {
         private readonly MainViewModel _mainVM;
 
-        private enum Filter { Grayscale, Pastel }
+        private enum FilterType { Grayscale, Pastel }
 
-        public override string Name => "Filters";
+        public override string Name => "Filter";
         public override string ImageUrl => "XEdit.Media.Sections.Filters.filter.png";
 
         private SKBitmap _bitmap;
 
-        public ColorFilters(MainViewModel vm)
+        public Filter(MainViewModel vm)
         {
             _mainVM = vm;
 
             Handlers = new ObservableCollection<VisualHandler>()
             {
-                CreateHandler(Filter.Grayscale),
-                CreateHandler(Filter.Pastel),
+                CreateHandler(FilterType.Grayscale),
+                CreateHandler(FilterType.Pastel),
             };
         }
 
@@ -43,7 +43,7 @@ namespace XEdit.Sections
             }
         }
 
-        private VisualHandler CreateHandler(Filter filter)
+        private VisualHandler CreateHandler(FilterType filter)
         {
             string name = null;
 
@@ -53,15 +53,15 @@ namespace XEdit.Sections
 
             switch (filter)
             {
-                case Filter.Grayscale:
+                case FilterType.Grayscale:
                     url = "XEdit.Media.Sections.Filters.grayscale.png";
                     handler = OnGrayscale;
-                    name = Filter.Grayscale.ToString();
+                    name = FilterType.Grayscale.ToString();
                     break;
-                case Filter.Pastel:
+                case FilterType.Pastel:
                     url = "XEdit.Media.Sections.Filters.pastel.png";
                     handler = OnPastel;
-                    name = Filter.Pastel.ToString();
+                    name = FilterType.Pastel.ToString();
                     break;
                 default:
                     break;
@@ -98,9 +98,9 @@ namespace XEdit.Sections
             using (var paint = new SKPaint())
             {
                 canvas.Clear();
-                paint.ColorFilter = GetFilter(Filter.Pastel);
+                paint.ColorFilter = GetFilter(FilterType.Pastel);
                 Draw(canvas, paint, _bitmap, info.Rect);
-                SetState(_bitmap, Filter.Pastel);
+                SetState(_bitmap, FilterType.Pastel);
             }
         }
     
@@ -114,13 +114,13 @@ namespace XEdit.Sections
             using (var paint = new SKPaint())
             {
                 canvas.Clear();
-                paint.ColorFilter = GetFilter(Filter.Grayscale);
+                paint.ColorFilter = GetFilter(FilterType.Grayscale);
                 Draw(canvas, paint, _bitmap, info.Rect);
-                SetState(_bitmap, Filter.Grayscale);
+                SetState(_bitmap, FilterType.Grayscale);
             }
         }
 
-        private void SetState(SKBitmap bitmap, Filter filter)
+        private void SetState(SKBitmap bitmap, FilterType filter)
         {
             _mainVM.ImageWorker.AddImageState();
 
@@ -141,9 +141,9 @@ namespace XEdit.Sections
             _mainVM.CanvasViewWorker.SetUpdateHandler();
         }
 
-        SKColorFilter GetFilter(Filter filter)
+        SKColorFilter GetFilter(FilterType filter)
         {
-            if (filter == Filter.Grayscale)
+            if (filter == FilterType.Grayscale)
             {
                 return SKColorFilter.CreateColorMatrix(new float[]
                 {

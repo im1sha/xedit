@@ -8,7 +8,6 @@ namespace XEdit.Sections
     class TouchManipulationBitmap
     {
         public SKBitmap Bitmap { get; private set; }
-        public SKImageInfo BitmapInfo => Bitmap.Info;
         private Dictionary<long, TouchManipulationInfo> _touchDictionary =
             new Dictionary<long, TouchManipulationInfo>();
 

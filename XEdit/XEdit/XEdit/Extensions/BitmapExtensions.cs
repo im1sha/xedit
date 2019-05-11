@@ -152,6 +152,34 @@ namespace XEdit.Extensions
 
             return new SKRect(x, y, x + bmpWidth, y + bmpHeight);
         }
+
+        public static (float scale, SKRect rect) GetScaleAndRect(SKSize dest, float bitmapWidth, float bitmapHeight)
+        {
+            SKRect rect;
+            float scale; // determines image orientation
+            if ((dest.Height / dest.Width) > (bitmapHeight / bitmapWidth))
+            {
+                scale = bitmapWidth / dest.Width;
+                rect = new SKRect(0,
+                    (dest.Height - bitmapHeight / scale) / 2,
+                    dest.Width,
+                    (dest.Height + bitmapHeight / scale) / 2
+                    );
+            }
+            else
+            {
+                scale = bitmapHeight / dest.Height;
+                rect = new SKRect(
+                    (dest.Width - bitmapWidth / scale) / 2,
+                    0,
+                    (dest.Width + bitmapWidth / scale) / 2,
+                    dest.Height
+                    );
+            }
+
+            return (scale, rect);
+        }
+
     }
 
     public enum BitmapStretch

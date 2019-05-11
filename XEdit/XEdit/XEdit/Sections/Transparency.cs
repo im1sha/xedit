@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms;
 using XEdit.Extensions;
-using XEdit.Utils;
 using XEdit.ViewModels;
 
 namespace XEdit.Sections
@@ -24,7 +23,7 @@ namespace XEdit.Sections
 
         private SKBitmap _localImageCopy;
         private SKBitmap _filterImage;
-        const double MAX_OPACITY = 0.8;
+        const double MAX_OPACITY = 0.85;
 
         public Transparency(MainViewModel vm)
         {
@@ -85,8 +84,11 @@ namespace XEdit.Sections
                 canvas.DrawBitmap(_localImageCopy, info.Rect, BitmapStretch.Uniform, paint: paint);
 
                 
-                (_, SKRect rect) = SizeCalculator.GetScaleAndRect(new SKSize(info.Rect.Width, info.Rect.Height), _localImageCopy);
-                (_, SKRect filterRect) = SizeCalculator.GetScaleAndRect(new SKSize(_filterImage.Width, _filterImage.Height), _localImageCopy);
+                (_, SKRect rect) = BitmapExtensions.GetScaleAndRect(new SKSize(info.Rect.Width, info.Rect.Height),
+                    _localImageCopy.Width, _localImageCopy.Height);
+
+                (_, SKRect filterRect) = BitmapExtensions.GetScaleAndRect(new SKSize(_filterImage.Width, _filterImage.Height),
+                    _localImageCopy.Width, _localImageCopy.Height);
 
                 paint.Color = paint.Color.WithAlpha((byte)(0xFF * (MAX_OPACITY * progress)));
                 canvas.DrawBitmap(_filterImage, filterRect, rect, paint);

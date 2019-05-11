@@ -7,9 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XEdit.Extensions;
 using XEdit.PlatformSpecific;
-using XEdit.TouchTracking;
 
 namespace XEdit
 {
@@ -22,11 +20,6 @@ namespace XEdit
         private static readonly string _homeFolder = "XEdit";
 
         /// <summary>
-        /// Image created when you select new visual handler
-        /// </summary>   
-        //private SKBitmap _backupImage = new SKBitmap();
-
-        /// <summary>
         /// Image states when working with image 
         /// </summary>
         private List<SKBitmap> _stateStorage = new List<SKBitmap>();
@@ -34,17 +27,6 @@ namespace XEdit
         private SKBitmap _image = new SKBitmap();
 
         #region backup methods
-
-        //public void AddBackupImage()
-        //{
-        //    _backupImage = CloneImage(_image);
-        //}
-
-        //public void RestoreFromBackupImage()
-        //{
-        //    MoveToTrash(_image);
-        //    _image = CloneImage(_backupImage);
-        //}
 
         public void AddImageState(SKBitmap img = null)
         {

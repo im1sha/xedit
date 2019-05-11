@@ -10,7 +10,6 @@ using System.Text;
 using Xamarin.Forms;
 using XEdit.Extensions;
 using XEdit.TouchTracking;
-using XEdit.Utils;
 using XEdit.ViewModels;
 
 namespace XEdit.Sections
@@ -218,7 +217,7 @@ namespace XEdit.Sections
                     var bitmap = tmBitmap.Bitmap;
                     float scale;
                     SKRect backgroundImageRect; 
-                    (scale, backgroundImageRect) = SizeCalculator.GetScaleAndRect(canvasViewSize, _backgroundBitmap);
+                    (scale, backgroundImageRect) = BitmapExtensions.GetScaleAndRect(canvasViewSize, _backgroundBitmap.Width, _backgroundBitmap.Height);
 
                     SKMatrix shiftMatrix = new SKMatrix();
                     SKPoint point = new SKPoint(-backgroundImageRect.Left * scale, -backgroundImageRect.Top * scale);

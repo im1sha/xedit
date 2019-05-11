@@ -28,7 +28,7 @@ namespace XEdit.Sections
             };
         }
 
-        PhotoCropperCanvasView _photoCropper;
+        CropCanvasView _photoCropper;
 
         private VisualHandler CreateHandler()
         {
@@ -37,7 +37,7 @@ namespace XEdit.Sections
                 url: "XEdit.Media.Sections.Crop.free.png",
                 perform: () =>
                 {
-                    _photoCropper = new PhotoCropperCanvasView(_mainVM.TouchWorker, _mainVM.ImageWorker.Image);
+                    _photoCropper = new CropCanvasView(_mainVM.TouchWorker, _mainVM.ImageWorker.Image);
                     _mainVM.CanvasViewWorker.ChangeCanvas(_photoCropper);
                 },
                 close: (success) => {

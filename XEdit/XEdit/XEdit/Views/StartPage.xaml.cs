@@ -62,12 +62,6 @@ namespace XEdit.Views
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
             {
                 MediaFile file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions());  
-                //    new StoreCameraMediaOptions
-                //{
-                //    SaveToAlbum = true,
-                //    Directory = "XEdit",
-                //    Name = $"{DateTime.Now.ToString("dd.MM.yyyy_hh.mm.ss")}.jpg"
-                //}
 
                 if (file == null)
                 {

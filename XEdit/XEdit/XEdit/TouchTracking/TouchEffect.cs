@@ -5,8 +5,6 @@ namespace XEdit.TouchTracking
 {
     public class TouchEffect : RoutingEffect
     {
-        //public event TouchActionEventHandler TouchAction;
-
         public event EventHandler<TouchActionEventArgs> TouchAction;
 
         public TouchEffect() : base("im1sha.TouchEffect")

@@ -7,13 +7,13 @@ using XEdit.ViewModels;
 
 namespace XEdit.Sections
 {
-    class PhotoCropperCanvasView : SKCanvasView
+    class CropCanvasView : SKCanvasView
     {
         const int CORNER = 50;      // pixel length of cropper corner
         const int RADIUS = 100;     // pixel radius of touch hit-test
 
         SKBitmap _bitmap;
-        CroppingRectangle _croppingRect;
+        CropRectangle _croppingRect;
         SKMatrix _inverseBitmapMatrix;
 
         struct TouchPoint
@@ -22,13 +22,13 @@ namespace XEdit.Sections
             public SKPoint Offset { set; get; }
         }
 
-        Dictionary<long, TouchPoint> touchPoints = new Dictionary<long, TouchPoint>();
+        Dictionary<long, TouchPoint> _touchPoints = new Dictionary<long, TouchPoint>();
 
         // Drawing objects
         readonly SKPaint _cornerStroke = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
-            Color = SKColors.DarkGray,
+            Color = SKColors.Black,
             StrokeWidth = 10
         };
         readonly SKPaint _edgeStroke = new SKPaint
@@ -38,11 +38,11 @@ namespace XEdit.Sections
             StrokeWidth = 1
         };
 
-        public PhotoCropperCanvasView(TouchWorker touchWorker, SKBitmap bitmap, float? aspectRatio = null)
+        public CropCanvasView(TouchWorker touchWorker, SKBitmap bitmap, float? aspectRatio = null)
         {
             _bitmap = bitmap;
             SKRect bitmapRect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
-            _croppingRect = new CroppingRectangle(bitmapRect, aspectRatio);
+            _croppingRect = new CropRectangle(bitmapRect, aspectRatio);
             touchWorker.SetUpdateHandler(OnTouchEffectTouchAction);
         }
 
@@ -131,7 +131,7 @@ namespace XEdit.Sections
                     // Find corner that the finger is touching
                     int cornerIndex = _croppingRect.HitTest(bitmapLocation, radius);
 
-                    if (cornerIndex != -1 && !touchPoints.ContainsKey(args.Id))
+                    if (cornerIndex != -1 && !_touchPoints.ContainsKey(args.Id))
                     {
                         TouchPoint touchPoint = new TouchPoint
                         {
@@ -139,14 +139,14 @@ namespace XEdit.Sections
                             Offset = bitmapLocation - _croppingRect.Corners[cornerIndex]
                         };
 
-                        touchPoints.Add(args.Id, touchPoint);
+                        _touchPoints.Add(args.Id, touchPoint);
                     }
                     break;
 
                 case TouchActionType.Moved:
-                    if (touchPoints.ContainsKey(args.Id))
+                    if (_touchPoints.ContainsKey(args.Id))
                     {
-                        TouchPoint touchPoint = touchPoints[args.Id];
+                        TouchPoint touchPoint = _touchPoints[args.Id];
                         _croppingRect.MoveCorner(touchPoint.CornerIndex, 
                                                 bitmapLocation - touchPoint.Offset);
                         InvalidateSurface();
@@ -155,9 +155,9 @@ namespace XEdit.Sections
 
                 case TouchActionType.Released:
                 case TouchActionType.Cancelled:
-                    if (touchPoints.ContainsKey(args.Id))
+                    if (_touchPoints.ContainsKey(args.Id))
                     {
-                        touchPoints.Remove(args.Id);
+                        _touchPoints.Remove(args.Id);
                     }
                     break;
             }

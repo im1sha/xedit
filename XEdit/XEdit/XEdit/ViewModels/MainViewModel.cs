@@ -13,7 +13,7 @@ using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using XEdit.Sections;
 using XEdit.TouchTracking;
-using XEdit.Utils;
+using XEdit.Extensions;
 using XEdit.Views;
 
 namespace XEdit.ViewModels
@@ -71,12 +71,12 @@ namespace XEdit.ViewModels
 
         public MainViewModel()
         {
-            Sections.Add(new ColorFilters(this));
+            Sections.Add(new Filter(this));
             Sections.Add(new Crop(this));
             Sections.Add(new Flip(this));
             Sections.Add(new Transparency(this));
             Sections.Add(new Sections.Image(this));
-            Sections.Add(new Painting(this));
+            Sections.Add(new Paint(this));
             SelectedSection = Sections.FirstOrDefault();
         }
 

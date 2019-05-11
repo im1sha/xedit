@@ -5,17 +5,17 @@ using SkiaSharp;
 
 namespace XEdit.Sections
 {
-    class CroppingRectangle
+    class CropRectangle
     {
         const float MINIMUM = 10;   // pixels width or height
 
-        SKRect maxRect;             // generally the size of the bitmap
-        float? aspectRatio;
+        SKRect _maxRect;             // generally the size of the bitmap
+        float? _aspectRatio;
 
-        public CroppingRectangle(SKRect maxRect, float? aspectRatio = null)
+        public CropRectangle(SKRect maxRect, float? aspectRatio = null)
         {
-            this.maxRect = maxRect;
-            this.aspectRatio = aspectRatio;
+            this._maxRect = maxRect;
+            this._aspectRatio = aspectRatio;
 
             // Set initial cropping rectangle
             Rect = new SKRect(0.9f * maxRect.Left + 0.1f * maxRect.Right,
@@ -86,30 +86,30 @@ namespace XEdit.Sections
             switch (index)
             {
                 case 0: // upper-left
-                    rect.Left = Math.Min(Math.Max(point.X, maxRect.Left), rect.Right - MINIMUM);
-                    rect.Top = Math.Min(Math.Max(point.Y, maxRect.Top), rect.Bottom - MINIMUM);
+                    rect.Left = Math.Min(Math.Max(point.X, _maxRect.Left), rect.Right - MINIMUM);
+                    rect.Top = Math.Min(Math.Max(point.Y, _maxRect.Top), rect.Bottom - MINIMUM);
                     break;
 
                 case 1: // upper-right
-                    rect.Right = Math.Max(Math.Min(point.X, maxRect.Right), rect.Left + MINIMUM);
-                    rect.Top = Math.Min(Math.Max(point.Y, maxRect.Top), rect.Bottom - MINIMUM);
+                    rect.Right = Math.Max(Math.Min(point.X, _maxRect.Right), rect.Left + MINIMUM);
+                    rect.Top = Math.Min(Math.Max(point.Y, _maxRect.Top), rect.Bottom - MINIMUM);
                     break;
 
                 case 2: // lower-right
-                    rect.Right = Math.Max(Math.Min(point.X, maxRect.Right), rect.Left + MINIMUM);
-                    rect.Bottom = Math.Max(Math.Min(point.Y, maxRect.Bottom), rect.Top + MINIMUM);
+                    rect.Right = Math.Max(Math.Min(point.X, _maxRect.Right), rect.Left + MINIMUM);
+                    rect.Bottom = Math.Max(Math.Min(point.Y, _maxRect.Bottom), rect.Top + MINIMUM);
                     break;
 
                 case 3: // lower-left
-                    rect.Left = Math.Min(Math.Max(point.X, maxRect.Left), rect.Right - MINIMUM);
-                    rect.Bottom = Math.Max(Math.Min(point.Y, maxRect.Bottom), rect.Top + MINIMUM);
+                    rect.Left = Math.Min(Math.Max(point.X, _maxRect.Left), rect.Right - MINIMUM);
+                    rect.Bottom = Math.Max(Math.Min(point.Y, _maxRect.Bottom), rect.Top + MINIMUM);
                     break;
             }
 
             // Adjust for aspect ratio
-            if (aspectRatio.HasValue)
+            if (_aspectRatio.HasValue)
             {
-                float aspect = aspectRatio.Value;
+                float aspect = _aspectRatio.Value;
 
                 if (rect.Width > aspect * rect.Height)
                 {

@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace XEdit.Sections
 {
-    class Painting : BaseSection
+    class Paint : BaseSection
     {
         readonly MainViewModel _mainVM;
 
@@ -20,7 +20,7 @@ namespace XEdit.Sections
 
         public override string ImageUrl => "XEdit.Media.Sections.Paint.paint.png";
 
-        public Painting(MainViewModel vm)
+        public Paint(MainViewModel vm)
         {
             _mainVM = vm;
 
@@ -110,7 +110,7 @@ namespace XEdit.Sections
 
             SKRect rect;
             float scale; // determines image orientation
-            (scale, rect) = SizeCalculator.GetScaleAndRect(canvasViewSize, bitmap);
+            (scale, rect) = BitmapExtensions.GetScaleAndRect(canvasViewSize, bitmap.Width, bitmap.Height);
 
             SKPoint location = ConvertToPixel(args.Location);
 

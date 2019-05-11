@@ -11,8 +11,7 @@
             <localViews:ImageResourceConverter x:Key="pathConverter" />
             <localViews:GridLengthConverter x:Key="gridLengthConverter" />
         </ResourceDictionary>
-        
-    
+         
         <Style TargetType="Grid" x:Key="activeItemStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -106,14 +105,7 @@
                    >
                 </ImageButton>
             </Grid>
-         
-            <!--<ImageButton.CommandParameter>
-                <x:Array Type="{x:Type x:Object}">
-                    <x:String>Y</x:String>
-                    <x:Double>10</x:Double>
-                </x:Array>
-            </ImageButton.CommandParameter>-->
-
+                 
             <Grid BackgroundColor="White"
                 Grid.Row="1" 
                 x:Name="skiaWrapper" 
@@ -158,35 +150,7 @@
                 </CollectionView>
             </StackLayout>
 
-            <!--<Label                                     
-                                    Text="{Binding Name}" 
-                                    TextColor="Black" 
-                                    FontSize="Micro" 
-                                    HorizontalOptions="CenterAndExpand"
-                                    VerticalOptions="CenterAndExpand" >
-            </Label>-->
-
-            <!--<ImageButton 
-                                Padding="5" 
-                                HorizontalOptions="Fill"
-                                VerticalOptions="Fill" 
-                                BackgroundColor="Yellow"
-                                WidthRequest="{Binding Height, Source={x:Reference filtersTag}}"
-
-                                Source ="{Binding ., Converter={StaticResource pathConverter}}">
-
-            </ImageButton>-->
-
-          
-
-            <!--<Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ButtonCommand}"    
-                        CommandParameter="{Reference skiaWrapper}"
-                        NumberOfTapsRequired="1" />
-                </Label.GestureRecognizers>-->
-            
             <!--SECTIONS-->
-            
             <StackLayout Grid.Row="4" >                   
                 <CollectionView x:Name="sectionsTag"
                     ItemsSource="{Binding Sections}"
