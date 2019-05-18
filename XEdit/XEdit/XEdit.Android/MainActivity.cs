@@ -14,7 +14,7 @@ using Plugin.CurrentActivity;
 
 namespace XEdit.Droid
 {
-    [Activity(Label = "XEdit", Icon = "@mipmap/icon", Theme = "@style/MainTheme",
+    [Activity(Label = "XEdit", Icon = "@drawable/XEDIT", Theme = "@style/MainTheme",
         MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
